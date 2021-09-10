@@ -8,6 +8,8 @@ from django.views.generic import View
 from functools import reduce
 from itertools import chain
 
+import json
+
 from .models import Address, Board, Committee, Membership, Person, NeedsReview
 
 @login_required
@@ -26,26 +28,22 @@ class ListBoardView(LoginRequiredMixin, View):
 
     def get(self, request):
         executive_members = Board.objects.filter()
-        committees = Committee.objects.all().exclude(person__isnull=True)
-        print(committees)
-        roles = [role for role in committees.all()]
-        print(roles)
-        for r in roles:
-            print(r)
-        board_members = list(chain(executive_members, committees))
-        # print(board_members)
-        executive = {
-            'president': '',
-            'vice president': '',
-            'secretary': '',
-            'treasurer': '',
-            'past president': ''
-        }
+        roles = Committee.get_cmte_members()
+        # print(roles)
+        committee_members = []
+        for role in roles:
+            people = role.person.all()
+            for i in range(len(people)):
+                committee_members.append(people[i])
+        # print("Before dedupe: {}".format(committee_members))
+        committee_members = list(dict.fromkeys(committee_members))
+        # print("After dedupe: {}".format(committee_members))
+        board_members = list(chain(executive_members, committee_members))
+        print(board_members)
         paginator = Paginator(board_members, 10)
         page_number = request.GET.get('page')
         members = paginator.get_page(page_number)
         context = {
-            # 'executive': executive,
             'members': members,
             'view': 'list_board',
         }
@@ -98,7 +96,6 @@ def search_results(request):
     except:
         pass
     two_names_orig = querystring.split("and")
-    # two_names_cleaned = [name for name in two_names if name.strip()]
     two_names = []
     for name in two_names_orig:
         two_names.append(name.strip())
@@ -109,12 +106,9 @@ def search_results(request):
         search_terms.remove('and')
     except:
         pass
-    # print(search_terms)
-    # print(two_names)
 
     member_records = Member.objects.all()
     try:
-        print("Filter: {}".format(filter))
         member_records = member_records.filter(board_member=True)
     except:
         pass

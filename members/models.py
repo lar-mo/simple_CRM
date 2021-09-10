@@ -97,7 +97,6 @@ class Person(models.Model):
     partner                = models.ForeignKey('self', on_delete=models.CASCADE, related_name='person', blank=True, null=True)
     address                = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='address', blank=True, null=True)
     membership             = models.ForeignKey(Membership, on_delete=models.CASCADE, related_name='membership', blank=True, null=True)
-    # board_member           = models.Boolean(default=False, blank=False)
 
     def __str__(self):
         ## corresponds with ManyToManyField above
@@ -180,6 +179,15 @@ class Committee(models.Model):
         # people = list(zip(people_fn, people_ln))
         return "{} {}".format(self.role, people)
 
+    @classmethod
+    def get_cmte_members(cls):
+        roles_with_people = cls.objects.exclude(person__isnull=True)
+        role_list = [x for x in roles_with_people.all().order_by('role')]
+        return role_list
+
+    # class Meta:
+    #     ordering = ['person']
+
 class Board(models.Model):
     PRESIDENT = 'President'
     VICE_PRESIDENT = 'Vice President'
@@ -202,6 +210,9 @@ class Board(models.Model):
 
     def __str__(self):
         return "{} - {} {}".format(self.title, self.person.first_name, self.person.last_name)
+
+    class Meta:
+        ordering = ['person']
 
 class NeedsReview(models.Model):
     summary                     = models.CharField(max_length=100, null=True)

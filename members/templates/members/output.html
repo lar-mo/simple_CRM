@@ -20,13 +20,6 @@
             {% endif %}
         </span>
     </div>
-    {% if executive %}
-    <div class="execs">
-        {% for key, value in executive.items %}
-            <b>{{ key|title }}</b>: {{ value }}<br>
-        {% endfor %}
-    </div>
-    {% endif %}
     {% for member in members %}
         <div class="tile">
           {% url 'members_app:needs_review' as needs_review_url %}
@@ -41,7 +34,7 @@
               <span class="names_title">
                 {{member.first_name}}{{member.person.first_name}} {{member.last_name}}{{member.person.last_name}}{{member.member.last_name}}{% if member.byline or member.person.byline %}<span class="byline">, {{member.byline}}{{member.person.byline}}</span>{% endif %}
             </div>
-            {% if view != 'list_all_people' %}
+            {% if view == 'list_active_members' %}
               <div class="row">
                 <span class="names_title">{{member.partner.first_name}} {{member.partner.last_name}}
                   <!-- {% if member.person.partner.byline %} -->
@@ -66,7 +59,7 @@
             <div class="row">
               <div class="">{{member.phone_number}}{{member.person.phone_number}}</div>
               <div class="">{% if view == 'list_active_members' %}{{member.partner.phone_number}}{% endif %}</div>
-              <div>{{member.title}}{{member.person.title}}</div>
+              <div>{{member.title}}</div>
             </div>
           </div>
           {% url 'members_app:needs_review' as needs_review_url %}
