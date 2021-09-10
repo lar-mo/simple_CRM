@@ -1,6 +1,34 @@
 from django.db import models
 from django.contrib.auth.models import User
-# from multiselectfield import MultiSelectField
+
+from django.utils import timezone
+import datetime
+import django, platform
+
+def all_member_count(user):
+    number_of_all_members = Person.objects.count()
+    return number_of_all_members
+User.add_to_class('all_member_count', all_member_count)
+
+def board_member_count(user):
+    number_of_board_members = Board.objects.count()
+    return number_of_board_members
+User.add_to_class('board_member_count', board_member_count)
+
+def active_member_count(user):
+    number_of_active_members = Membership.objects.filter(status='Active').count()
+    return number_of_active_members
+User.add_to_class('active_member_count', active_member_count)
+
+def inactive_member_count(user):
+    number_of_inactive_members = Membership.objects.filter(status='Inactive').count()
+    return number_of_inactive_members
+User.add_to_class('inactive_member_count', inactive_member_count)
+
+def needs_review_count(user):
+    number_of_needs_review = NeedsReview.objects.filter().exclude(status='Closed').count()
+    return number_of_needs_review
+User.add_to_class('needs_review_count', needs_review_count)
 
 class Address(models.Model):
     description                 = models.CharField(max_length=100, blank=False)
@@ -10,37 +38,15 @@ class Address(models.Model):
     state                       = models.CharField(max_length=20, blank=False)
     postal_code                 = models.CharField(max_length=20, blank=False)
     country                     = models.CharField(max_length=30, blank=False, default="US")
-    PRIMARY = 'Primary'
-    SECONDARY = 'Secondary'
-    ADDRESS_TYPE_CHOICES = [
-        (PRIMARY, 'Primary'),
-        (SECONDARY, 'Secondary'),
-    ]
-    type                        = models.CharField(
-        max_length=10,
-        choices=ADDRESS_TYPE_CHOICES,
-        default=PRIMARY,
-        blank=False,
-    )
 
     def __str__(self):
-        return "{} ({})".format(self.address_1, self.description)
+        return "{} - {}".format(self.description, self.address_1)
 
-class Person(models.Model):
-    first_name             = models.CharField(max_length=100)
-    last_name              = models.CharField(max_length=100)
-    byline                 = models.CharField(max_length=100, blank=True)
-    nickname               = models.CharField(max_length=100, blank=True)
-    phone_number           = models.CharField(max_length=20, blank=True)
-    email                  = models.EmailField()
-    partner                = models.ForeignKey('self', on_delete=models.CASCADE, related_name='person', blank=True, null=True)
-    address                = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='address', blank=True, null=True)
-    # membership             = models.ForeignKey(Membership, on_delete=models.CASCADE, related_name='membership', blank=True, null=True)
-
-    def __str__(self):
-        return "{} {}".format(self.first_name, self.last_name)
+    class Meta:
+        ordering = ['description']
 
 class Membership(models.Model):
+    description                 = models.CharField(max_length=100, blank=False)
     SUPPORTER = 'Supporter'
     CONTRIBUTOR = 'Contributor'
     ADVOCATE = 'Advocate'
@@ -71,13 +77,36 @@ class Membership(models.Model):
         default=ACTIVE,
         blank=True,
     )
-    member                      = models.ManyToManyField(Person)
 
     def __str__(self):
-        # return "{}".format(self.level)
-        members = ["{} {}".format(x.first_name, x.last_name) for x in self.member.all()]
-        members = ', '.join(map(str, members))
-        return "{} - {}".format(self.level, members)
+        return "{} - {} ({})".format(self.description, self.level, self.status)
+        # members = ["{} {}".format(x.first_name, x.last_name) for x in self.member.all().distinct()]
+        # members = ', '.join(map(str, members))
+        # return "{} - {}".format(self.level, members)
+
+    # class Meta:
+        # ordering = ['member__last_name']
+
+class Person(models.Model):
+    first_name             = models.CharField(max_length=100)
+    last_name              = models.CharField(max_length=100)
+    byline                 = models.CharField(max_length=100, blank=True)
+    nickname               = models.CharField(max_length=100, blank=True)
+    phone_number           = models.CharField(max_length=20, blank=True)
+    email                  = models.EmailField(blank=True)
+    partner                = models.ForeignKey('self', on_delete=models.CASCADE, related_name='person', blank=True, null=True)
+    address                = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='address', blank=True, null=True)
+    membership             = models.ForeignKey(Membership, on_delete=models.CASCADE, related_name='membership', blank=True, null=True)
+    # board_member           = models.Boolean(default=False, blank=False)
+
+    def __str__(self):
+        ## corresponds with ManyToManyField above
+        # address = self.address.values_list('address_1', flat=True)
+        # address = [item for item in address]
+        return "{} {} ({}), {}".format(self.first_name, self.last_name, self.address, self.membership)
+
+    class Meta:
+        ordering = ['last_name']
 
 class Committee(models.Model):
     ADVISORY = 'Advisory'
@@ -136,9 +165,7 @@ class Committee(models.Model):
         choices=COMMITTEE_ROLE_CHOICES,
         blank=True,
     )
-    # COMMITTEE_MEMBERS = [("Larry Moiola", "Larry"),("Susan Jones", "Sue"),("Paul Virzi","Paul")]
     person                      = models.ManyToManyField(Person, blank=True)
-    # person                      = MultiSelectField(choices=COMMITTEE_MEMBERS, blank=True, null=True)
 
     def __str__(self):
         person_list = ["{} {}".format(x.first_name, x.last_name) for x in self.person.all()]
@@ -169,9 +196,62 @@ class Board(models.Model):
     title                       = models.CharField(
         max_length=20,
         choices=BOARD_TITLE_CHOICES,
-        blank=True,
+        unique=True,
     )
     person                      = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='board_member')
 
     def __str__(self):
-        return "{}: {} {}".format(self.title, self.person.first_name, self.person.last_name)
+        return "{} - {} {}".format(self.title, self.person.first_name, self.person.last_name)
+
+class NeedsReview(models.Model):
+    summary                     = models.CharField(max_length=100, null=True)
+    description                 = models.TextField(null=True)
+    NAME = 'Name'
+    ADDRESS = 'Address'
+    EMAIL = 'Email'
+    PHONE_NUMBER = 'Phone Number'
+    PARTNER = 'Partner'
+    MEMBERSHIP = 'Council Membership'
+    BOARD = 'Board Membership'
+    COMMITTEE = 'Committee Membeship'
+    REASON_CHOICES = [
+        (NAME, 'Name'),
+        (ADDRESS, 'Address'),
+        (EMAIL, 'Email'),
+        (PHONE_NUMBER, 'Phone Number'),
+        (PARTNER, 'Partner'),
+        (MEMBERSHIP, 'Council Membership'),
+        (BOARD, 'Board Membership'),
+        (COMMITTEE, 'Committee Membeship'),
+    ]
+    component                       = models.CharField(
+        max_length=30,
+        choices=REASON_CHOICES,
+    )
+    OPEN = 'Open'
+    ASSIGNED = 'Assigned'
+    CLOSED = 'Closed'
+    STATUS_CHOICES = [
+        (OPEN, 'Open'),
+        (ASSIGNED, 'Assigned'),
+        (CLOSED, 'Closed'),
+    ]
+    status                       = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=OPEN,
+    )
+    assignee                    = models.ForeignKey(
+        Committee,
+        on_delete=models.CASCADE,
+        related_name='assignee',
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        if self.assignee == None:
+            assignee = "unassigned"
+        else:
+            assignee = self.assignee
+        return "{} ({})".format(self.summary, assignee)

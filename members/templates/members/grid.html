@@ -1,0 +1,45 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+    <table class="members_list">
+      <tr>
+        <td class="members_list_header">Name(s)</td>
+        <td class="members_list_header">Phone Number(s)</td>
+        <td class="members_list_header">Address 1</td>
+        <td class="members_list_header">Address 2</td>
+        <td class="members_list_header">City</td>
+        <td class="members_list_header">State</td>
+        <td class="members_list_header">Postal Code</td>
+        <td class="members_list_header">Email 1</td>
+        <td class="members_list_header">Email 2</td>
+        <td class="members_list_header">Membership Status</td>
+        <td class="members_list_header">Type</td>
+        <td class="members_list_header">Role</td>
+        <td class="members_list_header">Directory Opt-Out</td>
+        <td class="members_list_header">Needs Review</td>
+        <td class="members_list_header">Reason for Review</td>
+      </tr>
+      {% for member in members %}
+      <tr>
+        <td class="members_list_value names_title">{{member.name1}}{% if member.byline != '' %}, <span class="byline">{{member.byline}}</span>{% endif %}{% if member.byline != '' and member.name2 != '' %},{% endif %}{% if member.name2 != '' %} and {% endif %} {{member.name2}}{% if member.note != '' %}<div class="note">{{member.note}}</div>{% endif %}</td>
+        <td class="members_list_value">{{member.phone_number1}}{% if member.phone_number2 != '' %}<br>{{member.phone_number2}}{% endif %}</td>
+        <td class="members_list_value">{{member.address1}}</td>
+        <td class="members_list_value">{{member.address2}}</td>
+        <td class="members_list_value">{{member.city}}</td>
+        <td class="members_list_value">{{member.state}}</td>
+        <td class="members_list_value">{{member.postal_code}}</td>
+        <td class="members_list_value">{{member.email1}}</td>
+        <td class="members_list_value">{{member.email2}}</td>
+        <td class="members_list_value">{{member.membership_status|title}}</td>
+        <td class="members_list_value">{{member.membership_type|title}}</td>
+        <td class="members_list_value">{{member.role|title}}</td>
+        <td class="members_list_value">{% if member.directory_optout %}<i class="bi bi-check"></i>{% endif %}</td>
+        <td class="members_list_value checkmark_bool_grid">{% if member.needs_review %}<i class="bi bi-check"></i>{% endif %}</td>
+        <td class="members_list_value">{{member.reason_for_review|title}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+{% endblock %}

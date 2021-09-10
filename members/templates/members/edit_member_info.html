@@ -1,0 +1,193 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <h3>Edit Member Information</h3>
+      <form id="edit_member_form" action="{% url 'members_app:save_member_info' %}" method="post">
+        <div class="tile edit_form_align">
+            {% csrf_token %}
+          <div class="col_rw">
+            <div class="row">
+              <div class="form_fields">
+                <label for="name1">Name 1: {{member.sort_by}}</label>
+                <input type="text" id="name1" name="name1" value="{{member.name1}}" required>
+                <input type="hidden" id="sort_by" name="sort_by" value="{{member.sort_by}}">
+              </div>
+              <div class="form_fields">
+                <label for="byline">Byline:</label>
+                <input type="text" id="byline" name="byline" value="{{member.byline}}">
+              </div>
+              <div class="form_fields">
+                <label for="name2">Name 2:</label>
+                <input type="text" id="name2" name="name2" value="{{member.name2}}">
+              </div>
+              <div class="form_fields">
+                <label for="note">Note:</label>
+                <input type="text" id="note" name="note" value="{{member.note}}">
+              </div>
+              <div class="form_fields">
+                <label for="postal_code">Address 1:</label>
+                <input type="text" id="address1" name="address1" value="{{member.address1}}">
+              </div>
+              <div class="form_fields">
+                <label for="address2">Address 2:</label>
+                <input type="text" id="address2" name="address2" value="{{member.address2}}">
+              </div>
+              <div class="form_fields">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" value="{{member.city}}">
+              </div>
+              <div class="form_fields">
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state" value="{{member.state}}">
+              </div>
+              <div class="form_fields">
+                <label for="postal_code">Postal Code:</label>
+                <input type="text" id="postal_code" name="postal_code" value="{{member.postal_code}}">
+              </div>
+            </div>
+          </div>
+          <div class="col_rw">
+            <div class="row">
+              <div class="form_fields">
+                <label for="email1">Email 1:</label>
+                <input type="text" id="email1" name="email1" value="{{member.email1}}">
+              </div>
+              <div class="form_fields">
+                <label for="email2">Email 2:</label>
+                <input type="text" id="email2" name="email2" value="{{member.email2}}">
+              </div>
+              <div class="form_fields">
+                <label for="phone_number1">Phone 1:</label>
+                <input type="text" id="phone_number1" name="phone_number1" value="{{member.phone_number1}}">
+              </div>
+              <div class="form_fields">
+                <label for="phone_number2">Phone 2:</label>
+                <input type="text" id="phone_number2" name="phone_number2" value="{{member.phone_number2}}">
+              </div>
+              <div class="form_fields">
+                <label for="membership_status">Member Status:</label>
+                <select id="membership_status" name="membership_status">
+                  <option value="Active"{% if member.membership_status|lower == 'active' %} selected{%endif%}>Active</option>
+                  <option value="Inactive"{% if member.membership_status|lower == 'inactive' %} selected{%endif%}>Inactive</option>
+                </select>
+              </div>
+              <div class="form_fields">
+                <label for="membership_type">Member Type:</label>
+                <select id="membership_type" name="membership_type">
+                  <option value="Supporter" {% if member.membership_type|lower == 'supporter' %} selected {%endif%}>Supporter</option>
+                  <option value="Contributor" {% if member.membership_type|lower == 'contributor' %} selected {%endif%}>Contributor</option>
+                  <option value="Advocate" {% if member.membership_type|lower == 'advocate' %} selected {%endif%}>Advocate</option>
+                  <option value="Honorary" {% if member.membership_type|lower == 'honorary' %} selected {%endif%}>Honorary</option>
+                  <option value="PAM staff" {% if member.membership_type|lower == 'pam staff' %} selected {%endif%}>PAM staff</option>
+                </select>
+              </div>
+              <div class="form_fields">
+                <label for="board_member">Board Member:</label>
+                <input type="checkbox" id="board_member" name="board_member" style="width: auto;" {% if member.board_member %}checked{% endif %}>
+              </div>
+              <div class="form_fields">
+                <label for="role" id="role_label" {% if member.board_member %}style="visibility:visible"{% endif %}>Role & Commitees:</label>
+                <input type="text" id="role" name="role" value="{{member.role}}" {% if member.board_member %}style="visibility:visible"{% endif %}>
+              </div>
+              <div class="form_fields">
+                <label for="directory_optout">Directory Opt-out:</label>
+                <input type="checkbox" id="directory_optout" name="directory_optout" style="width: auto;" {% if member.directory_optout %}checked{% endif %}>
+              </div>
+              <div class="form_fields">
+                <label for="needs_review">Needs Review:</label>
+                <input type="checkbox" id="needs_review" name="needs_review" style="width: auto;" {% if member.needs_review %}checked{% endif %}>
+              </div>
+              <div class="form_fields">
+                <label for="reason_for_review" id="reason_for_review_label" {% if member.needs_review %}style="visibility:visible"{% endif %}>Reason for Review: <a href="#" id="clear_reason_lnk">[clear]</a></label>
+                <input type="text" id="reason_for_review" name="reason_for_review" value="{{member.reason_for_review}}" {% if member.needs_review %}style="visibility:visible"{% endif %}>
+              </div>
+            </div>
+            <hr>
+              <div class="form_fields submit_btn">
+                <button type="submit" class="" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
+                <a href="{% url 'members_app:show_member_info' member.id %}">cancel</a>
+              </div>
+          </div>
+        </div>
+        <input type="hidden" id="member_id" name="member_id" value="{{member.id}}">
+      </form>
+  </div> <!-- end of 'container' -->
+
+  <script type="text/javascript">
+    let clear_reason_lnk = document.querySelector('#clear_reason_lnk');
+    let reason_for_review = document.querySelector('#reason_for_review');
+    clear_reason_lnk.onclick = function (event) {
+      reason_for_review.value = '';
+      event.preventDefault()
+    }
+  </script>
+
+  <script type="text/javascript">
+    let board_member = document.querySelector('#board_member');
+    let role = document.querySelector('#role');
+    board_member.onclick = function() {
+      if (board_member.checked) {
+        document.getElementById("role_label").style.visibility = "visible";
+        document.getElementById("role").style.visibility = "visible";
+        document.getElementById("role").setAttribute("required", true);
+      } else {
+        document.getElementById("role_label").style.visibility = "hidden";
+        document.getElementById("role").style.visibility = "hidden";
+        document.getElementById("role").removeAttribute("required");
+      }
+    }
+
+    let needs_review = document.querySelector('#needs_review');
+    needs_review.onclick = function(e) {
+      if (needs_review.checked) {
+        document.getElementById("reason_for_review_label").style.visibility = "visible";
+        document.getElementById("reason_for_review").style.visibility = "visible";
+        document.getElementById("reason_for_review").setAttribute("required", true);
+      } else {
+        if (reason_for_review.value != '') {
+          var answer=confirm("Do you want to clear the Reason for Review?");
+          if(answer){
+            reason_for_review.value = '';
+            document.getElementById("reason_for_review_label").style.visibility = "hidden";
+            document.getElementById("reason_for_review").style.visibility = "hidden";
+            document.getElementById("reason_for_review").removeAttribute("required");
+          } else {
+            e.preventDefault();
+          }
+        } else {
+          document.getElementById("reason_for_review_label").style.visibility = "hidden";
+          document.getElementById("reason_for_review").style.visibility = "hidden";
+          document.getElementById("reason_for_review").removeAttribute("required");
+        }
+      }
+    }
+  </script>
+
+  <script type="text/javascript">
+    let name1 = document.querySelector('#name1');
+    name1.onchange = function() {
+      let lname1 = name1.value.split(' ').pop();
+      sort_by.value = lname1;
+    }
+  </script>
+
+  <script type="text/javascript">
+    window.onload = function() {
+      if (board_member.checked) {
+        document.getElementById("role").setAttribute("required", true);
+      } else {
+        document.getElementById("role").removeAttribute("required");
+      }
+      if (needs_review.checked) {
+        document.getElementById("reason_for_review").setAttribute("required", true);
+      } else {
+        document.getElementById("reason_for_review").removeAttribute("required");
+      }
+      let lname1 = "{{member.name1}}".split(' ').pop();
+      sort_by.value = lname1;
+    }
+  </script>
+
+{% endblock %}

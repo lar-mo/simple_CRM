@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>EAAC Members</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <link rel="shortcut icon" href="{{ STATIC_URL }}/static/favicon.png">
+    <style media="screen" type="text/css">
+      html, body {
+        background: radial-gradient(#60A9EA, #6D6D6D);
+        background-attachment: fixed;
+        background-size: cover;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 0.95em;
+      }
+      header {
+        padding: 10px;
+        background-color: #fff;
+      }
+      main {
+        padding: 10px;
+        margin: 20px auto;
+      }
+      /* main > * {
+        box-shadow:           3px 3px 5px 0 rgba(25,25,25,0.4);
+        -moz-box-shadow:      3px 3px 5px 0 rgba(25,25,25,0.4);
+        -webkit-box-shadow:   3px 3px 5px 0 rgba(25,25,25,0.4);
+      } */
+      .main_edit {
+        width: 90vw;
+        /* height: 100vw; */
+        padding: 10px;
+        margin: 20px auto;
+      }
+      .pagination_top {
+        border-radius: 10px 10px 0 0;
+        /* text-align: center; */
+      }
+      .pagination_bottom {
+        border-radius: 0 0 10px 10px;
+        text-align: center;
+      }
+      .members_list_value {
+        border: 1px solid #000;
+        padding: 4px;
+      }
+      .members_list_header {
+        border: 1px solid #000;
+        padding: 4px;
+        font-weight: bold;
+      }
+      .members_list {
+        border-collapse: collapse;
+        background-color: #fff;
+      }
+      .names_title {
+        font-weight: bold;
+      }
+      .byline {
+        font-style: italic;
+        font-weight: normal;
+      }
+      .note {
+        font-style: italic;
+        font-weight: normal;
+      }
+      .tile {
+        background-color: #fff;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+      .tile:first-child:last-child {
+        border-radius: 10px;
+      }
+      .tile:first-child {
+        border-radius: 10px 10px 0 0;
+      }
+      .tile:last-child {
+        border-radius: 0 0 10px 10px;
+      }
+      .tile:nth-child(odd) {
+        background-color: rgba(255,255,255,0.7);
+      }
+      .row {
+        padding-right: 20px;
+      }
+      .col_ro {
+        width: 400px;
+      }
+      .col_rw {
+        width: 640px;
+      }
+      .container > * {
+        padding: 10px;
+        background-color: #fff;
+      }
+      .search_box {
+        margin: 10px 0;
+        width: 400px;
+      }
+      .red_label {
+        color: red;
+      }
+      .needs_review {
+        width: 220px;
+      }
+      .edit_link {
+        margin: 10px 50px;
+        color: blue;
+        text-decoration: underline;
+      }
+      #clear_reason_lnk {
+        font-size: 0.8em;
+        text-decoration: none;
+      }
+      label {
+        display: block;
+        width: 230px;
+        float: left;
+        font-weight: bold;
+      }
+      .form_fields > input,
+      .form_fields > select {
+        width: 300px;
+        margin-bottom: 10px;
+      }
+      h3 {
+        background-color: #fff;
+        margin: 0 auto;
+        border-radius: 10px 10px 0 0;
+      }
+      .checkmark_bool_grid {
+        text-align: center;
+        font-size: 1.99em;
+      }
+      .submit_btn {
+        text-align: center;
+      }
+      #filter_cb {
+        margin-left: 5px;
+      }
+      .message {
+        color: green;
+        border-radius: 3px 3px 0 0;
+        margin-left: 10px;
+        padding: 2px 4px 2px 4px;
+        background-color: #F2F2F2;
+        /* z-index: 2; */
+        /* text-transform: uppercase; */
+      }
+      #edit_member_form {
+        border-radius: 0 0 10px 10px;
+      }
+      .execs {
+        font-size: 1.2em;
+      }
+      #role_label, #role, #reason_for_review, #reason_for_review_label {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+    <body>
+      <header>
+        <h1>EAAC Members</h1>
+        <div class="filter_members">Show:
+          <input type="radio" name="filter_members" id="show_all"> <a href="{% url 'members_app:list_all' %}">All People</a> ({{user.all_member_count}})
+          <input type="radio" name="filter_members" id="show_board"> <a href="/members/list_board/">Board Members</a> ({{user.board_member_count}})
+          <input type="radio" name="filter_members" id="show_active"> <a href="/members/list_active/">Active Members</a> ({{user.active_member_count}})
+          <input type="radio" name="filter_members" id="show_inactive"> <a href="/members/list_inactive/">Inactive Members</a> ({{user.inactive_member_count}})
+          <input type="radio" name="filter_members" id="show_needs_review"> <a href="/members/needs_review/">Needs Review</a> ({{user.needs_review_count}})
+        </div>
+
+          <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
+          <button type="submit" class="" id="search_btn"><b>Search</b></button>
+          <input type="checkbox" class="" name="filter_cb" id="filter_cb"/> Show Only Board Members
+      </header>
+
+      <main>
+        {% block content %}{% endblock %}
+      </main>
+
+      <script type="text/javascript">
+        let show_all = document.querySelector('#show_all');
+        let show_board = document.querySelector('#show_board');
+        let show_active = document.querySelector('#show_active');
+        let show_inactive = document.querySelector('#show_inactive');
+        let show_needs_review = document.querySelector('#show_needs_review');
+        if (window.location.pathname == '/members/') {
+          show_active.checked = true;
+        } else if (window.location.pathname == '/members/list_all/') {
+          show_all.checked = true;
+        } else if (window.location.pathname == '/members/list_board/') {
+          show_board.checked = true;
+        } else if (window.location.pathname == '/members/list_active/') {
+          show_active.checked = true;
+        } else if (window.location.pathname == '/members/list_inactive/') {
+          show_inactive.checked = true;
+        } else if (window.location.pathname == '/members/needs_review/') {
+          show_needs_review.checked = true;
+        } else {
+          show_all.checked = false;
+          show_board.checked = false;
+          show_active.checked = false;
+          show_inactive.checked = false;
+          show_needs_review.checked = false;
+        }
+        show_all.onclick = function() {
+          window.location='/members/list_all/';
+        }
+        show_board.onclick = function() {
+          window.location='/members/list_board/';
+        }
+        show_active.onclick = function() {
+          window.location='/members/list_active/';
+        }
+        show_inactive.onclick = function() {
+          window.location='/members/list_inactive/';
+        }
+        show_needs_review.onclick = function() {
+          window.location='/members/needs_review/';
+        }
+      </script>
+
+      <script type="text/javascript">
+        search_btn = document.querySelector('#search_btn')
+        q = document.querySelector('#q')
+        filter_cb = document.querySelector('#filter_cb')
+        search_btn.onclick = function(event) {
+          if (q.value.trim() == '') {
+            event.preventDefault()
+          } else {
+            if (filter_cb.checked) {
+              window.location="{% url 'members_app:search_results' %}?q=" + q.value + "&f=board_only"
+            } else {
+              window.location="{% url 'members_app:search_results' %}?q=" + q.value
+            }
+          }
+        }
+        q.addEventListener("keydown", function (event) { // listen for  key presses
+            if (event.keyCode === 13) {                                 // '13' is the Enter/Return key
+                search_btn.click()                                      // emulate button click
+            }
+        })
+      </script>
+
+    </body>
+  </html>

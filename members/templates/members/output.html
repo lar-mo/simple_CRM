@@ -1,0 +1,112 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <div class="pagination_top" style="background-color: #cde;">
+        <span class="step-links" id="step_links_top">
+            {% if members.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ members.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ members.number }} of {{ members.paginator.num_pages }}.
+            </span>
+
+            {% if members.has_next %}
+                <a href="?page={{ members.next_page_number }}">next</a>
+                <a href="?page={{ members.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% if executive %}
+    <div class="execs">
+        {% for key, value in executive.items %}
+            <b>{{ key|title }}</b>: {{ value }}<br>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% for member in members %}
+        <div class="tile">
+          {% url 'members_app:needs_review' as needs_review_url %}
+          {% if request.path == needs_review_url %}
+          <div class="needs_review"><b>Needs Review</b>:<br><i>{{member.reason_for_review|title}}</i>
+            <!-- <div class="edit_link"><a href="/members/edit_member_info/{{member.id}}/">Edit</a></div> -->
+            <div class="edit_link"><a href="{% url 'members_app:edit_member_info' member.id %}">Edit</a></div>
+          </div>
+          {% endif %}
+          <div class="col_ro">
+            <div class="row">
+              <span class="names_title">
+                {{member.first_name}}{{member.person.first_name}} {{member.last_name}}{{member.person.last_name}}{{member.member.last_name}}{% if member.byline or member.person.byline %}<span class="byline">, {{member.byline}}{{member.person.byline}}</span>{% endif %}
+            </div>
+            {% if view != 'list_all_people' %}
+              <div class="row">
+                <span class="names_title">{{member.partner.first_name}} {{member.partner.last_name}}
+                  <!-- {% if member.person.partner.byline %} -->
+                  <div class="byline">{{member.partner.byline}}</div>
+                  <!-- {% endif %} -->
+                </span>
+              </div>
+            {% endif %}
+            <div class="row">
+              {% if member.address.address_1 != '' %}
+              <div class="">{{member.address.address_1}}{{member.person.address.address_1}}</div>
+              <div class="">{{member.address.address_2}}{{member.person.address.address_2}}</div>
+              <div class="">{{member.address.city}}{{member.person.address.city}}, {{member.address.state}}{{member.person.address.state}} {{member.address.postal_code}}{{member.person.address.postal_code}}</div>
+              {% endif %}
+            </div>
+            <div class="row">
+              <div class="">{{member.email}}{{member.person.email}}</div>
+              <div class="">{% if view == 'list_active_members' %}{{member.partner.email}}{% endif %}</div>
+            </div>
+          </div>
+          <div class="col_ro">
+            <div class="row">
+              <div class="">{{member.phone_number}}{{member.person.phone_number}}</div>
+              <div class="">{% if view == 'list_active_members' %}{{member.partner.phone_number}}{% endif %}</div>
+              <div>{{member.title}}{{member.person.title}}</div>
+            </div>
+          </div>
+          {% url 'members_app:needs_review' as needs_review_url %}
+          {% if request.path != needs_review_url %}
+          <span><a href="{% url 'members_app:edit_member_info' member.id %}">edit</a></span>
+          {% endif %}
+        </div>
+    {% endfor %}
+    <div class="pagination_bottom">
+        <span class="step-links" id="step_links_bottom">
+            {% if members.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ members.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ members.number }} of {{ members.paginator.num_pages }}.
+            </span>
+
+            {% if members.has_next %}
+                <a href="?page={{ members.next_page_number }}">next</a>
+                <a href="?page={{ members.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+  {% if view == 'search_page' %}
+      document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>"
+      document.getElementById("step_links_bottom").innerHTML = "";
+      console.log('{{match}}')
+  {% elif view == 'show_member_info_page' %}
+        {% if message == "changes_saved" %}
+          document.getElementById("step_links_top").innerHTML = "Changes Saved"
+        {% else %}
+          document.getElementById("step_links_top").innerHTML = "Member Details"
+        {% endif %}
+        document.getElementById("step_links_bottom").innerHTML = "";
+    {% endif %}
+  </script>
+
+{% endblock %}
