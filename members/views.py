@@ -27,19 +27,44 @@ def list_all(request):
 class ListBoardView(LoginRequiredMixin, View):
 
     def get(self, request):
-        executive_members = Board.objects.filter()
+        executive_members = Board.objects.all()
+        # committee_members = Committee.objects.all()
+
+        # role = Committee.get_role(12)
+        # print(role)
+        # for x in role:
+        #     print(x.role)
+
         roles = Committee.get_cmte_members()
-        # print(roles)
+        print("Cmte Roles: {}".format(roles))
         committee_members = []
         for role in roles:
-            people = role.person.all()
-            for i in range(len(people)):
-                committee_members.append(people[i])
+            person = role.cmte_member
+            committee_members.append(person)
+
         # print("Before dedupe: {}".format(committee_members))
         committee_members = list(dict.fromkeys(committee_members))
-        # print("After dedupe: {}".format(committee_members))
+        # print("{}".format(executive_members))
+
         board_members = list(chain(executive_members, committee_members))
-        print(board_members)
+        # board_members = Q(executive_members) | Q(committee_members)
+        # print(board_members)
+        all_bm = []
+        for m in board_members:
+            try:
+                em = m.cmte_member.board_member
+                all_bm.append(em)
+            except:
+                pass
+            try:
+                cm = m.board_member
+                all_bm.append(cm)
+            except:
+                pass
+        # print(all_bm)
+        all = list(dict.fromkeys(all_bm)) # remove duplicates
+        print(all)
+
         paginator = Paginator(board_members, 10)
         page_number = request.GET.get('page')
         members = paginator.get_page(page_number)

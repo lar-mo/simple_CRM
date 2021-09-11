@@ -94,7 +94,7 @@ class Person(models.Model):
     nickname               = models.CharField(max_length=100, blank=True)
     phone_number           = models.CharField(max_length=20, blank=True)
     email                  = models.EmailField(blank=True)
-    partner                = models.ForeignKey('self', on_delete=models.CASCADE, related_name='person', blank=True, null=True)
+    partner                = models.ForeignKey('self', on_delete=models.CASCADE, related_name='so', blank=True, null=True)
     address                = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='address', blank=True, null=True)
     membership             = models.ForeignKey(Membership, on_delete=models.CASCADE, related_name='membership', blank=True, null=True)
 
@@ -106,6 +106,33 @@ class Person(models.Model):
 
     class Meta:
         ordering = ['last_name']
+
+class Board(models.Model):
+    PRESIDENT = 'President'
+    VICE_PRESIDENT = 'Vice President'
+    SECRETARY = 'Secretary'
+    TREASURER = 'Treasurer'
+    PAST_PRESIDENT = 'Past President'
+    COMMITTEE = 'Commitee'
+    BOARD_TITLE_CHOICES = [
+        (PRESIDENT, 'President'),
+        (VICE_PRESIDENT, 'Vice President'),
+        (SECRETARY, 'Secretary'),
+        (TREASURER, 'Treasurer'),
+        (PAST_PRESIDENT, 'Past President'),
+        (COMMITTEE, 'Commitee'),
+    ]
+    title                       = models.CharField(
+        max_length=20,
+        choices=BOARD_TITLE_CHOICES,
+    )
+    board_member    = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True, related_name='board_member')
+
+    def __str__(self):
+        return "{} - {} {}".format(self.title, self.board_member.first_name, self.board_member.last_name)
+
+    class Meta:
+        ordering = ['id']
 
 class Committee(models.Model):
     ADVISORY = 'Advisory'
@@ -164,55 +191,36 @@ class Committee(models.Model):
         choices=COMMITTEE_ROLE_CHOICES,
         blank=True,
     )
-    person                      = models.ManyToManyField(Person, blank=True)
+    cmte_member            = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='cmte_member', blank=True, null=True)
 
     def __str__(self):
-        person_list = ["{} {}".format(x.first_name, x.last_name) for x in self.person.all()]
-        people = ''
-        for i in range(len(person_list)):
-            if i == len(person_list)-1 and len(person_list) > 1:
-                people += ", and {}".format(person_list[i])
-            elif i == 0:
-                people+= "- {}".format(person_list[i])
-            else:
-                people += ", {}".format(person_list[i])
-        # people = list(zip(people_fn, people_ln))
-        return "{} {}".format(self.role, people)
+        # person_list = ["{} {}".format(x.first_name, x.last_name) for x in self.person.all()]
+        # people = ''
+        # for i in range(len(person_list)):
+        #     if i == len(person_list)-1 and len(person_list) > 1:
+        #         people += ", and {}".format(person_list[i])
+        #     elif i == 0:
+        #         people+= "- {}".format(person_list[i])
+        #     else:
+        #         people += ", {}".format(person_list[i])
+        # # people = list(zip(people_fn, people_ln))
+        # return "{} {}".format(self.role, people)
+        # return "{} - {} {}".format(self.role, self.person.first_name, self.person.last_name)
+        return "{} ({} {})".format(self.role, self.cmte_member.board_member.first_name, self.cmte_member.board_member.last_name)
+        # return "{} ({} {})".format(self.role, self.cmte_member.first_name, self.cmte_member.last_name)
 
     @classmethod
     def get_cmte_members(cls):
-        roles_with_people = cls.objects.exclude(person__isnull=True)
+        roles_with_people = cls.objects.all()
         role_list = [x for x in roles_with_people.all().order_by('role')]
         return role_list
 
-    # class Meta:
-    #     ordering = ['person']
-
-class Board(models.Model):
-    PRESIDENT = 'President'
-    VICE_PRESIDENT = 'Vice President'
-    SECRETARY = 'Secretary'
-    TREASURER = 'Treasurer'
-    PAST_PRESIDENT = 'Past President'
-    BOARD_TITLE_CHOICES = [
-        (PRESIDENT, 'President'),
-        (VICE_PRESIDENT, 'Vice President'),
-        (SECRETARY, 'Secretary'),
-        (TREASURER, 'Treasurer'),
-        (PAST_PRESIDENT, 'Past President'),
-    ]
-    title                       = models.CharField(
-        max_length=20,
-        choices=BOARD_TITLE_CHOICES,
-        unique=True,
-    )
-    person                      = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='board_member')
-
-    def __str__(self):
-        return "{} - {} {}".format(self.title, self.person.first_name, self.person.last_name)
+    @classmethod
+    def get_role(cls, person_id):
+        return cls.objects.filter(cmte_member_id=person_id)
 
     class Meta:
-        ordering = ['person']
+        ordering = ['role']
 
 class NeedsReview(models.Model):
     summary                     = models.CharField(max_length=100, null=True)

@@ -32,7 +32,7 @@
           <div class="col_ro">
             <div class="row">
               <span class="names_title">
-                {{member.first_name}}{{member.person.first_name}} {{member.last_name}}{{member.person.last_name}}{{member.member.last_name}}{% if member.byline or member.person.byline %}<span class="byline">, {{member.byline}}{{member.person.byline}}</span>{% endif %}
+                {{member.first_name}}{{member.board_member.first_name}}{{member.cmte_member.first_name}} {{member.last_name}}{{member.board_member.last_name}}{% if member.byline or member.person.byline  %}<span class="byline">, {{member.byline}}{{member.person.byline}}{{member.board_member.byline}}</span>{% endif %}
             </div>
             {% if view == 'list_active_members' %}
               <div class="row">
@@ -45,13 +45,13 @@
             {% endif %}
             <div class="row">
               {% if member.address.address_1 != '' %}
-              <div class="">{{member.address.address_1}}{{member.person.address.address_1}}</div>
-              <div class="">{{member.address.address_2}}{{member.person.address.address_2}}</div>
-              <div class="">{{member.address.city}}{{member.person.address.city}}, {{member.address.state}}{{member.person.address.state}} {{member.address.postal_code}}{{member.person.address.postal_code}}</div>
+              <div class="">{{member.address.address_1}}{{member.board_member.address.address_1}}</div>
+              <div class="">{{member.address.address_2}}{{member.board_member.address.address_2}}</div>
+              <div class="">{{member.address.city}}{{member.board_member.address.city}}, {{member.address.state}}{{member.board_member.address.state}} {{member.address.postal_code}}{{member.board_member.address.postal_code}}</div>
               {% endif %}
             </div>
             <div class="row">
-              <div class="">{{member.email}}{{member.person.email}}</div>
+              <div class="">{{member.email}}{{member.board_member.email}}</div>
               <div class="">{% if view == 'list_active_members' %}{{member.partner.email}}{% endif %}</div>
             </div>
           </div>
