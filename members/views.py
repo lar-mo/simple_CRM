@@ -48,7 +48,7 @@ def list_active(request):
     members = paginator.get_page(page_number)
     context = {
         'members': members,
-        'view': 'list_active_members'
+        'view': 'active_members'
     }
     return render(request, 'members/output.html', context)
 
@@ -60,7 +60,7 @@ def list_inactive(request):
     members = paginator.get_page(page_number)
     context = {
         'members': members,
-        'view': 'list_inactive_members'
+        'view': 'inactive_members'
     }
     return render(request, 'members/output.html', context)
 
@@ -168,39 +168,55 @@ def search_results(request):
 
 
 @login_required
-def show_person_info(request, person_id):
+def show_person(request, person_id):
     message = request.GET.get('message', '')
     person = Person.objects.filter(id=person_id)
     # print(member)
     context = {
         'members': person,
         'message': message,
-        'view': 'show_person_info',
+        'view': 'show_person',
     }
     return render(request, 'members/output.html', context)
 
 @login_required
-def edit_person_info(request, person_id):
-    message = request.GET.get('message', '')
+def edit_person(request, person_id):
     people = Person.objects.all()
     person = people.get(id=person_id)
     context = {
         'person': person,
         'people': people,
-        'message': message,
-        'view': 'edit_person_info_page',
+        'view': 'edit_person',
     }
-    return render(request, 'members/edit_person_info.html', context)
+    return render(request, 'members/edit_person.html', context)
 
 @login_required
-def edit_member_info(request, member_id):
+def save_person(request):
+    return HttpResponse("Hello world!")
+
+@login_required
+def show_member(request, member_id):
+    message = request.GET.get('message', '')
+    members = Membership.objects.filter(id=member_id)
+    context = {
+        'members': members,
+        'message': message,
+        'view': 'show_member',
+    }
+    return render(request, 'members/output.html', context)
+
+@login_required
+def edit_member(request, member_id):
     member = Membership.objects.get(id=member_id)
+    people = Person.objects.all()
     context = {
         'member': member,
+        'people': people,
+        'view': 'edit_member',
     }
-    return render(request, 'members/edit_member_info.html', context)
+    return render(request, 'members/edit_member.html', context)
 
-def save_member_info(request):
+def save_member(request):
     member_id = request.POST['member_id']
     member_info = Member.objects.get(id=member_id)
     member_info.name1 = request.POST['name1'].strip()
@@ -246,4 +262,4 @@ def save_member_info(request):
     member_info.reason_for_review = request.POST['reason_for_review'].strip()
     member_info.save()
 
-    return HttpResponseRedirect(reverse('members_app:show_member_info', kwargs={'member_id':member_id})+'?message=changes_saved')
+    return HttpResponseRedirect(reverse('members_app:show_member', kwargs={'member_id':member_id})+'?message=changes_saved')

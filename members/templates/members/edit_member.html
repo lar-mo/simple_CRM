@@ -1,0 +1,65 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <h3>Edit Member Information</h3>
+      <form id="edit_member_form" action="{% url 'members_app:save_member' %}" method="post">
+        <div class="tile edit_form_align">
+            {% csrf_token %}
+          <div class="col_rw">
+            <div class="row">
+              <div class="form_fields">
+                <div class="member_label">Member{% if member.person2 %}s{%endif%} <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:</div>
+                <div class="member_names">{{member.person1}}{% if member.person2 %} and {{member.person2}}{% endif %}</div>
+              </div>
+              <div class="form_fields">
+                <div class="">
+                  <div class="">
+                    <div class="mailing_address_label">Mailing Address <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:</div>
+                    <div class="mailing_address">
+                      <div class="">{{member.address.address_1}}</div>
+                      <div class="">{{member.address.address_2}}</div>
+                      <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+                      <div class="">{{member.address.country}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- end of 'row' -->
+          </div><!-- end of 'col_rw' -->
+          <div class="col_rw">
+            <div class="row">
+              <div class="form_fields">
+                <label for="level">Level:</label>
+                <input type="text" id="level" name="level" value="{{member.level}}">
+              </div>
+              <div class="form_fields">
+                <label for="expiration">Expiration:</label>
+                <input type="text" id="expiration" name="expiration" value="{{member.expiration}}">
+              </div>
+              <div class="form_fields">
+                <label for="status">Status:</label>
+                <select name="status" required id="status">
+                  <option disabled selected></option>
+                  <option value="Active"{% if member.status == 'Active' %} selected{%endif%}>Active</option>
+                  <option value="Inactive"{% if member.status == 'Inactive' %} selected{%endif%}>Inactive</option>
+                </select>
+              </div>
+              <div class="form_fields">
+                <label for="notes">Notes:</label>
+                <input type="text" id="notes" name="notes" value="{{member.address.notes}}">
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="form_fields submit_btn">
+          <button type="submit" class="" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
+          <a href="{% url 'members_app:show_member' member.id %}">cancel</a>
+        </div>
+        <input type="hidden" id="member_id" name="member_id" value="{{member.id}}">
+      </form>
+  </div> <!-- end of 'container' -->
+
+{% endblock %}

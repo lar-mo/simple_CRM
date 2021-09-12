@@ -32,6 +32,9 @@ def needs_review_count(user):
     return number_of_needs_review
 User.add_to_class('needs_review_count', needs_review_count)
 
+def one_year_from_today():
+    return timezone.now() + datetime.timedelta(days=365)
+
 class Address(models.Model):
     description             = models.CharField(max_length=100, blank=False)
     address_1               = models.CharField(max_length=100, blank=False)
@@ -84,11 +87,6 @@ class Membership(models.Model):
             (INACTIVE, 'Inactive'),
     ]
 
-    level = models.CharField(
-            max_length=20,
-            choices=MEMBER_LEVEL_CHOICES,
-            default='SUPPORTER',
-            blank=False)
     person1 = models.OneToOneField(
             Person, on_delete=models.CASCADE,
             related_name='membership1',
@@ -101,11 +99,16 @@ class Membership(models.Model):
             blank=True,
             null=True)
     address                 = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='member_address', null=True)
-    expiration              = models.DateField(null=True, blank=True)
+    level = models.CharField(
+            max_length=20,
+            choices=MEMBER_LEVEL_CHOICES,
+            default=SUPPORTER,
+            blank=False)
+    expiration              = models.DateField(default=one_year_from_today, null=True, blank=True)
     status = models.CharField(
             max_length=10,
             choices=MEMBERSHIP_STATUS_CHOICES,
-            default='ACTIVE',
+            default=ACTIVE,
             blank=True,)
     notes                   = models.CharField(max_length=300, blank=True)
 

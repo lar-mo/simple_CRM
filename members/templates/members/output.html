@@ -62,9 +62,13 @@
           </div>
           {% url 'members_app:needs_review' as needs_review_url %}
           {% if view == 'list_all' %}
-          <span><a href="{% url 'members_app:show_person_info' member.id %}">show</a></span>
-          {% elif view == 'show_person_info' %}
-          <span><a href="{% url 'members_app:edit_person_info' member.id %}">edit</a></span>
+          <span><a href="{% url 'members_app:show_person' member.id %}">show</a></span>
+          {% elif view == 'show_person' %}
+          <span><a href="{% url 'members_app:edit_person' member.id %}">edit</a></span>
+          {% elif view == 'active_members' or view == 'inactive_members' %}
+          <span><a href="{% url 'members_app:show_member' member.id %}">show</a></span>
+          {% elif view == 'show_member' %}
+          <span><a href="{% url 'members_app:edit_member' member.id %}">edit</a></span>
           {% endif %}
         </div>
     {% endfor %}
@@ -88,18 +92,19 @@
   </div>
 
   <script type="text/javascript">
-  {% if view == 'search_page' %}
-      document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>"
-      document.getElementById("step_links_bottom").innerHTML = "";
-      console.log('{{match}}')
-  {% elif view == 'show_person_info' %}
-        {% if message == "changes_saved" %}
-          document.getElementById("step_links_top").innerHTML = "Changes Saved"
-        {% else %}
-          document.getElementById("step_links_top").innerHTML = "Member Details"
-        {% endif %}
-        document.getElementById("step_links_bottom").innerHTML = "";
+    {% if message == "changes_saved" %}
+      document.getElementById("step_links_top").innerHTML = "Changes Saved"
     {% endif %}
+    {% if view == 'search_page' %}
+        document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>"
+        document.getElementById("step_links_bottom").innerHTML = "";
+        console.log('{{match}}')
+    {% elif view == 'show_person' %}
+        document.getElementById("step_links_top").innerHTML = "Person Details"
+    {% elif view == 'show_member' %}
+        document.getElementById("step_links_top").innerHTML = "Member Details"
+    {% endif %}
+    document.getElementById("step_links_bottom").innerHTML = "";
   </script>
 
 {% endblock %}

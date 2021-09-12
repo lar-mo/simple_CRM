@@ -117,9 +117,9 @@
         width: 220px;
       }
       .edit_link {
-        margin: 10px 50px;
         color: blue;
-        text-decoration: underline;
+        text-decoration: none;
+        font-size: 0.8em;
       }
       #clear_reason_lnk {
         font-size: 0.8em;
@@ -169,6 +169,18 @@
       #role_label, #role, #reason_for_review, #reason_for_review_label {
         visibility: hidden;
       }
+      .member_label {
+        font-weight: bold;
+      }
+      .member_names {
+        margin: auto auto 20px 20px;
+      }
+      .mailing_address_label {
+        font-weight: bold;
+      }
+      .mailing_address {
+        margin-left: 20px;
+      }
     </style>
   </head>
     <body>
@@ -176,10 +188,10 @@
         <h1>Council Members</h1>
         <div class="filter_members">Show:
           <input type="radio" name="filter_members" id="show_all"> <a href="{% url 'members_app:list_all' %}">All People</a> ({{user.all_member_count}})
-          <input type="radio" name="filter_members" id="show_board"> <a href="/members/list_board/">Board Members</a> ({{user.board_member_count}})
-          <input type="radio" name="filter_members" id="show_active"> <a href="/members/list_active/">Active Members</a> ({{user.active_member_count}})
-          <input type="radio" name="filter_members" id="show_inactive"> <a href="/members/list_inactive/">Inactive Members</a> ({{user.inactive_member_count}})
-          <input type="radio" name="filter_members" id="show_needs_review"> <a href="/members/needs_review/">Needs Review</a> ({{user.needs_review_count}})
+          <input type="radio" name="filter_members" id="show_board"> <a href="{% url 'members_app:list_board' %}">Board Members</a> ({{user.board_member_count}})
+          <input type="radio" name="filter_members" id="show_active"> <a href="{% url 'members_app:list_active' %}">Active Members</a> ({{user.active_member_count}})
+          <input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})
+          <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}})
         </div>
 
           <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
@@ -199,15 +211,15 @@
         let show_needs_review = document.querySelector('#show_needs_review');
         if (window.location.pathname == '/members/') {
           show_active.checked = true;
-        } else if (window.location.pathname == '/members/list_all/') {
+        } else if (window.location.pathname == '{% url 'members_app:list_all' %}') {
           show_all.checked = true;
-        } else if (window.location.pathname == '/members/list_board/') {
+        } else if (window.location.pathname == '{% url 'members_app:list_board' %}') {
           show_board.checked = true;
-        } else if (window.location.pathname == '/members/list_active/') {
+        } else if (window.location.pathname == '{% url 'members_app:list_active' %}') {
           show_active.checked = true;
-        } else if (window.location.pathname == '/members/list_inactive/') {
+        } else if (window.location.pathname == '{% url 'members_app:list_inactive' %}') {
           show_inactive.checked = true;
-        } else if (window.location.pathname == '/members/needs_review/') {
+        } else if (window.location.pathname == '{% url 'members_app:needs_review' %}') {
           show_needs_review.checked = true;
         } else {
           show_all.checked = false;
@@ -217,19 +229,19 @@
           show_needs_review.checked = false;
         }
         show_all.onclick = function() {
-          window.location='/members/list_all/';
+          window.location='{% url 'members_app:list_all' %}';
         }
         show_board.onclick = function() {
-          window.location='/members/list_board/';
+          window.location='{% url 'members_app:list_board' %}';
         }
         show_active.onclick = function() {
-          window.location='/members/list_active/';
+          window.location='{% url 'members_app:list_active' %}';
         }
         show_inactive.onclick = function() {
-          window.location='/members/list_inactive/';
+          window.location='{% url 'members_app:list_inactive' %}';
         }
         show_needs_review.onclick = function() {
-          window.location='/members/needs_review/';
+          window.location='{% url 'members_app:needs_review' %}';
         }
       </script>
 
