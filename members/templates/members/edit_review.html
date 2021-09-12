@@ -20,8 +20,18 @@
             {% endif %}
         </span>
     </div>
+    {% for %}
+
+    {% endfor %}
     {% for member in members %}
         <div class="tile">
+          {% url 'members_app:needs_review' as needs_review_url %}
+          {% if request.path == needs_review_url %}
+          <div class="needs_review"><b>Needs Review</b>:<br><i>{{member.reason_for_review|title}}</i>
+            <!-- <div class="edit_link"><a href="/members/edit_member_info/{{member.id}}/">Edit</a></div> -->
+            <div class="edit_link"><a href="{% url 'members_app:edit_member_info' member.id %}">Edit</a></div>
+          </div>
+          {% endif %}
           <div class="col_ro">
             <div class="row">
               <span class="names_title">
@@ -37,14 +47,14 @@
               </div>
             {% endif %}
             <div class="row">
-              {% if view == 'list_board' %}
-                <div class="">{{member.person1.address.address_1}}</div>
-                <div class="">{{member.person1.address.address_2}}</div>
-                <div class="">{{member.person1.address.city}}, {{member.person1.address.state}} {{member.person1.address.postal_code}}</div>
-              {% else %}
+              {% if view == 'list_active_members' or view == 'list_inactive_members' or view == 'list_all_people' %}
                 <div class="">{{member.address.address_1}}</div>
                 <div class="">{{member.address.address_2}}</div>
                 <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+              {% elif view == 'list_board' %}
+                <div class="">{{member.person1.address.address_1}}</div>
+                <div class="">{{member.person1.address.address_2}}</div>
+                <div class="">{{member.person1.address.city}}, {{member.person1.address.state}} {{member.person1.address.postal_code}}</div>
               {% endif %}
             </div>
             <div class="row">
@@ -61,10 +71,8 @@
             </div>
           </div>
           {% url 'members_app:needs_review' as needs_review_url %}
-          {% if view == 'list_all' %}
-          <span><a href="{% url 'members_app:show_person_info' member.id %}">show</a></span>
-          {% elif view == 'show_person_info' %}
-          <span><a href="{% url 'members_app:edit_person_info' member.id %}">edit</a></span>
+          {% if request.path != needs_review_url %}
+          <span><a href="{% url 'members_app:edit_member_info' member.id %}">edit</a></span>
           {% endif %}
         </div>
     {% endfor %}
@@ -92,7 +100,7 @@
       document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>"
       document.getElementById("step_links_bottom").innerHTML = "";
       console.log('{{match}}')
-  {% elif view == 'show_person_info' %}
+  {% elif view == 'show_person_info_page' %}
         {% if message == "changes_saved" %}
           document.getElementById("step_links_top").innerHTML = "Changes Saved"
         {% else %}

@@ -10,7 +10,10 @@ from itertools import chain
 
 import json
 
-from .models import Address, Board, Committee, Membership, Person, NeedsReview
+from .models import Address, Board, Membership, Person, NeedsReview
+
+def index(request):
+    return HttpResponse("Hello world!")
 
 @login_required
 def list_all(request):
@@ -20,51 +23,14 @@ def list_all(request):
     members = paginator.get_page(page_number)
     context = {
         'members': members,
-        'view': 'list_all_people',
+        'view': 'list_all',
     }
     return render(request, 'members/output.html', context)
 
 class ListBoardView(LoginRequiredMixin, View):
 
     def get(self, request):
-        executive_members = Board.objects.all()
-        # committee_members = Committee.objects.all()
-
-        # role = Committee.get_role(12)
-        # print(role)
-        # for x in role:
-        #     print(x.role)
-
-        roles = Committee.get_cmte_members()
-        print("Cmte Roles: {}".format(roles))
-        committee_members = []
-        for role in roles:
-            person = role.cmte_member
-            committee_members.append(person)
-
-        # print("Before dedupe: {}".format(committee_members))
-        committee_members = list(dict.fromkeys(committee_members))
-        # print("{}".format(executive_members))
-
-        board_members = list(chain(executive_members, committee_members))
-        # board_members = Q(executive_members) | Q(committee_members)
-        # print(board_members)
-        all_bm = []
-        for m in board_members:
-            try:
-                em = m.cmte_member.board_member
-                all_bm.append(em)
-            except:
-                pass
-            try:
-                cm = m.board_member
-                all_bm.append(cm)
-            except:
-                pass
-        # print(all_bm)
-        all = list(dict.fromkeys(all_bm)) # remove duplicates
-        print(all)
-
+        board_members = Board.objects.all()
         paginator = Paginator(board_members, 10)
         page_number = request.GET.get('page')
         members = paginator.get_page(page_number)
@@ -76,12 +42,7 @@ class ListBoardView(LoginRequiredMixin, View):
 
 @login_required
 def list_active(request):
-    # name1.split(' ')[-1]
-    # REGEX \b(\w+)$
-    active_members = Person.objects.filter(membership__status='Active')
-    # members = Member.objects.filter(membership_status='active').order_by('name1')
-    # members = Member.objects.filter(membership_status='active').extra(select={'lname1' : "SUBSTR(name1, -1 ,)"}).order_by('lname1')
-    # print(members)
+    active_members = Membership.objects.filter(status='Active')
     paginator = Paginator(active_members, 10)
     page_number = request.GET.get('page')
     members = paginator.get_page(page_number)
@@ -93,25 +54,26 @@ def list_active(request):
 
 @login_required
 def list_inactive(request):
-    inactive_members = Person.objects.filter(membership__status='Inactive')
+    inactive_members = Membership.objects.filter(status='Inactive')
     paginator = Paginator(inactive_members, 10)
     page_number = request.GET.get('page')
     members = paginator.get_page(page_number)
     context = {
         'members': members,
+        'view': 'list_inactive_members'
     }
     return render(request, 'members/output.html', context)
 
 @login_required
 def needs_review(request):
-    needs_review = Member.objects.filter(needs_review=1)
-    paginator = Paginator(needs_review, 10)
+    tickets = NeedsReview.objects.filter()
+    paginator = Paginator(tickets, 10)
     page_number = request.GET.get('page')
-    members = paginator.get_page(page_number)
+    tickets = paginator.get_page(page_number)
     context = {
-        'members': members,
+        'tickets': tickets,
     }
-    return render(request, 'members/output.html', context)
+    return render(request, 'members/list_tickets.html', context)
 
 @login_required
 def search_results(request):
@@ -132,20 +94,20 @@ def search_results(request):
     except:
         pass
 
-    member_records = Member.objects.all()
+    member_records = Person.objects.all()
     try:
         member_records = member_records.filter(board_member=True)
     except:
         pass
-    exact_match = member_records.filter(name1=querystring)
-    members_name1_2n = member_records.filter(reduce(Q.__or__, [Q(name1__istartswith=word) for word in two_names])) # was icontains
-    members_name2_2n = member_records.filter(reduce(Q.__or__, [Q(name2__istartswith=word) for word in two_names])) # was icontains
-    members_name1_swst = member_records.filter(reduce(Q.__or__, [Q(name1__istartswith=word) for word in search_terms])) # was icontains
-    members_name2_swst = member_records.filter(reduce(Q.__or__, [Q(name2__istartswith=word) for word in search_terms])) # was icontains
-    members_name1_ewst = member_records.filter(reduce(Q.__or__, [Q(name1__iendswith=word) for word in search_terms])) # was icontains
-    members_name2_ewst = member_records.filter(reduce(Q.__or__, [Q(name2__iendswith=word) for word in search_terms])) # was icontains
-    members_name1_cst = member_records.filter(reduce(Q.__or__, [Q(name1__icontains=word) for word in search_terms]))
-    members_name2_cst = member_records.filter(reduce(Q.__or__, [Q(name2__icontains=word) for word in search_terms]))
+    exact_match = member_records.filter(first_name=querystring)
+    members_name1_2n = member_records.filter(reduce(Q.__or__, [Q(first_name__istartswith=word) for word in two_names])) # was icontains
+    members_name2_2n = member_records.filter(reduce(Q.__or__, [Q(last_name__istartswith=word) for word in two_names])) # was icontains
+    members_name1_swst = member_records.filter(reduce(Q.__or__, [Q(first_name__istartswith=word) for word in search_terms])) # was icontains
+    members_name2_swst = member_records.filter(reduce(Q.__or__, [Q(last_name__istartswith=word) for word in search_terms])) # was icontains
+    members_name1_ewst = member_records.filter(reduce(Q.__or__, [Q(first_name__iendswith=word) for word in search_terms])) # was icontains
+    members_name2_ewst = member_records.filter(reduce(Q.__or__, [Q(last_name__iendswith=word) for word in search_terms])) # was icontains
+    members_name1_cst = member_records.filter(reduce(Q.__or__, [Q(first_name__icontains=word) for word in search_terms]))
+    members_name2_cst = member_records.filter(reduce(Q.__or__, [Q(last_name__icontains=word) for word in search_terms]))
     # print(exact_match.exists())
     # print(members_name1.exists())
     # print(members_name2.exists())
@@ -185,7 +147,7 @@ def search_results(request):
             'match': '2:ewst',
         }
         return render(request, 'members/output.html', context)
-    else:
+    elif members_name1_cst.exists() or members_name2_cst.exists():
         members = list(dict.fromkeys(chain(members_name1_cst, members_name2_cst)))
         context = {
             'members': members,
@@ -194,22 +156,45 @@ def search_results(request):
             'match': '3:words',
         }
         return render(request, 'members/output.html', context)
+    else:
+        members = []
+        context = {
+            'members': members,
+            'querystring': querystring,
+            'view': 'search_page',
+            'match': '3:words',
+        }
+        return render(request, 'members/output.html', context)
+
 
 @login_required
-def show_member_info(request, member_id):
+def show_person_info(request, person_id):
     message = request.GET.get('message', '')
-    member = Person.objects.filter(id=member_id)
+    person = Person.objects.filter(id=person_id)
     # print(member)
     context = {
-        'members': member,
+        'members': person,
         'message': message,
-        'view': 'show_member_info_page',
+        'view': 'show_person_info',
     }
     return render(request, 'members/output.html', context)
 
 @login_required
+def edit_person_info(request, person_id):
+    message = request.GET.get('message', '')
+    people = Person.objects.all()
+    person = people.get(id=person_id)
+    context = {
+        'person': person,
+        'people': people,
+        'message': message,
+        'view': 'edit_person_info_page',
+    }
+    return render(request, 'members/edit_person_info.html', context)
+
+@login_required
 def edit_member_info(request, member_id):
-    member = Member.objects.get(id=member_id)
+    member = Membership.objects.get(id=member_id)
     context = {
         'member': member,
     }

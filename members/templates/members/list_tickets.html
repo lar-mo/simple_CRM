@@ -1,0 +1,29 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+    <table class="ticket_list">
+      <tr>
+        <td class="ticket_list_header">Summary</td>
+        <td class="ticket_list_header">Description</td>
+        <td class="ticket_list_header">Component</td>
+        <td class="ticket_list_header">Person</td>
+        <td class="ticket_list_header">Membership</td>
+        <td class="ticket_list_header">Status</td>
+        <td class="ticket_list_header">Assignee</td>
+      </tr>
+      {% for ticket in tickets %}
+      <tr>
+        <td class="ticket_list_value">{{ticket.summary}}</td>
+        <td class="ticket_list_value">{{ticket.description}}</td>
+        <td class="ticket_list_value">{{ticket.component}}</td>
+        <td class="ticket_list_value">{{ticket.person}}</td>
+        <td class="ticket_list_value">{{ticket.membership}}</td>
+        <td class="ticket_list_value">{{ticket.status}}</td>
+        <td class="ticket_list_value">{{ticket.assignee}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+{% endblock %}
