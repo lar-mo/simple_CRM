@@ -9,21 +9,30 @@
             {% csrf_token %}
           <div class="col_rw">
             <div class="row">
-              <div class="form_fields">
-                <div class="member_label">Member{% if member.person2 %}s{%endif%} <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:</div>
+              <div class="member_detail_section">
+                <div class=""><b>Member{% if member.person2 %}s{%endif%}</b> <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:</div>
                 <div class="member_names">{{member.person1}}{% if member.person2 %} and {{member.person2}}{% endif %}</div>
               </div>
-              <div class="form_fields">
+              <!-- <div class="form_fields">
                 <div class="">
-                  <div class="">
-                    <div class="mailing_address_label">Mailing Address <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:</div>
-                    <div class="mailing_address">
-                      <div class="">{{member.address.address_1}}</div>
-                      <div class="">{{member.address.address_2}}</div>
-                      <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
-                      <div class="">{{member.address.country}}</div>
+                  <div class="member_detail_section">
+                    <div class="edit_member_mailing_address">Mailing Address <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:
+                        <div class="">{{member.address.address_1}}</div>
+                        <div class="">{{member.address.address_2}}</div>
+                        <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+                        <div class="">{{member.address.country}}</div>
                     </div>
                   </div>
+                </div> -->
+              <!-- </div> -->
+            </div><!-- end of 'row' -->
+            <div class="row">
+              <div class="member_detail_section">
+                <div class="member_detail_mailing_address">
+                  <b>Mailing Address</b> <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:
+                    <div class="">{{member.address.address_1}}</div>
+                    <div class="">{{member.address.address_2}}</div>
+                    <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
                 </div>
               </div>
             </div><!-- end of 'row' -->

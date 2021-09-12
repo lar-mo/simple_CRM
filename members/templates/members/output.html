@@ -32,9 +32,7 @@
             {% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}
               <div class="row">
                 <span class="names_title">{{member.person1.partner.first_name}} {{member.person1.partner.last_name}}
-                  <!-- {% if member.person.partner.byline %} -->
                   <div class="byline">{{member.person1.partner.byline}}</div>
-                  <!-- {% endif %} -->
                 </span>
               </div>
             {% endif %}
@@ -96,19 +94,29 @@
 
   <script type="text/javascript">
     {% if message == "changes_saved" %}
-      document.getElementById("step_links_top").innerHTML = "Changes Saved"
+      document.getElementById("step_links_top").innerHTML = "Changes Saved";
     {% endif %}
     {% if view == 'search_page' %}
-        document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>"
+        document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>";
         document.getElementById("step_links_bottom").innerHTML = "";
         console.log('{{match}}')
     {% elif view == 'show_person' %}
-        document.getElementById("step_links_top").innerHTML = "Person Details"
+        document.getElementById("step_links_top").innerHTML = "PERSON DETAILS";
         document.getElementById("step_links_bottom").innerHTML = "";
     {% elif view == 'show_member' %}
-        document.getElementById("step_links_top").innerHTML = "Member Details"
+        document.getElementById("step_links_top").innerHTML = "MEMBER DETAILS";
         document.getElementById("step_links_bottom").innerHTML = "";
+    {% elif members.paginator.num_pages == 1 %}
+        document.getElementById("step_links_bottom").innerHTML = "";
+        {% if view == 'list_board' %}
+            document.getElementById("step_links_top").innerHTML = "BOARD MEMBERS";
+        {% elif view == 'active_members' %}
+            document.getElementById("step_links_top").innerHTML = "ACTIVE MEMBERS";
+        {% elif view == 'inactive_members' %}
+            document.getElementById("step_links_top").innerHTML = "INACTIVE MEMBERS";
+        {% endif %}
     {% endif %}
+    document.getElementById("step_links_top").style.fontWeight = "bold";
   </script>
 
 {% endblock %}

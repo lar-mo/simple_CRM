@@ -166,18 +166,17 @@ def search_results(request):
         }
         return render(request, 'members/output.html', context)
 
-
 @login_required
 def show_person(request, person_id):
     message = request.GET.get('message', '')
-    person = Person.objects.filter(id=person_id)
-    # print(member)
+    person = Person.objects.get(id=person_id)
+    # cmtes = Board.get_cmte_roles_by_person(person_id)
     context = {
-        'members': person,
+        'person': person,
         'message': message,
         'view': 'show_person',
     }
-    return render(request, 'members/output.html', context)
+    return render(request, 'members/show_person.html', context)
 
 @login_required
 def edit_person(request, person_id):

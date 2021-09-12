@@ -1,0 +1,97 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <div class="pagination_top" style="background-color: #cde;">
+        <span class="step-links" id="step_links_top">
+          <b>{{person.first_name}} {{person.last_name}}</b>{% if person.byline %}<span class="person_detail_byline">, {{person.byline}}</span>{%endif%}
+        </span>
+    </div>
+    <div class="tile">
+      <div class="col_ro">
+
+        {% if person.nickname %}
+        <div class="row">
+          <div class="person_detail_section">
+            <b>Nickname</b>: {{person.nickname}}
+          </div>
+        </div><!-- end of 'row' -->
+        {% endif %}
+
+        {% if person.partner %}
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_partner">
+              <b>Partner</b>:
+              {{person.partner.first_name}} {{person.partner.last_name}}{% if person.partner.byline %}<span class="person_detail_byline">, {{person.partner.byline}}</span>{%endif%}
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+        {% endif %}
+
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_mailing_address">
+              <b>Mailing Address</b>:
+                <div class="">{{person.address.address_1}}</div>
+                <div class="">{{person.address.address_2}}</div>
+                <div class="">{{person.address.city}}, {{person.address.state}} {{person.address.postal_code}}</div>
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_mailing_address">
+              <b>Phone Number</b>:
+                <div class="">{{person.phone_number}}</div>
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_mailing_address">
+              <b>Email</b>:
+                <div class="">{{person.email}}</div>
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+
+      </div><!-- end of 'col_ro' -->
+
+      <div class="col_ro">
+
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_mailing_address">
+              <b>Board Title</b>:
+                <div class="">{{person.email}}</div>
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_mailing_address">
+              <b>Committee Role(s)</b>:
+                <div class="">{{person.email}}</div>
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_mailing_address">
+              <b>Membership</b>:
+                <div class="">{{person.email}} ({{person.email}})</div>
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+
+      </div><!-- end of 'col_ro' -->
+    </div><!-- end of 'tile' -->
+  </div><!-- end of 'container' -->
+
+{% endblock %}
