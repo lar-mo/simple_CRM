@@ -57,8 +57,20 @@ class Person(models.Model):
     nickname                = models.CharField(max_length=100, blank=True)
     phone_number            = models.CharField(max_length=20, blank=True)
     email                   = models.EmailField(blank=True)
-    partner                 = models.ForeignKey('self', on_delete=models.CASCADE, related_name='person', blank=True, null=True)
-    address                 = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='address', blank=True, null=True)
+    partner = models.OneToOneField(
+                'self',
+                on_delete=models.CASCADE,
+                related_name='person',
+                blank=True,
+                null=True,
+    )
+    address = models.ForeignKey(
+                Address,
+                on_delete=models.CASCADE,
+                related_name='address',
+                blank=True,
+                null=True,
+    )
 
     def __str__(self):
         return "{} {}".format(self.first_name, self.last_name)
@@ -88,28 +100,40 @@ class Membership(models.Model):
     ]
 
     person1 = models.OneToOneField(
-            Person, on_delete=models.CASCADE,
+            Person,
+            on_delete=models.CASCADE,
             related_name='membership1',
             related_query_name='membership',
-            null=True)
-    person2 = models.OneToOneField(
-            Person, on_delete=models.CASCADE,
-            related_name='membership2',
-            related_query_name='membership',
+            null=True,
+    )
+    # person2 = models.OneToOneField(
+    #         Person, on_delete=models.CASCADE,
+    #         related_name='membership2',
+    #         related_query_name='membership',
+    #         blank=True,
+    #         null=True)
+    person2 = models.ForeignKey(
+            Person,
+            to_field='partner',
+            on_delete=models.CASCADE,
+            related_name='so',
+            null=True,
             blank=True,
-            null=True)
-    address                 = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='member_address', null=True)
+    )
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='member_address', null=True)
     level = models.CharField(
             max_length=20,
             choices=MEMBER_LEVEL_CHOICES,
             default=SUPPORTER,
-            blank=False)
+            blank=False,
+    )
     expiration              = models.DateField(default=one_year_from_today, null=True, blank=True)
     status = models.CharField(
             max_length=10,
             choices=MEMBERSHIP_STATUS_CHOICES,
             default=ACTIVE,
-            blank=True,)
+            blank=True,
+    )
     notes                   = models.CharField(max_length=300, blank=True)
 
     def __str__(self):

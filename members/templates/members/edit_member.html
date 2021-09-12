@@ -32,11 +32,19 @@
             <div class="row">
               <div class="form_fields">
                 <label for="level">Level:</label>
-                <input type="text" id="level" name="level" value="{{member.level}}">
+                <!-- <input type="text" id="level" name="level" value="{{member.level}}"> -->
+                <select name="level" id="level">
+                  <option value="Supporter"{% if member.level == 'Supporter' %} selected{%endif%}>Supporter</option>
+                  <option value="Contributor"{% if member.level == 'Contributor' %} selected{%endif%}>Contributor</option>
+                  <option value="Adovcate"{% if member.level == 'Adovcate' %} selected{%endif%}>Adovcate</option>
+                  <option value="Honorary"{% if member.level == 'Honorary' %} selected{%endif%}>Honorary</option>
+                  <option value="PAM Staff"{% if member.level == 'PAM Staff' %} selected{%endif%}>PAM Staff</option>
+                  <option></option>
+                </select>
               </div>
               <div class="form_fields">
                 <label for="expiration">Expiration:</label>
-                <input type="text" id="expiration" name="expiration" value="{{member.expiration}}">
+                <input type="date" id="expiration" name="expiration" value="{{member.expiration|date:'Y-m-d'}}">
               </div>
               <div class="form_fields">
                 <label for="status">Status:</label>
