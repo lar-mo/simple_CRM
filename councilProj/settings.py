@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'multiselectfield',    
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [
@@ -101,6 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_URL = '/admin/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

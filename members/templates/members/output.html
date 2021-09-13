@@ -38,24 +38,24 @@
             {% endif %}
             <div class="row">
               {% if view == 'list_board' %}
-                <div class="">{{member.person1.address.address_1}}</div>
-                <div class="">{{member.person1.address.address_2}}</div>
-                <div class="">{{member.person1.address.city}}, {{member.person1.address.state}} {{member.person1.address.postal_code}}</div>
+                <div>{{member.person1.address.address_1}}</div>
+                <div>{{member.person1.address.address_2}}</div>
+                <div>{{member.person1.address.city}}, {{member.person1.address.state}} {{member.person1.address.postal_code}}</div>
               {% else %}
-                <div class="">{{member.address.address_1}}</div>
-                <div class="">{{member.address.address_2}}</div>
-                <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+                <div>{{member.address.address_1}}</div>
+                <div>{{member.address.address_2}}</div>
+                <div>{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
               {% endif %}
             </div>
             <div class="row">
-              <div class="">{{member.email}}{{member.person1.email}}</div>
-              <div class="">{% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}{{member.person1.partner.email}}{% endif %}</div>
+              <div>{{member.email}}{{member.person1.email}}</div>
+              <div>{% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}{{member.person1.partner.email}}{% endif %}</div>
             </div>
           </div>
           <div class="col_ro">
             <div class="row">
-              <div class="">{{member.phone_number}}{{member.person1.phone_number}}</div>
-              <div class="">{% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}{{member.person1.partner.phone_number}}{% endif %}</div>
+              <div>{{member.phone_number}}{{member.person1.phone_number}}</div>
+              <div>{% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}{{member.person1.partner.phone_number}}{% endif %}</div>
               <div>{% if member.title != 'Committee' %}{{member.title}}{% endif %}</div>
               <div>{% if member.committees|length > 0 %}Committee{{member.committees|length|pluralize}}: {{member.committees}}{% endif %}</div>
             </div>

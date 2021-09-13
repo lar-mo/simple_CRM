@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 from django.utils import timezone
 import datetime
@@ -77,7 +78,6 @@ class Person(models.Model):
 
     class Meta:
         ordering = ['last_name']
-        # abstract = True
 
 
 class Membership(models.Model):

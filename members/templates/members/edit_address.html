@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Council Members</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <link rel="shortcut icon" href="{{ STATIC_URL }}/static/favicon.png">
+    <style media="screen" type="text/css">
+      html, body {
+        /* background: radial-gradient(#60A9EA, #6D6D6D); */
+        background-attachment: fixed;
+        background-size: cover;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 0.95em;
+      }
+      </style>
+    </head>
+  <body>
+    <div>
+      <form action = "" method = "post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </body>
+</html>

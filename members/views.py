@@ -5,6 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.generic import View
+from django import forms
+from django.shortcuts import get_object_or_404
+from django.forms import ModelForm
 from functools import reduce
 from itertools import chain
 
@@ -170,24 +173,46 @@ def search_results(request):
 def show_person(request, person_id):
     message = request.GET.get('message', '')
     person = Person.objects.get(id=person_id)
-    # cmtes = Board.get_cmte_roles_by_person(person_id)
+    membership = Membership.objects.get(Q(person1__id=person_id) | Q(person2__id=person_id))
+    try:
+        board = Board.objects.get(person1__id=person_id)
+    except:
+        board = False
     context = {
         'person': person,
+        'board': board,
+        'membership': membership,
         'message': message,
         'view': 'show_person',
     }
     return render(request, 'members/show_person.html', context)
 
+class AddressForm(ModelForm):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
 @login_required
 def edit_person(request, person_id):
     people = Person.objects.all()
     person = people.get(id=person_id)
+    address = get_object_or_404(Address, id=person.address.id)
+    form = AddressForm(instance=address)
     context = {
         'person': person,
         'people': people,
+        'form': form,
         'view': 'edit_person',
     }
     return render(request, 'members/edit_person.html', context)
+
+@login_required
+def edit_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id)
+    print(address)
+    form = AddressForm(instance=address)
+    print(form)
+    return render(request, 'members/edit_address.html', {'form': form})
 
 @login_required
 def save_person(request):
@@ -207,10 +232,13 @@ def show_member(request, member_id):
 @login_required
 def edit_member(request, member_id):
     member = Membership.objects.get(id=member_id)
+    address = get_object_or_404(Address, id=member.address.id)
+    form = AddressForm(instance=address)
     people = Person.objects.all()
     context = {
         'member': member,
         'people': people,
+        'form': form,
         'view': 'edit_member',
     }
     return render(request, 'members/edit_member.html', context)

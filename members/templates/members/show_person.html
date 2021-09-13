@@ -5,26 +5,18 @@
   <div class="container">
     <div class="pagination_top" style="background-color: #cde;">
         <span class="step-links" id="step_links_top">
-          <b>{{person.first_name}} {{person.last_name}}</b>{% if person.byline %}<span class="person_detail_byline">, {{person.byline}}</span>{%endif%}
+          <b>{{person.first_name}} {% if person.partner.nickname %}({{person.nickname}}){%endif%} {{person.last_name}}</b>{% if person.byline %}<span class="person_detail_byline">, {{person.byline}}</span>{%endif%}
         </span>
     </div>
     <div class="tile">
       <div class="col_ro">
-
-        {% if person.nickname %}
-        <div class="row">
-          <div class="person_detail_section">
-            <b>Nickname</b>: {{person.nickname}}
-          </div>
-        </div><!-- end of 'row' -->
-        {% endif %}
 
         {% if person.partner %}
         <div class="row">
           <div class="person_detail_section">
             <div class="person_detail_partner">
               <b>Partner</b>:
-              {{person.partner.first_name}} {{person.partner.last_name}}{% if person.partner.byline %}<span class="person_detail_byline">, {{person.partner.byline}}</span>{%endif%}
+              {{person.partner.first_name}} {% if person.partner.nickname %}({{person.partner.nickname}}){%endif%} {{person.partner.last_name}}{% if person.partner.byline %}<span class="person_detail_byline">, {{person.partner.byline}}</span>{%endif%}
             </div>
           </div>
         </div><!-- end of 'row' -->
@@ -40,6 +32,10 @@
             </div>
           </div>
         </div><!-- end of 'row' -->
+
+      </div><!-- end of 'col_ro' -->
+
+      <div class="col_ro">
 
         <div class="row">
           <div class="person_detail_section">
@@ -59,39 +55,46 @@
           </div>
         </div><!-- end of 'row' -->
 
-      </div><!-- end of 'col_ro' -->
-
-      <div class="col_ro">
-
-        <div class="row">
-          <div class="person_detail_section">
-            <div class="person_detail_mailing_address">
-              <b>Board Title</b>:
-                <div class="">{{person.email}}</div>
-            </div>
-          </div>
-        </div><!-- end of 'row' -->
-
-        <div class="row">
-          <div class="person_detail_section">
-            <div class="person_detail_mailing_address">
-              <b>Committee Role(s)</b>:
-                <div class="">{{person.email}}</div>
-            </div>
-          </div>
-        </div><!-- end of 'row' -->
-
         <div class="row">
           <div class="person_detail_section">
             <div class="person_detail_mailing_address">
               <b>Membership</b>:
-                <div class="">{{person.email}} ({{person.email}})</div>
+                <div class="">{{membership.level}} ({{membership.status}})</div>
+                <div class="">{% if membership.expiration %}{{membership.expiration}}{% endif %}</div>
+                <div class="">{{membership.notes}}</div>
             </div>
           </div>
         </div><!-- end of 'row' -->
-
       </div><!-- end of 'col_ro' -->
     </div><!-- end of 'tile' -->
+    <div>
+      <hr>
+      <div class="tile">
+        <div class="col_ro">
+          {% if board.title %}
+          <div class="row">
+            <div class="person_detail_section">
+              <div class="person_detail_mailing_address">
+                <b>Board Title</b>:
+                  <div class="">{{board.title}}</div>
+              </div>
+            </div>
+          </div><!-- end of 'row' -->
+        </div>
+        <div class="col_ro">
+          <div class="row">
+            <div class="person_detail_section">
+              <div class="person_detail_mailing_address">
+                <b>Committee Role(s)</b>:
+                  <div class="">{{board.committees}}</div>
+              </div>
+            </div>
+          </div><!-- end of 'row' -->
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
   </div><!-- end of 'container' -->
 
 {% endblock %}

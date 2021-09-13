@@ -3,7 +3,7 @@
 {% block content %}
 
   <div class="container">
-    <h3>Edit Member Information</h3>
+    <h3>Edit Membership Information</h3>
       <form id="edit_member_form" action="{% url 'members_app:save_member' %}" method="post">
         <div class="tile edit_form_align">
             {% csrf_token %}
@@ -29,7 +29,7 @@
             <div class="row">
               <div class="member_detail_section">
                 <div class="member_detail_mailing_address">
-                  <b>Mailing Address</b> <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:
+                  <b>Mailing Address</b> <a href="#" id="edit_address_link" class="edit_link">(edit)</a>:
                     <div class="">{{member.address.address_1}}</div>
                     <div class="">{{member.address.address_2}}</div>
                     <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
@@ -58,7 +58,6 @@
               <div class="form_fields">
                 <label for="status">Status:</label>
                 <select name="status" required id="status">
-                  <option disabled selected></option>
                   <option value="Active"{% if member.status == 'Active' %} selected{%endif%}>Active</option>
                   <option value="Inactive"{% if member.status == 'Inactive' %} selected{%endif%}>Inactive</option>
                 </select>
@@ -70,13 +69,55 @@
             </div>
           </div>
         </div>
-        <hr>
+        <div class="clearfix"></div>
         <div class="form_fields submit_btn">
-          <button type="submit" class="" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
+          <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
           <a href="{% url 'members_app:show_member' member.id %}">cancel</a>
         </div>
         <input type="hidden" id="member_id" name="member_id" value="{{member.id}}">
       </form>
   </div> <!-- end of 'container' -->
+
+  <!-- Button trigger modal -->
+  <button style="display: none" id="show_edit_address" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal">
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editAddressModal">Edit Address</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action = "" method = "post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <div class="clearfix"></div>
+            <input type="submit" class="btn btn-secondary" value="Submit">
+          </form>
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    let edit_address_link = document.querySelector('#edit_address_link');
+    let show_edit_address = document.querySelector('#show_edit_address');
+    edit_address_link.onclick = function() {
+      $('#show_edit_address').click();
+      $('')
+    }
+  </script>
 
 {% endblock %}
