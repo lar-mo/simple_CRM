@@ -16,7 +16,8 @@ import json
 from .models import Address, Board, Membership, Person, NeedsReview
 
 def index(request):
-    return HttpResponse("Hello world!")
+    context = {}
+    return render(request, 'members/welcome.html', context)
 
 @login_required
 def list_all(request):
@@ -197,11 +198,18 @@ def edit_person(request, person_id):
     people = Person.objects.all()
     person = people.get(id=person_id)
     address = get_object_or_404(Address, id=person.address.id)
+    membership = get_object_or_404(Membership, person1=person_id)
     form = AddressForm(instance=address)
+    try:
+        querystring = request.GET['from']
+    except:
+        querystring = ''
     context = {
         'person': person,
         'people': people,
+        'membership': membership,
         'form': form,
+        'querystring': querystring,
         'view': 'edit_person',
     }
     return render(request, 'members/edit_person.html', context)
@@ -222,9 +230,14 @@ def save_person(request):
 def show_member(request, member_id):
     message = request.GET.get('message', '')
     members = Membership.objects.filter(id=member_id)
+    try:
+        querystring = request.GET['from']
+    except:
+        querystring = ''
     context = {
         'members': members,
         'message': message,
+        'querystring': querystring,
         'view': 'show_member',
     }
     return render(request, 'members/output.html', context)
@@ -235,10 +248,15 @@ def edit_member(request, member_id):
     address = get_object_or_404(Address, id=member.address.id)
     form = AddressForm(instance=address)
     people = Person.objects.all()
+    try:
+        querystring = request.GET['from']
+    except:
+        querystring = ''
     context = {
         'member': member,
         'people': people,
         'form': form,
+        'querystring': querystring,
         'view': 'edit_member',
     }
     return render(request, 'members/edit_member.html', context)

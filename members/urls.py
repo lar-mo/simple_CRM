@@ -7,7 +7,7 @@ from . import views
 app_name = 'members_app'
 
 urlpatterns = [
-    path('', views.list_active, name='list_active'),
+    path('', views.index, name='index'),
     path('all/', views.list_all, name='list_all'),
     path('board/', ListBoardView.as_view(), name='list_board'),
     path('active/', views.list_active, name='list_active'),

@@ -3,7 +3,7 @@
 {% block content %}
 
   <div class="container">
-    <div class="pagination_top" style="background-color: #cde;">
+    <div id="pagination_top" style="background-color: #cde;">
         <span class="step-links" id="step_links_top">
             {% if members.has_previous %}
                 <a href="?page=1">&laquo; first</a>
@@ -68,12 +68,12 @@
           {% elif view == 'active_members' or view == 'inactive_members' %}
           <span><a href="{% url 'members_app:show_member' member.id %}">show</a></span>
           {% elif view == 'show_member' %}
-          <span><a href="{% url 'members_app:edit_member' member.id %}">edit</a></span>
+          <span><a href="{% url 'members_app:edit_member' member.id %}?from=member">edit</a></span>
           {% endif %}
         </div>
     {% endspaceless %}
     {% endfor %}
-    <div class="pagination_bottom">
+    <div id="pagination_bottom">
         <span class="step-links" id="step_links_bottom">
             {% if members.has_previous %}
                 <a href="?page=1">&laquo; first</a>
@@ -98,16 +98,16 @@
     {% endif %}
     {% if view == 'search_page' %}
         document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>";
-        document.getElementById("step_links_bottom").innerHTML = "";
+        document.getElementById("pagination_bottom").style.display = "none";
         console.log('{{match}}')
     {% elif view == 'show_person' %}
         document.getElementById("step_links_top").innerHTML = "PERSON DETAILS";
-        document.getElementById("step_links_bottom").innerHTML = "";
+        document.getElementById("pagination_bottom").style.display = "none";
     {% elif view == 'show_member' %}
         document.getElementById("step_links_top").innerHTML = "MEMBER DETAILS";
-        document.getElementById("step_links_bottom").innerHTML = "";
+        document.getElementById("pagination_bottom").style.display = "none";
     {% elif members.paginator.num_pages == 1 %}
-        document.getElementById("step_links_bottom").innerHTML = "";
+        document.getElementById("pagination_bottom").style.display = "none";
         {% if view == 'list_board' %}
             document.getElementById("step_links_top").innerHTML = "BOARD MEMBERS";
         {% elif view == 'active_members' %}
@@ -115,6 +115,7 @@
         {% elif view == 'inactive_members' %}
             document.getElementById("step_links_top").innerHTML = "INACTIVE MEMBERS";
         {% endif %}
+        document.getElementById("step_links_top").style.fontWeight = "bold";
     {% endif %}
     document.getElementById("step_links_top").style.fontWeight = "bold";
   </script>

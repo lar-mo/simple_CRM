@@ -3,28 +3,16 @@
 {% block content %}
 
   <div class="container">
-    <h3>Edit Membership Information</h3>
+    <div class="edit_page_heading"><h3>Edit Membership Information</h3></div>
       <form id="edit_member_form" action="{% url 'members_app:save_member' %}" method="post">
         <div class="tile edit_form_align">
             {% csrf_token %}
           <div class="col_rw">
             <div class="row">
               <div class="member_detail_section">
-                <div class=""><b>Member{% if member.person2 %}s{%endif%}</b> <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:</div>
-                <div class="member_names">{{member.person1}}{% if member.person2 %} and {{member.person2}}{% endif %}</div>
+                <div class=""><b>Member{% if member.person2 %}s{%endif%}</b> <a href="{% url 'members_app:edit_person' member.person1.id %}?from=edit_member" class="edit_link">(edit)</a>:</div>
+                <div class="member_names">{{member.person1.first_name}} {{member.person1.last_name}}{% if member.person2 %} and {{member.person2.first_name}} {{member.person2.last_name}}{% endif %}</div>
               </div>
-              <!-- <div class="form_fields">
-                <div class="">
-                  <div class="member_detail_section">
-                    <div class="edit_member_mailing_address">Mailing Address <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:
-                        <div class="">{{member.address.address_1}}</div>
-                        <div class="">{{member.address.address_2}}</div>
-                        <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
-                        <div class="">{{member.address.country}}</div>
-                    </div>
-                  </div>
-                </div> -->
-              <!-- </div> -->
             </div><!-- end of 'row' -->
             <div class="row">
               <div class="member_detail_section">
@@ -72,16 +60,14 @@
         <div class="clearfix"></div>
         <div class="form_fields submit_btn">
           <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
-          <a href="{% url 'members_app:show_member' member.id %}">cancel</a>
+          <a href="{% if querystring == 'person' %}{% url 'members_app:show_person' member.person1.id %}{% elif querystring == 'member' %}{% url 'members_app:show_member' member.id %}{%else%}{% url 'members_app:list_active' %}{%endif%}">cancel</a>
         </div>
         <input type="hidden" id="member_id" name="member_id" value="{{member.id}}">
       </form>
   </div> <!-- end of 'container' -->
 
   <!-- Button trigger modal -->
-  <button style="display: none" id="show_edit_address" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal">
-    Launch demo modal
-  </button>
+  <button style="display: none" id="show_edit_address" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal"></button>
 
   <!-- Modal -->
   <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
@@ -99,14 +85,12 @@
             <table>
                 {{ form.as_table }}
             </table>
-            <div class="clearfix"></div>
-            <input type="submit" class="btn btn-secondary" value="Submit">
           </form>
         </div>
-        <!-- <div class="modal-footer">
+        <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -116,7 +100,7 @@
     let show_edit_address = document.querySelector('#show_edit_address');
     edit_address_link.onclick = function() {
       $('#show_edit_address').click();
-      $('')
+      // $('')
     }
   </script>
 

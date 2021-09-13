@@ -59,10 +59,10 @@
         padding: 10px;
         margin: 20px auto;
       }
-      .pagination_top {
+      #pagination_top {
         border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
       }
-      .pagination_bottom {
+      #pagination_bottom {
         border-radius: 0 0 calc(.3rem - 1px) calc(.3rem - 1px);
         text-align: center;
       }
@@ -203,16 +203,28 @@
       .edit_member_mailing_address > {
         margin-left: 20px;
       }
+      .edit_page_heading, h3 {
+        background-color: #cde;
+        border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
+      }
+      #show_person_header {
+        display: flex;
+        justify-content: space-between;
+      }
+      .homepage_link, .homepage_link:hover {
+        text-decoration: none;
+        color: black;
+      }
     </style>
   </head>
     <body>
       <header>
-        <h1>Council Members</h1>
+        <div class="display-5"><a href="/members/" class="homepage_link">Council Members</a></div>
         <div class="filter_members">Show:
           <input type="radio" name="filter_members" id="show_active"> <a href="{% url 'members_app:list_active' %}">Active Members</a> ({{user.active_member_count}})
-          <input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})
-          <input type="radio" name="filter_members" id="show_all"> <a href="{% url 'members_app:list_all' %}">All People</a> ({{user.all_member_count}})
           <input type="radio" name="filter_members" id="show_board"> <a href="{% url 'members_app:list_board' %}">Board Members</a> ({{user.board_member_count}})
+          <input type="radio" name="filter_members" id="show_all"> <a href="{% url 'members_app:list_all' %}">All People</a> ({{user.all_member_count}})
+          <input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})
           <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}})
         </div>
 
@@ -231,9 +243,7 @@
         let show_active = document.querySelector('#show_active');
         let show_inactive = document.querySelector('#show_inactive');
         let show_needs_review = document.querySelector('#show_needs_review');
-        if (window.location.pathname == '/members/') {
-          show_active.checked = true;
-        } else if (window.location.pathname == '{% url 'members_app:list_all' %}') {
+        if (window.location.pathname == '{% url 'members_app:list_all' %}') {
           show_all.checked = true;
         } else if (window.location.pathname == '{% url 'members_app:list_board' %}') {
           show_board.checked = true;
