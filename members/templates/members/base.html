@@ -27,8 +27,26 @@
         font-size: 0.95em;
       }
       header {
-        padding: 10px;
+        padding: 10px 20px;
         background-color: #fff;
+        position: sticky;
+        position: -webkit-sticky;
+        position: -moz-sticky;
+        position: -ms-sticky;
+        position: -o-sticky;
+        top: 0px;
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-size: 1.0em;
+        z-index: 999;
+        font-weight: bold;
+        box-shadow:           3px 3px 5px 0 rgba(25,25,25,0.4);
+        -moz-box-shadow:      3px 3px 5px 0 rgba(25,25,25,0.4);
+        -webkit-box-shadow:   3px 3px 5px 0 rgba(25,25,25,0.4);
+      }
+      header > * {
+        margin: 3px 0;
       }
       main {
         padding: 10px;
@@ -112,11 +130,16 @@
       .row {
         padding-right: 20px;
       }
+      .edit_form_align {
+        display: flex;
+        justify-content: space-between;
+        width: auto;
+      }
       .col_ro {
-        width: 400px;
+        width: 135vw; /* 400px */
       }
       .col_rw {
-        width: 640px;
+        width: auto; /* 640px */
       }
       .container > * {
         padding: 10px;
@@ -149,7 +172,7 @@
       }
       .form_fields > input,
       .form_fields > select {
-        width: auto; /* 300px; */
+        width: 25vw; /* 300px; */
         margin-bottom: 10px;
       }
       h3 {
@@ -165,6 +188,9 @@
         text-align: center;
       }
       #filter_cb {
+        margin: auto 5px;
+      }
+      #search_btn {
         margin-left: 5px;
       }
       .message {
@@ -210,10 +236,18 @@
       #show_person_header {
         display: flex;
         justify-content: space-between;
+        border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
       }
       .homepage_link, .homepage_link:hover {
         text-decoration: none;
         color: black;
+      }
+      .search_container {
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
       }
     </style>
   </head>
@@ -227,10 +261,13 @@
           <input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})
           <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}})
         </div>
-
-          <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
-          <button type="submit" class="" id="search_btn"><b>Search</b></button>
-          <input type="checkbox" class="" name="filter_cb" id="filter_cb"/> Show Only Board Members
+        <div class="search_container">
+            <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
+            <button type="submit" class="btn btn-secondary btn-sm" id="search_btn"><b>Search</b></button>
+            &nbsp;&nbsp;
+            <input type="checkbox" class="" name="filter_cb" id="filter_cb"/>
+            <span>Show Only Board Members</span>
+        </div>
       </header>
 
       <main>

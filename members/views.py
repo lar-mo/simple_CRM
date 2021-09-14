@@ -229,18 +229,18 @@ def save_person(request):
 @login_required
 def show_member(request, member_id):
     message = request.GET.get('message', '')
-    members = Membership.objects.filter(id=member_id)
+    membership = get_object_or_404(Membership, id=member_id)
     try:
         querystring = request.GET['from']
     except:
         querystring = ''
     context = {
-        'members': members,
+        'membership': membership,
         'message': message,
         'querystring': querystring,
         'view': 'show_member',
     }
-    return render(request, 'members/output.html', context)
+    return render(request, 'members/show_membership.html', context)
 
 @login_required
 def edit_member(request, member_id):

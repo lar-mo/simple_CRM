@@ -3,9 +3,9 @@
 {% block content %}
 
   <div class="container">
-    <div class="pagination_top" style="background-color: #cde;" id="show_person_header">
+    <div style="background-color: #cde;" id="show_person_header">
         <span class="step-links" id="step_links_top">
-          <h3>{{person.first_name}} {% if person.partner.nickname %}({{person.nickname}}){%endif%} {{person.last_name}}{% if person.byline %}<span class="person_detail_byline">, {{person.byline}}</span>{%endif%}</h3>
+          <h3>{{person.first_name}} {% if person.nickname %}({{person.nickname}}){%endif%} {{person.last_name}}{% if person.byline %}<span class="person_detail_byline">, {{person.byline}}</span>{%endif%}</h3>
         </span>
         <span>
           <a href="{% url 'members_app:edit_person' person.id %}">edit</a>

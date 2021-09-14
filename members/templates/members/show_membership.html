@@ -1,0 +1,91 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <div style="background-color: #cde;" id="show_person_header">
+        <span class="step-links" id="step_links_top">
+          <h3>{{membership.person1.first_name}} {{membership.person1.last_name}}{% if membership.person1.byline %}<span class="person_detail_byline">, {{membership.person1.byline}}</span>{%endif%}{% if membership.person2 %} and {{membership.person2.first_name}} {{membership.person2.last_name}}{%endif%}</h3>
+        </span>
+        <span>
+          <a href="{% url 'members_app:edit_member' membership.id %}">edit</a>
+        </span>
+    </div>
+    <div class="tile">
+      <div class="col_ro">
+
+        <div class="row">
+          <div class="member_detail_section">
+            <div class="person_detail_mailing_address">
+              <b>Mailing Address</b>:
+                <div class="">{{membership.address.address_1}}</div>
+                <div class="">{{membership.address.address_2}}</div>
+                <div class="">{{membership.address.city}}, {{membership.address.state}} {{membership.address.postal_code}}</div>
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+
+      </div><!-- end of 'col_ro' -->
+
+      <div class="col_ro">
+        <div class="row">
+          <div class="member_detail_section">
+            <div class="">
+              <b>Level</b>: {{membership.level}}</div>
+          </div>
+        </div><!-- end of 'row' -->
+
+        <div class="row">
+          <div class="member_detail_section">
+            <div class="">
+              <b>Expiration</b>: {{membership.expiration}}</div>
+          </div>
+        </div><!-- end of 'row' -->
+
+        <div class="row">
+          <div class="member_detail_section">
+            <div class="">
+              <b>Status</b>: {{membership.status}}</div>
+          </div>
+        </div><!-- end of 'row' -->
+
+        <div class="row">
+          <div class="member_detail_section">
+            <div class="">
+              <b>Notes</b>: {{membership.notes}}</div>
+          </div>
+        </div><!-- end of 'row' -->
+
+      </div><!-- end of 'col_ro' -->
+    </div><!-- end of 'tile' -->
+    {% if board %}
+    <div>
+      <hr>
+      <div class="tile">
+        <div class="col_ro">
+          <div class="row">
+            <div class="person_detail_section">
+              <div class="person_detail_board_title" style="text-align: right">
+                <b>Board Title</b>:
+                  <span class="">{{board.title}}</span>
+              </div>
+            </div>
+          </div><!-- end of 'row' -->
+        </div>
+        <div class="col_ro">
+          <div class="row">
+            <div class="person_detail_section">
+              <div class="person_detail_cmte_roles">
+                <b>Committee Role{{board.committees|length|pluralize}}</b>:
+                  <span class="">{{board.committees}}</span>
+              </div>
+            </div>
+          </div><!-- end of 'row' -->
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div><!-- end of 'container' -->
+
+{% endblock %}
