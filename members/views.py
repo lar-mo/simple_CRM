@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
@@ -214,13 +214,33 @@ def edit_person(request, person_id):
     }
     return render(request, 'members/edit_person.html', context)
 
+# @login_required
+# def edit_address(request, address_id):
+#     address = get_object_or_404(Address, id=address_id)
+#     print(address)
+#     form = AddressForm(instance=address)
+#     print(form)
+#     return render(request, 'members/edit_address.html', {'form': form})
+
 @login_required
-def edit_address(request, address_id):
-    address = get_object_or_404(Address, id=address_id)
-    print(address)
-    form = AddressForm(instance=address)
-    print(form)
-    return render(request, 'members/edit_address.html', {'form': form})
+def save_address(request):
+    print(request.POST)
+    addr_id = request.POST['address_id']
+    member_id = request.POST['member_id']
+    refresh_url = request.POST['refresh_url']
+    address_obj = get_object_or_404(Address, id=addr_id)
+    address_obj.description = request.POST['description']
+    address_obj.address_1 = request.POST['address_1']
+    address_obj.address_2 = request.POST['address_2']
+    address_obj.city = request.POST['city']
+    address_obj.state = request.POST['state']
+    address_obj.postal_code = request.POST['postal_code']
+    address_obj.country = request.POST['country']
+    address_obj.save()
+    context = {}
+    return HttpResponse()
+    # return redirect(refresh_url)
+    # return HttpResponseRedirect(reverse('members_app:edit_member', kwargs={'member_id':member_id})+'?message=changes_saved')
 
 @login_required
 def save_person(request):
@@ -240,7 +260,7 @@ def show_member(request, member_id):
         'querystring': querystring,
         'view': 'show_member',
     }
-    return render(request, 'members/show_membership.html', context)
+    return render(request, 'members/show_member.html', context)
 
 @login_required
 def edit_member(request, member_id):
@@ -255,6 +275,7 @@ def edit_member(request, member_id):
     context = {
         'member': member,
         'people': people,
+        'address_id': address.id,
         'form': form,
         'querystring': querystring,
         'view': 'edit_member',

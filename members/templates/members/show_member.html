@@ -8,7 +8,7 @@
           <h3>{{membership.person1.first_name}} {{membership.person1.last_name}}{% if membership.person1.byline %}<span class="person_detail_byline">, {{membership.person1.byline}}</span>{%endif%}{% if membership.person2 %} and {{membership.person2.first_name}} {{membership.person2.last_name}}{%endif%}</h3>
         </span>
         <span>
-          <a href="{% url 'members_app:edit_member' membership.id %}">edit</a>
+          <a href="{% url 'members_app:edit_member' membership.id %}?from=member">edit</a>
         </span>
     </div>
     <div class="tile">
