@@ -89,7 +89,7 @@ class Address(models.Model):
     WI = 'WI'
     WY = 'WY'
     STATE_CHOICES = [
-            (AL, 'Alabama'), # (key, 'select option'),
+            (AL, 'Alabama'), # (key, 'select option text'),
             (AK, 'Alaska'),
             (AZ, 'Arizona'),
             (AR, 'Arkansas'),
