@@ -31,7 +31,6 @@
             <div class="row">
               <div class="form_fields">
                 <label for="level">Level:</label>
-                <!-- <input type="text" id="level" name="level" value="{{member.level}}"> -->
                 <select name="level" id="level">
                   <option value="Supporter"{% if member.level == 'Supporter' %} selected{%endif%}>Supporter</option>
                   <option value="Contributor"{% if member.level == 'Contributor' %} selected{%endif%}>Contributor</option>
@@ -67,5 +66,13 @@
         <input type="hidden" id="member_id" name="member_id" value="{{member.id}}">
       </form>
   </div> <!-- end of 'container' -->
+
+  <script type="text/javascript">
+    let edit_address_link = document.querySelector('#edit_address_link');
+    let show_edit_address = document.querySelector('#show_edit_address');
+    edit_address_link.onclick = function() {
+      $('#show_edit_address').click();
+    }
+  </script>
 
 {% endblock %}

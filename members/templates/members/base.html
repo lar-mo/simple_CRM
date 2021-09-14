@@ -332,12 +332,6 @@
       </div>
 
       <script type="text/javascript">
-        let edit_address_link = document.querySelector('#edit_address_link');
-        let show_edit_address = document.querySelector('#show_edit_address');
-        edit_address_link.onclick = function() {
-          $('#show_edit_address').click();
-        }
-
         function AjaxFormSubmit() {
           var address_form = document.querySelector('#address_form');
           var data = new FormData(address_form);

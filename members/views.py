@@ -230,13 +230,13 @@ def save_address(request):
     member_id = request.POST['member_id']
     refresh_url = request.POST['refresh_url']
     address_obj = get_object_or_404(Address, id=addr_id)
-    address_obj.description = request.POST['description']
-    address_obj.address_1 = request.POST['address_1']
-    address_obj.address_2 = request.POST['address_2']
-    address_obj.city = request.POST['city']
+    address_obj.description = request.POST['description'].strip()
+    address_obj.address_1 = request.POST['address_1'].strip()
+    address_obj.address_2 = request.POST['address_2'].strip()
+    address_obj.city = request.POST['city'].strip()
     address_obj.state = request.POST['state']
-    address_obj.postal_code = request.POST['postal_code']
-    address_obj.country = request.POST['country']
+    address_obj.postal_code = request.POST['postal_code'].strip()
+    address_obj.country = request.POST['country'].strip()
     address_obj.save()
     context = {}
     return HttpResponse()
