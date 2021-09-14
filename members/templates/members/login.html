@@ -1,0 +1,17 @@
+{% extends 'members/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <div id="pagination_top" style="background-color: #cde;">
+      <span class="step-links" id="step_links_top">
+        <h2>Login</h2>
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </span>
+{% endblock %}
