@@ -27,9 +27,17 @@
         height: 100%;
         font-size: 0.95em;
       }
+      .filter_members a {
+        color: #60A9EA;
+      }
+      .right_side_header a {
+        color: #6D6D6D;
+      }
       header {
-        /* padding: 10px 20px; */
-        background-color: #fff;
+        background-color: #EEE;
+        /* background: radial-gradient(#ccc, #000); */
+        /* background: linear-gradient(90deg, #6D6D6D 50%, #60A9EA 100%); */
+        /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,0.5) 100%); */
         position: sticky;
         position: -webkit-sticky;
         position: -moz-sticky;
@@ -84,10 +92,12 @@
       }
       #pagination_top {
         border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
+        background-color: #cde;
       }
       #pagination_bottom {
         border-radius: 0 0 calc(.3rem - 1px) calc(.3rem - 1px);
         text-align: center;
+        background-color: #cde;
       }
       .members_list_value, .ticket_list_value {
         border: 1px solid #000;
@@ -259,21 +269,23 @@
     <body>
       <header>
         <div class="left_side_header">
-        <div class="display-5"><a href="/members/" class="homepage_link">Council Members</a></div>
-        <div class="filter_members">Show:
-          <input type="radio" name="filter_members" id="show_active"> <a href="{% url 'members_app:list_active' %}">Active Members</a> ({{user.active_member_count}})
-          <input type="radio" name="filter_members" id="show_board"> <a href="{% url 'members_app:list_board' %}">Board Members</a> ({{user.board_member_count}})
-          <input type="radio" name="filter_members" id="show_all"> <a href="{% url 'members_app:list_all' %}">All People</a> ({{user.all_member_count}})
-          <input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})
-          <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}})
-        </div>
-        <div class="search_container">
-            <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
-            <button type="submit" class="btn btn-secondary btn-sm" id="search_btn"><b>Search</b></button>
-            &nbsp;&nbsp;
-            <input type="checkbox" class="" name="filter_cb" id="filter_cb"/>
-            <span>Show Only Board Members</span>
-        </div>
+          <div class="display-5"><a href="/members/" class="homepage_link">Council Members</a></div>
+          {% if user.is_authenticated %}
+          <div class="filter_members">Show:
+            <input type="radio" name="filter_members" id="show_active"> <a href="{% url 'members_app:list_active' %}">Active Members</a> ({{user.active_member_count}})
+            <input type="radio" name="filter_members" id="show_board"> <a href="{% url 'members_app:list_board' %}">Board Members</a> ({{user.board_member_count}})
+            <input type="radio" name="filter_members" id="show_all"> <a href="{% url 'members_app:list_all' %}">All People</a> ({{user.all_member_count}})
+            <input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})
+            <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}})
+          </div>
+          <div class="search_container">
+              <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
+              <button type="submit" class="btn btn-secondary btn-sm" id="search_btn"><b>Search</b></button>
+              &nbsp;&nbsp;
+              <input type="checkbox" class="" name="filter_cb" id="filter_cb"/>
+              <span>Show Only Board Members</span>
+          </div>
+          {% endif %}
         </div>
         <div class="right_side_header">
           {% if user.is_authenticated %}
