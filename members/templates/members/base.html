@@ -27,7 +27,7 @@
         font-size: 0.95em;
       }
       header {
-        padding: 10px 20px;
+        /* padding: 10px 20px; */
         background-color: #fff;
         position: sticky;
         position: -webkit-sticky;
@@ -36,8 +36,9 @@
         position: -o-sticky;
         top: 0px;
         display:flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: space-between;
+        align-items: center;
         font-size: 1.0em;
         z-index: 999;
         font-weight: bold;
@@ -45,24 +46,27 @@
         -moz-box-shadow:      3px 3px 5px 0 rgba(25,25,25,0.4);
         -webkit-box-shadow:   3px 3px 5px 0 rgba(25,25,25,0.4);
       }
-      header > * {
+      .left_side_header > * {
         margin: 3px 0;
+      }
+      .left_side_header {
+        padding: 10px 20px;
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .right_side_header {
+        margin-right: 40px;
       }
       main {
         padding: 10px;
         margin: 20px auto;
       }
-      /* main > * {
-        box-shadow:           3px 3px 5px 0 rgba(25,25,25,0.4);
-        -moz-box-shadow:      3px 3px 5px 0 rgba(25,25,25,0.4);
-        -webkit-box-shadow:   3px 3px 5px 0 rgba(25,25,25,0.4);
-      } */
       input[type=text], input[type=date] {
         border: none;
         border-bottom: 2px solid #ccc;
       }
       select {
-        /* width: 100%; */
         padding: 3px 3px;
         border: none;
         border-bottom: 2px solid #ccc;
@@ -253,6 +257,7 @@
   </head>
     <body>
       <header>
+        <div class="left_side_header">
         <div class="display-5"><a href="/members/" class="homepage_link">Council Members</a></div>
         <div class="filter_members">Show:
           <input type="radio" name="filter_members" id="show_active"> <a href="{% url 'members_app:list_active' %}">Active Members</a> ({{user.active_member_count}})
@@ -267,6 +272,14 @@
             &nbsp;&nbsp;
             <input type="checkbox" class="" name="filter_cb" id="filter_cb"/>
             <span>Show Only Board Members</span>
+        </div>
+        </div>
+        <div class="right_side_header">
+          {% if user.is_authenticated %}
+            <span><a href="/logout">Logout</a></span>
+          {% else %}
+            <span><a href="/login">Login</a></span>
+          {% endif %}
         </div>
       </header>
 
