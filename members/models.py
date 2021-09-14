@@ -37,7 +37,7 @@ def one_year_from_today():
     return timezone.now() + datetime.timedelta(days=365)
 
 class Address(models.Model):
-    AL = 'AL'
+    AL = 'AL' # key = 'db value'
     AK = 'AK'
     AZ = 'AZ'
     AR = 'AR'
@@ -89,7 +89,7 @@ class Address(models.Model):
     WI = 'WI'
     WY = 'WY'
     STATE_CHOICES = [
-            (AL, 'Alabama'),
+            (AL, 'Alabama'), # (key, 'select option'),
             (AK, 'Alaska'),
             (AZ, 'Arizona'),
             (AR, 'Arkansas'),
