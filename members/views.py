@@ -207,6 +207,7 @@ def edit_person(request, person_id):
     context = {
         'person': person,
         'people': people,
+        'address_id': address.id,
         'membership': membership,
         'form': form,
         'querystring': querystring,
@@ -224,7 +225,7 @@ def edit_person(request, person_id):
 
 @login_required
 def save_address(request):
-    print(request.POST)
+    # print(request.POST)
     addr_id = request.POST['address_id']
     member_id = request.POST['member_id']
     refresh_url = request.POST['refresh_url']

@@ -288,6 +288,74 @@
         {% block content %}{% endblock %}
       </main>
 
+      <!-- Button trigger modal -->
+      <button style="display: none" id="show_edit_address" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal"></button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editAddressModal">Edit Address</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="" method="post" name="address_form" id="address_form">
+              <input type="hidden" name="address_id" id="address_id" value="{{address_id}}">
+              <input type="hidden" name="member_id" id="member_id" value="{{member.id}}">
+                <div class="modal-body">
+                    <!-- {% csrf_token %} -->
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" id="address_submit_btn" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        let edit_address_link = document.querySelector('#edit_address_link');
+        let show_edit_address = document.querySelector('#show_edit_address');
+        edit_address_link.onclick = function() {
+          $('#show_edit_address').click();
+        }
+
+        function AjaxFormSubmit() {
+          var address_form = document.querySelector('#address_form');
+          var data = new FormData(address_form);
+          var refresh_url = window.location;
+          data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+          data.append('refresh_url', refresh_url);
+          $.ajax({
+              url: '/members/save_address/',
+              type: "POST",
+              data: data,
+              cache: false,
+              processData: false,
+              contentType: false,
+              // close modal & reload the address with new data
+              success : function(json) {
+                  $('#show_edit_address').click();
+                  $("#address_fields").load(location.href+" #address_fields>*","");
+                  console.log("success: address saved"); // another sanity check
+              },
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  $('#show_edit_address').click();
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          });
+        };
+        let address_submit_btn = document.querySelector('#address_submit_btn');
+        address_submit_btn.onclick = AjaxFormSubmit;
+      </script>
+
       <script type="text/javascript">
         let show_all = document.querySelector('#show_all');
         let show_board = document.querySelector('#show_board');

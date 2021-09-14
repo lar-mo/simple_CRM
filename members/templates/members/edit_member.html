@@ -18,9 +18,11 @@
               <div class="member_detail_section" id="member_detail_section">
                 <div class="member_detail_mailing_address" id="member_detail_mailing_address">
                   <b>Mailing Address</b> <a href="#" id="edit_address_link" class="edit_link">(edit)</a>:
-                    <div class="">{{member.address.address_1}}</div>
-                    <div class="">{{member.address.address_2}}</div>
-                    <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+                    <div id="address_fields">
+                      <div class="">{{member.address.address_1}}</div>
+                      <div class="">{{member.address.address_2}}</div>
+                      <div class="">{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+                    </div>
                 </div>
               </div>
             </div><!-- end of 'row' -->
@@ -65,90 +67,5 @@
         <input type="hidden" id="member_id" name="member_id" value="{{member.id}}">
       </form>
   </div> <!-- end of 'container' -->
-
-  <!-- Button trigger modal -->
-  <button style="display: none" id="show_edit_address" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal"></button>
-
-  <!-- Modal -->
-  <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editAddressModal">Edit Address</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form action="" method="post" name="address_form" id="address_form">
-          <input type="hidden" name="address_id" id="address_id" value="{{address_id}}">
-          <input type="hidden" name="member_id" id="member_id" value="{{member.id}}">
-            <div class="modal-body">
-                <!-- {% csrf_token %} -->
-                <table>
-                    {{ form.as_table }}
-                </table>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" id="address_submit_btn" class="btn btn-primary">Save changes</button>
-            </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <script type="text/javascript">
-    let edit_address_link = document.querySelector('#edit_address_link');
-    let show_edit_address = document.querySelector('#show_edit_address');
-    edit_address_link.onclick = function() {
-      $('#show_edit_address').click();
-      // alert('clicked!')
-    }
-
-    //
-    // Known issue: The Edit link for Mailing Address only works the first time.
-    // After submitting the Edit Address form, the (edit) link stops working.
-    //
-
-    function AjaxFormSubmit() {
-      var address_form = document.querySelector('#address_form');
-      var data = new FormData(address_form);
-      var refresh_url = window.location;
-      data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-      data.append('refresh_url', refresh_url);
-      $.ajax({
-          url: '/members/save_address/',
-          type: "POST",
-          data: data,
-          cache: false,
-          processData: false,
-          contentType: false,
-      // }
-          // ).done(function(returned_data){
-          //
-          //     // This is the ajax.done() method, where you can fire events after the ajax method is complete
-          //     $('#show_edit_address').click();
-          //     // For instance, you could hide/display your add/remove button here
-          //
-          // });
-          success : function(json) {
-              // $('#post-text').val(''); // remove the value from the input
-              $('#show_edit_address').click();
-              $('#member_detail_section').load(location.href = '  #member_detail_mailing_address');
-              console.log("success: address saved"); // another sanity check
-          },
-
-          // handle a non-successful response
-          error : function(xhr,errmsg,err) {
-              // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                  // " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-              $('#show_edit_address').click();
-              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-          }
-      });
-    };
-    let address_submit_btn = document.querySelector('#address_submit_btn');
-    address_submit_btn.onclick = AjaxFormSubmit;
-  </script>
 
 {% endblock %}
