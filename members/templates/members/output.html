@@ -107,7 +107,7 @@
         document.getElementById("step_links_top").innerHTML = "MEMBER DETAILS";
         document.getElementById("pagination_bottom").style.display = "none";
     {% elif members.paginator.num_pages == 1 %}
-        document.getElementById("pagination_bottom").style.display = "none";
+        document.getElementById("pagination_bottom").innerHTML = "";
         {% if view == 'list_board' %}
             document.getElementById("step_links_top").innerHTML = "BOARD MEMBERS";
         {% elif view == 'active_members' %}

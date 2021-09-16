@@ -286,47 +286,13 @@ def edit_member(request, member_id):
 def save_member(request):
     member_id = request.POST['member_id']
     member_info = Member.objects.get(id=member_id)
-    member_info.name1 = request.POST['name1'].strip()
-    member_info.sort_by = request.POST['sort_by'].strip()
-    member_info.byline = request.POST['byline'].strip()
-    member_info.name2 = request.POST['name2'].strip()
-    member_info.note = request.POST['note'].strip()
-    member_info.address1 = request.POST['address1'].strip()
-    member_info.address2 = request.POST['address2'].strip()
-    member_info.city = request.POST['city'].strip()
-    member_info.state = request.POST['state'].strip()
-    member_info.postal_code = request.POST['postal_code'].strip()
-    member_info.email1 = request.POST['email1'].strip()
-    member_info.email2 = request.POST['email2'].strip()
-    member_info.phone_number1 = request.POST['phone_number1'].strip()
-    member_info.phone_number2 = request.POST['phone_number2'].strip()
-    member_info.membership_status = request.POST['membership_status']
-    member_info.membership_type = request.POST['membership_type']
-
-    try:
-        board_member = request.POST['board_member']
-        if board_member == 'on':
-            member_info.board_member = True
-    except:
-        member_info.board_member = False
-
-    member_info.role = request.POST['role'].strip()
-
-    try:
-        directory_optout = request.POST['directory_optout']
-        if directory_optout == 'on':
-            member_info.directory_optout = True
-    except:
-        member_info.directory_optout = False
-
-    try:
-        needs_review = request.POST['needs_review']
-        if needs_review == 'on':
-            member_info.needs_review = True
-    except:
-        member_info.needs_review = False
-
-    member_info.reason_for_review = request.POST['reason_for_review'].strip()
+    member_info.person1 = request.POST['person1']
+    member_info.person2 = request.POST['person2']
+    member_info.address = request.POST['address']
+    member_info.level = request.POST['level']
+    member_info.expiration = request.POST['expiration']
+    member_info.status = request.POST['status']
+    member_info.notes = request.POST['notes']
     member_info.save()
 
     return HttpResponseRedirect(reverse('members_app:show_member', kwargs={'member_id':member_id})+'?message=changes_saved')
