@@ -29,10 +29,9 @@
                 {% firstof member.first_name member.person1.first_name %} {% firstof member.last_name member.person1.last_name %}{% if member.byline or member.person1.byline %}<span class="byline">, {% firstof member.byline member.person1.byline %}</span>{% endif %}
               </span>
             </div>
-            {% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}
+            {% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' or view == 'search_results' %}
               <div class="row">
-                <span class="names_title">{{member.person1.partner.first_name}} {{member.person1.partner.last_name}}
-                  <div class="byline">{{member.person1.partner.byline}}</div>
+                <span class="names_title">{{member.person1.partner.first_name}} {{member.person1.partner.last_name}}{% if member.person1.partner.byline %}<span class="byline">, {{member.person1.partner.byline}}</span>{% endif %}
                 </span>
               </div>
             {% endif %}
@@ -60,16 +59,20 @@
               <div>{% if member.committees|length > 0 %}Committee{{member.committees|length|pluralize}}: {{member.committees}}{% endif %}</div>
             </div>
           </div>
-          {% url 'members_app:needs_review' as needs_review_url %}
-          {% if view == 'list_all' %}
-          <span><a href="{% url 'members_app:show_person' member.id %}">show</a></span>
-          {% elif view == 'show_person' %}
-          <span><a href="{% url 'members_app:edit_person' member.id %}">edit</a></span>
-          {% elif view == 'active_members' or view == 'inactive_members' %}
-          <span><a href="{% url 'members_app:show_member' member.id %}">show</a></span>
-          {% elif view == 'show_member' %}
-          <span><a href="{% url 'members_app:edit_member' member.id %}?from=member">edit</a></span>
+          {% if view == 'search_results' %}
+              {% if member.first_name %}Person <a href="{% url 'members_app:edit_person' member.id %}">(edit)</a>{% endif %}
+              {% if member.person1.first_name %}Membership <a href="{% url 'members_app:edit_member' member.id %}">(edit)</a>{% endif %}
           {% endif %}
+            {% url 'members_app:needs_review' as needs_review_url %}
+            {% if view == 'list_all' %}
+            <span><a href="{% url 'members_app:show_person' member.id %}">show</a></span>
+            {% elif view == 'show_person' %}
+            <span><a href="{% url 'members_app:edit_person' member.id %}">edit</a></span>
+            {% elif view == 'active_members' or view == 'inactive_members' %}
+            <span><a href="{% url 'members_app:show_member' member.id %}">show</a></span>
+            {% elif view == 'show_member' %}
+            <span><a href="{% url 'members_app:edit_member' member.id %}?from=member">edit</a></span>
+            {% endif %}
         </div>
     {% endspaceless %}
     {% endfor %}
@@ -96,16 +99,16 @@
     {% if message == "changes_saved" %}
       document.getElementById("step_links_top").innerHTML = "Changes Saved";
     {% endif %}
-    {% if view == 'search_page' %}
+    {% if view == 'search_results' %}
         document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>";
-        document.getElementById("pagination_bottom").style.display = "none";
+        document.getElementById("pagination_bottom").innerHTML = "";
         console.log('{{match}}')
     {% elif view == 'show_person' %}
         document.getElementById("step_links_top").innerHTML = "PERSON DETAILS";
-        document.getElementById("pagination_bottom").style.display = "none";
+        document.getElementById("pagination_bottom").innerHTML = "";
     {% elif view == 'show_member' %}
         document.getElementById("step_links_top").innerHTML = "MEMBER DETAILS";
-        document.getElementById("pagination_bottom").style.display = "none";
+        document.getElementById("pagination_bottom").innerHTML = "";
     {% elif members.paginator.num_pages == 1 %}
         document.getElementById("pagination_bottom").innerHTML = "";
         {% if view == 'list_board' %}

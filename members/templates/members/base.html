@@ -24,7 +24,7 @@
         margin: 0;
         padding: 0;
         width: 100%;
-        height: 100%;
+        height: auto;
         font-size: 0.95em;
       }
       header {
@@ -64,7 +64,7 @@
       }
       .container > * {
         padding: 10px;
-        background-color: #fff;
+        background-color: #FFF;
       }
       input[type=text], input[type=date] {
         border: none;
@@ -125,7 +125,7 @@
         align-items: flex-start;
         justify-content: flex-start;
       }
-      .tile:first-child:last-child {
+      /* .tile:first-child:last-child {
         border-radius: calc(.3rem - 1px);
       }
       .tile:first-child {
@@ -133,9 +133,9 @@
       }
       .tile:last-child {
         border-radius: 0 0 calc(.3rem - 1px) calc(.3rem - 1px);
-      }
+      } */
       .tile:nth-child(odd) {
-        background-color: rgba(255,255,255,0.7);
+        background-color: #EEE;
       }
       .row {
         padding-right: 20px;
@@ -206,8 +206,9 @@
         padding: 2px 4px 2px 4px;
         background-color: #F2F2F2;
       }
-      #edit_member_form {
+      #edit_member_form, #edit_person_form {
         border-radius: 0 0 calc(.3rem - 1px) calc(.3rem - 1px);
+        background-color: #FFF;
       }
       .execs {
         font-size: 1.2em;

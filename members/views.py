@@ -81,15 +81,11 @@ def needs_review(request):
 
 @login_required
 def search_results(request):
-    querystring = request.GET['q']
-    try:
-        filter = request.GET['f']
-    except:
-        pass
-    two_names_orig = querystring.split("and")
-    two_names = []
-    for name in two_names_orig:
-        two_names.append(name.strip())
+    querystring = request.GET['q'].strip()
+    # try:
+    #     filter = request.GET['f']
+    # except:
+    #     pass
 
     search_terms = querystring.split()
     search_terms = list(dict.fromkeys(search_terms))
@@ -97,67 +93,125 @@ def search_results(request):
         search_terms.remove('and')
     except:
         pass
+    print(search_terms)
 
-    member_records = Person.objects.all()
-    try:
-        member_records = member_records.filter(board_member=True)
-    except:
-        pass
-    exact_match = member_records.filter(first_name=querystring)
-    members_name1_2n = member_records.filter(reduce(Q.__or__, [Q(first_name__istartswith=word) for word in two_names])) # was icontains
-    members_name2_2n = member_records.filter(reduce(Q.__or__, [Q(last_name__istartswith=word) for word in two_names])) # was icontains
-    members_name1_swst = member_records.filter(reduce(Q.__or__, [Q(first_name__istartswith=word) for word in search_terms])) # was icontains
-    members_name2_swst = member_records.filter(reduce(Q.__or__, [Q(last_name__istartswith=word) for word in search_terms])) # was icontains
-    members_name1_ewst = member_records.filter(reduce(Q.__or__, [Q(first_name__iendswith=word) for word in search_terms])) # was icontains
-    members_name2_ewst = member_records.filter(reduce(Q.__or__, [Q(last_name__iendswith=word) for word in search_terms])) # was icontains
-    members_name1_cst = member_records.filter(reduce(Q.__or__, [Q(first_name__icontains=word) for word in search_terms]))
-    members_name2_cst = member_records.filter(reduce(Q.__or__, [Q(last_name__icontains=word) for word in search_terms]))
-    # print(exact_match.exists())
-    # print(members_name1.exists())
-    # print(members_name2.exists())
+    person_records = Person.objects.all()
+    member_records = Membership.objects.all()
+    board_records = Board.objects.all()
 
-    if exact_match.exists():
-        context = {
-            'members': exact_match,
-            'querystring': querystring,
-            'view': 'search_page',
-            'match': '1:exact',
-        }
-        return render(request, 'members/output.html', context)
-    elif members_name1_2n.exists() or members_name2_2n.exists():
-        members = list(dict.fromkeys(chain(members_name1_2n, members_name2_2n)))
+    # try:
+    #     member_records = member_records.filter(board_member=True)
+    # except:
+    #     pass
+    # print(search_terms[0])
+    # print(search_terms[1])
+    exact_match_p = person_records.filter(Q(first_name=search_terms[0], last_name=search_terms[1]))
+    exact_match_mp1 = member_records.filter(Q(person1__first_name=search_terms[0], person1__last_name=search_terms[1]))
+    exact_match_mp2 = member_records.filter(Q(person2__first_name=search_terms[0], person2__last_name=search_terms[1]))
+
+    # (2)(n)ames
+    # members_name1_2n = member_records.filter(reduce(Q.__or__, [Q(first_name__istartswith=word) for word in two_names])) # was icontains
+    # members_name2_2n = member_records.filter(reduce(Q.__or__, [Q(last_name__istartswith=word) for word in two_names])) # was icontains
+    # two_names_orig = querystring.split("and")
+    # print(two_names_orig)
+    # second_name_split = two_names_orig[1].strip().split(" ")
+    # two_names = [x for x in second_name_split]
+    # two_names.append(two_names_orig[0].strip())
+    members_person1_2nfn = member_records.filter(person1__first_name=search_terms[0])
+    members_person1_2nln = member_records.filter(person1__last_name=search_terms[1])
+    # members_person2_2nfn = member_records.filter(person2__first_name=search_terms[2])
+    # print(members_person1_2nfn.exists())
+    # print(members_person1_2nln.exists())
+    # print(members_person2_2nfn.exists())
+
+    # (s)tarts (w)ith (s)earch (t)erms
+    # members_name1_swst = member_records.filter(reduce(Q.__or__, [Q(first_name__istartswith=word) for word in search_terms])) # was icontains
+    # members_name2_swst = member_records.filter(reduce(Q.__or__, [Q(last_name__istartswith=word) for word in search_terms])) # was icontains
+    members_name1_swst = person_records.filter(first_name='')
+    members_name2_swst = person_records.filter(first_name='')
+
+    # (e)nds (w)ith (s)earch (t)erms
+    # members_name1_ewst = member_records.filter(reduce(Q.__or__, [Q(first_name__iendswith=word) for word in search_terms])) # was icontains
+    # members_name2_ewst = member_records.filter(reduce(Q.__or__, [Q(last_name__iendswith=word) for word in search_terms])) # was icontains
+    members_name1_ewst = person_records.filter(first_name='')
+    members_name2_ewst = person_records.filter(first_name='')
+
+    # (c)ontains (s)earch (t)erms
+    person_name1_cst = person_records.filter(reduce(Q.__or__, [Q(first_name__icontains=word) for word in search_terms]))
+    person_name2_cst = person_records.filter(reduce(Q.__or__, [Q(last_name__icontains=word) for word in search_terms]))
+    member_name1fn_cst = member_records.filter(reduce(Q.__or__, [Q(person1__first_name__icontains=word) for word in search_terms]))
+    member_name1ln_cst = member_records.filter(reduce(Q.__or__, [Q(person1__last_name__icontains=word) for word in search_terms]))
+    member_name2fn_cst = member_records.filter(reduce(Q.__or__, [Q(person2__first_name__icontains=word) for word in search_terms]))
+    member_name2ln_cst = member_records.filter(reduce(Q.__or__, [Q(person2__last_name__icontains=word) for word in search_terms]))
+    # # print(exact_match.exists())
+    # # print(members_name1.exists())
+    # # print(members_name2.exists())
+    # print(member_name1_cst)
+    # print(member_name2_cst)
+
+    if exact_match_p.exists() or exact_match_mp1.exists() or exact_match_mp2.exists():
+        members = list(dict.fromkeys(chain(exact_match_p, exact_match_mp1, exact_match_mp2)))
+        print(members)
         context = {
             'members': members,
             'querystring': querystring,
-            'view': 'search_page',
-            'match': '2:pairs',
+            'view': 'search_results',
+            'match': '1:exact',
         }
         return render(request, 'members/output.html', context)
-    elif members_name1_swst.exists() or members_name2_swst.exists():
+
+    # second_name_split = two_names_orig[1].strip().split(" ")
+    # two_names = [x for x in second_name_split]
+    # two_names.append(two_names_orig[0].strip())
+    # members_person1_2nfn = member_records.filter(person1__first_name=two_names[0])
+    # members_person1_2nln = member_records.filter(person1__last_name=two_names[1])
+    # members_person2_2nfn = member_records.filter(person2__first_name=two_names[2])
+
+    # if members_person1_2nfn.exists() or members_person1_2nfn.exists() or members_person2_2nfn.exists():
+    #     members = list(dict.fromkeys(chain(members_person1_2nfn, members_person1_2nfn, members_person2_2nfn)))
+    #     context = {
+    #         'members': members,
+    #         'querystring': querystring,
+    #         'view': 'search_results',
+    #         'match': '2:pairs',
+    #     }
+    #     return render(request, 'members/output.html', context)
+
+    if members_name1_swst.exists() or members_name2_swst.exists():
         members = list(dict.fromkeys(chain(members_name1_swst, members_name2_swst)))
         context = {
             'members': members,
             'querystring': querystring,
-            'view': 'search_page',
-            'match': '2:swst',
+            'view': 'search_results',
+            'match': '3:swst',
         }
         return render(request, 'members/output.html', context)
-    elif members_name1_ewst.exists() or members_name2_ewst.exists():
+
+    if members_name1_ewst.exists() or members_name2_ewst.exists():
         members = list(dict.fromkeys(chain(members_name1_ewst, members_name2_ewst)))
         context = {
             'members': members,
             'querystring': querystring,
-            'view': 'search_page',
-            'match': '2:ewst',
+            'view': 'search_results',
+            'match': '4:ewst',
         }
         return render(request, 'members/output.html', context)
-    elif members_name1_cst.exists() or members_name2_cst.exists():
-        members = list(dict.fromkeys(chain(members_name1_cst, members_name2_cst)))
+
+    if member_name1fn_cst.exists() or member_name1ln_cst.exists() or member_name2fn_cst.exists() or member_name2ln_cst.exists() or person_name1_cst.exists() or person_name2_cst.exists():
+        people = list(dict.fromkeys(chain(
+                        member_name1fn_cst,
+                        member_name1ln_cst,
+                        member_name2fn_cst,
+                        member_name2ln_cst,
+                        person_name1_cst,
+                        person_name2_cst
+                        )
+                ))
         context = {
-            'members': members,
+            'members': people,
             'querystring': querystring,
-            'view': 'search_page',
-            'match': '3:words',
+            'view': 'search_results',
+            'match': '5:words',
         }
         return render(request, 'members/output.html', context)
     else:
@@ -165,8 +219,8 @@ def search_results(request):
         context = {
             'members': members,
             'querystring': querystring,
-            'view': 'search_page',
-            'match': '3:words',
+            'view': 'search_results',
+            'match': '6:else',
         }
         return render(request, 'members/output.html', context)
 
@@ -198,7 +252,7 @@ def edit_person(request, person_id):
     people = Person.objects.all()
     person = people.get(id=person_id)
     address = get_object_or_404(Address, id=person.address.id)
-    membership = get_object_or_404(Membership, person1=person_id)
+    membership = Membership.objects.filter(person1__id=person_id, person2__id=person_id)
     form = AddressForm(instance=address)
     try:
         querystring = request.GET['from']

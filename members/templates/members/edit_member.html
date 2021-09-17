@@ -5,7 +5,7 @@
   <div class="container">
     <div class="edit_page_heading"><h3>Edit Membership Information</h3></div>
       <form id="edit_member_form" action="{% url 'members_app:save_member' %}" method="post">
-        <div class="tile edit_form_align">
+        <div class="edit_form_align">
             {% csrf_token %}
           <div class="col_ro">
             <div class="row">
