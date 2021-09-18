@@ -279,13 +279,12 @@ def save_address(request):
 
 @login_required
 def save_person(request):
-    print(request.POST)
     person_id = request.POST['person_id']
     partner_id = request.POST['partner']
     address_id = request.POST['address']
+    person = get_object_or_404(Person, id=person_id)
     partner = get_object_or_404(Person, id=partner_id)
     address = get_object_or_404(Address, id=address_id)
-    person = get_object_or_404(Person, id=person_id)
     person.first_name = request.POST['first_name']
     person.last_name = request.POST['last_name']
     person.byline = request.POST['byline']
@@ -336,14 +335,21 @@ def edit_member(request, member_id):
 
 def save_member(request):
     member_id = request.POST['member_id']
-    member_info = Member.objects.get(id=member_id)
-    member_info.person1 = request.POST['person1']
-    member_info.person2 = request.POST['person2']
-    member_info.address = request.POST['address']
-    member_info.level = request.POST['level']
-    member_info.expiration = request.POST['expiration']
-    member_info.status = request.POST['status']
-    member_info.notes = request.POST['notes']
-    member_info.save()
+    person1 = request.POST['person1']
+    person2 = request.POST['person2']
+    address = request.POST['address']
+    member = Membership.objects.get(id=member_id)
+    person1 = get_object_or_404(Person, id=person1)
+    person2 = get_object_or_404(Person, id=person2)
+    address = get_object_or_404(Address, id=address)
+    member.person1 = person1
+    member.person2 = person2
+    member.address = address
+    member.level = request.POST['level']
+    if request.POST['expiration']:
+        member.expiration = request.POST['expiration']
+    member.status = request.POST['status']
+    member.notes = request.POST['notes']
+    member.save()
 
     return HttpResponseRedirect(reverse('members_app:show_member', kwargs={'member_id':member_id})+'?message=changes_saved')

@@ -34,7 +34,7 @@
                 <select name="level" id="level">
                   <option value="Supporter"{% if member.level == 'Supporter' %} selected{%endif%}>Supporter</option>
                   <option value="Contributor"{% if member.level == 'Contributor' %} selected{%endif%}>Contributor</option>
-                  <option value="Adovcate"{% if member.level == 'Adovcate' %} selected{%endif%}>Adovcate</option>
+                  <option value="Adovcate"{% if member.level == 'Advocate' %} selected{%endif%}>Advocate</option>
                   <option value="Honorary"{% if member.level == 'Honorary' %} selected{%endif%}>Honorary</option>
                   <option value="PAM Staff"{% if member.level == 'PAM Staff' %} selected{%endif%}>PAM Staff</option>
                   <option></option>
@@ -53,7 +53,7 @@
               </div>
               <div class="form_fields">
                 <label for="notes">Notes:</label>
-                <input type="text" id="notes" name="notes" value="{{member.address.notes}}">
+                <input type="text" id="notes" name="notes" value="{{member.notes}}">
               </div>
             </div>
           </div>
@@ -64,6 +64,9 @@
           <a href="{% if querystring == 'person' %}{% url 'members_app:show_person' member.person1.id %}{% elif querystring == 'member' %}{% url 'members_app:show_member' member.id %}{%else%}{% url 'members_app:list_active' %}{%endif%}">cancel</a>
         </div>
         <input type="hidden" id="member_id" name="member_id" value="{{member.id}}">
+        <input type="hidden" id="address" name="address" value="{{member.address.id}}">
+        <input type="hidden" id="person1" name="person1" value="{{member.person1.id}}">
+        <input type="hidden" id="person2" name="person2" value="{{member.person2.id}}">
       </form>
   </div> <!-- end of 'container' -->
 
