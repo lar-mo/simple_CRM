@@ -7,10 +7,10 @@
       <form id="edit_member_form" action="{% url 'members_app:save_member' %}" method="post">
         <div class="edit_form_align">
             {% csrf_token %}
-          <div class="col_ro">
+          <div class="col_edit">
             <div class="row">
               <div class="member_detail_section">
-                <div class=""><b>Member{% if member.person2 %}s{%endif%}</b> <a href="{% url 'members_app:edit_person' member.person1.id %}?from=edit_member" class="edit_link">(edit)</a>:</div>
+                <div class=""><b>Member{% if member.person2 %}s{%endif%}</b> <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:</div>
                 <div class="member_names">{{member.person1.first_name}} {{member.person1.last_name}}{% if member.person2 %} and {{member.person2.first_name}} {{member.person2.last_name}}{% endif %}</div>
               </div>
             </div><!-- end of 'row' -->
