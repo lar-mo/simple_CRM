@@ -279,7 +279,24 @@ def save_address(request):
 
 @login_required
 def save_person(request):
-    return HttpResponse("Hello world!")
+    print(request.POST)
+    person_id = request.POST['person_id']
+    partner_id = request.POST['partner']
+    address_id = request.POST['address']
+    partner = get_object_or_404(Person, id=partner_id)
+    address = get_object_or_404(Address, id=address_id)
+    person = get_object_or_404(Person, id=person_id)
+    person.first_name = request.POST['first_name']
+    person.last_name = request.POST['last_name']
+    person.byline = request.POST['byline']
+    person.nickname = request.POST['nickname']
+    person.phone_number = request.POST['phone_number']
+    person.email = request.POST['email']
+    person.partner = partner
+    person.address = address
+    person.save()
+    # return HttpResponse("Hello world!")
+    return HttpResponseRedirect(reverse('members_app:show_person', kwargs={'person_id':person_id})+'?message=changes_saved')
 
 @login_required
 def show_member(request, member_id):

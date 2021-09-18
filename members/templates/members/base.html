@@ -283,7 +283,7 @@
             <input type="radio" name="filter_members" id="show_board"> <a href="{% url 'members_app:list_board' %}">Board Members</a> ({{user.board_member_count}})
             <input type="radio" name="filter_members" id="show_all"> <a href="{% url 'members_app:list_all' %}">All People</a> ({{user.all_member_count}})
             <input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})
-            <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}})
+            <!-- <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}}) -->
           </div>
           <div class="search_container">
               <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
@@ -374,7 +374,7 @@
         let show_board = document.querySelector('#show_board');
         let show_active = document.querySelector('#show_active');
         let show_inactive = document.querySelector('#show_inactive');
-        let show_needs_review = document.querySelector('#show_needs_review');
+        // let show_needs_review = document.querySelector('#show_needs_review');
         if (window.location.pathname == '{% url 'members_app:list_all' %}') {
           show_all.checked = true;
         } else if (window.location.pathname == '{% url 'members_app:list_board' %}') {
@@ -383,14 +383,14 @@
           show_active.checked = true;
         } else if (window.location.pathname == '{% url 'members_app:list_inactive' %}') {
           show_inactive.checked = true;
-        } else if (window.location.pathname == '{% url 'members_app:needs_review' %}') {
-          show_needs_review.checked = true;
+        // } else if (window.location.pathname == '{% url 'members_app:needs_review' %}') {
+        //   show_needs_review.checked = true;
         } else {
           show_all.checked = false;
           show_board.checked = false;
           show_active.checked = false;
           show_inactive.checked = false;
-          show_needs_review.checked = false;
+          // show_needs_review.checked = false;
         }
         show_all.onclick = function() {
           window.location='{% url 'members_app:list_all' %}';
@@ -404,9 +404,9 @@
         show_inactive.onclick = function() {
           window.location='{% url 'members_app:list_inactive' %}';
         }
-        show_needs_review.onclick = function() {
-          window.location='{% url 'members_app:needs_review' %}';
-        }
+        // show_needs_review.onclick = function() {
+          // window.location='{% url 'members_app:needs_review' %}';
+        // }
       </script>
 
       <script type="text/javascript">

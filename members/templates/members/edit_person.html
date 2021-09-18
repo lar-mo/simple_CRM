@@ -4,7 +4,7 @@
 
   <div class="container">
     <div class="edit_page_heading"><h3>Edit Person Information</h3></div>
-    <form id="edit_person_form" action="{% url 'members_app:save_member' %}" method="post">
+    <form id="edit_person_form" action="{% url 'members_app:save_person' %}" method="post">
       <div class="edit_form_align">
           {% csrf_token %}
         <div class="col_rw">
@@ -62,9 +62,10 @@
       <div class="clearfix"></div>
       <div class="form_fields submit_btn">
         <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
-        <a href="{% if querystring == 'edit_member' %}{% url 'members_app:edit_member' membership.id %}{%else%}{% url 'members_app:show_person' person.id %}{%endif%}">cancel</a>
+        <a href="{% url 'members_app:show_person' person.id %}">cancel</a>
       </div>
-      <input type="hidden" id="member_id" name="member_id" value="{{person.id}}">
+      <input type="hidden" id="person_id" name="person_id" value="{{person.id}}">
+      <input type="hidden" id="address" name="address" value="{{person.address.id}}">
     </form>
   </div> <!-- end of 'container' -->
 
