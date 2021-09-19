@@ -281,12 +281,6 @@ class Board(models.Model):
     HOSPITALITY_FOOD = 'Hopitality: Food'
     HOSPITALITY_GREETER = 'Hopitality: Greeter'
     HOSPITALITY_RSVPS_NAMETAGS = 'Hopitality: RSVPs/Name Tags'
-    HOSPITALITY = (
-            ('beverages', 'Beverages'),
-            ('food', 'Food'),
-            ('greeter', 'Greeter'),
-            ('rsvp_name_tags', 'RSVPs/Name Tags'),
-    )
     TRAVEL = 'Travel'
     BOT_COUNCIL_LIAISON = 'Board of Trustees Council Liaison'
     COUNCIL_COORDINATOR = 'Council Coordinator'
@@ -320,10 +314,6 @@ class Board(models.Model):
             return "{} - {} {}".format(self.title, self.person1.first_name, self.person1.last_name)
         else:
             return "{} - {} {} (Cmtes: {})".format(self.title, self.person1.first_name, self.person1.last_name, self.committees)
-
-    # def get_cmte_roles_by_person(self, person_id=person1__id):
-    #     person = self(title=person_id)
-    #     return person
 
     class Meta:
         ordering = ['id']
