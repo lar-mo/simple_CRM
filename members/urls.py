@@ -21,4 +21,5 @@ urlpatterns = [
     path('edit_member/<int:member_id>/', views.edit_member, name='edit_member'),
     path('save_member/', views.save_member, name='save_member'),
     path('search/', views.search_results, name='search_results'),
+    path('board/committees/', views.show_committees, name='show_committees'),
 ]
