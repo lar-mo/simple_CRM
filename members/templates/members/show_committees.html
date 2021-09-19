@@ -1,0 +1,23 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <div style="background-color: #cde;" id="show_person_header">
+        <span class="step-links" id="step_links_top">
+          <h3>Committees</h3>
+        </span>
+    </div>
+    {% for key, values in choices.items %}
+      <div class="tile">
+        <div class="row">
+          <div class="">
+            <b>{{key}}</b>: {% for v in values %}{% if not forloop.first %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{{v.first_name}} {{v.last_name}}{% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div><!-- end of 'container' -->
+
+{% endblock %}

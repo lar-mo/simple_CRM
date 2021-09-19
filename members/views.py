@@ -353,3 +353,24 @@ def save_member(request):
     member.save()
 
     return HttpResponseRedirect(reverse('members_app:show_member', kwargs={'member_id':member_id})+'?message=changes_saved')
+
+def show_committees(request):
+    choices = Board._meta.get_field('committees').choices
+    committee_roles = [x[0] for x in choices]
+    uniq_list = dict.fromkeys(committee_roles, [])
+    board = Board.objects.filter(~Q(committees='')).order_by('committees')
+    # print(board)
+    for x in board:
+        for i in range(len(x.committees)):
+            if x.committees[i] in uniq_list.keys():
+                if len(uniq_list[x.committees[i]]) == 0:
+                    uniq_list[x.committees[i]] = [x.person1]
+                else:
+                    uniq_list[x.committees[i]].append(x.person1)
+    print(uniq_list)
+    context = {
+        'choices': uniq_list,
+        'board': board,
+    }
+    return render(request, 'members/show_committees.html', context)
+    # return HttpResponse("Hello worlds!")
