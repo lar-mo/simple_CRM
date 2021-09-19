@@ -355,20 +355,20 @@ def save_member(request):
     return HttpResponseRedirect(reverse('members_app:show_member', kwargs={'member_id':member_id})+'?message=changes_saved')
 
 def show_committees(request):
-    choices = Board._meta.get_field('committees').choices
-    committee_roles = [x[0] for x in choices]
-    uniq_list = dict.fromkeys(committee_roles, [])
-    board = Board.objects.filter(~Q(committees='')).order_by('committees')
+    choices = Board._meta.get_field('committees').choices #get committee choices from model(Board)
+    committee_roles = [x[0] for x in choices] #create list from list of tuples
+    committee_roles_dict = dict.fromkeys(committee_roles, []) #create dictionary with value=[]
+    board = Board.objects.filter(~Q(committees='')).order_by('person1__last_name') #get only board members with committee role(s)
+
+    # loop through each board member with committee role(s) and add to committee_roles_dict
     for x in board:
         for i in range(len(x.committees)):
-            if x.committees[i] in uniq_list.keys():
-                if len(uniq_list[x.committees[i]]) == 0:
-                    uniq_list[x.committees[i]] = [x.person1]
+            if x.committees[i] in committee_roles_dict.keys():
+                if len(committee_roles_dict[x.committees[i]]) == 0:
+                    committee_roles_dict[x.committees[i]] = [x.person1]
                 else:
-                    uniq_list[x.committees[i]].append(x.person1)
-    print(uniq_list)
+                    committee_roles_dict[x.committees[i]].append(x.person1)
     context = {
-        'choices': uniq_list,
-        'board': board,
+        'choices': committee_roles_dict,
     }
     return render(request, 'members/show_committees.html', context)
