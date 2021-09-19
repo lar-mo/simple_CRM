@@ -359,7 +359,6 @@ def show_committees(request):
     committee_roles = [x[0] for x in choices]
     uniq_list = dict.fromkeys(committee_roles, [])
     board = Board.objects.filter(~Q(committees='')).order_by('committees')
-    # print(board)
     for x in board:
         for i in range(len(x.committees)):
             if x.committees[i] in uniq_list.keys():
@@ -373,4 +372,3 @@ def show_committees(request):
         'board': board,
     }
     return render(request, 'members/show_committees.html', context)
-    # return HttpResponse("Hello worlds!")
