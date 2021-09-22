@@ -276,7 +276,7 @@
     <body>
       <header>
         <div class="left_side_header">
-          <div class="display-5"><a href="/members/" class="homepage_link">Council Members</a></div>
+          <div class="display-5"><a href="{% url 'members_app:index' %}" class="homepage_link">Council Members</a></div>
           {% if user.is_authenticated %}
           <div class="filter_members">Show:
             <input type="radio" name="filter_members" id="show_active"> <a href="{% url 'members_app:list_active' %}">Active Members</a> ({{user.active_member_count}})

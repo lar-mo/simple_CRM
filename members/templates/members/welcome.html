@@ -11,7 +11,7 @@
   <p class="lead">
     <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_active' %}" role="button">Active Members</a> <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_board' %}" role="button">Board Members</a> <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_all' %}" role="button">All People</a> <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_inactive' %}" role="button">Inactive Members</a> <a class="btn btn-primary btn-lg" href="{% url 'members_app:needs_review' %}" role="button">Needs Review</a>
   </p>
-  {% if authenticated %}
+  {% if user.is_authenticated %}
   <div>Try: <a href="#" id="sample_search">Simple Search</a> (William Brown)</div>
   {% endif %}
 </div>
