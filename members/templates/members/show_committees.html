@@ -5,7 +5,10 @@
   <div class="container">
     <div style="background-color: #cde;" id="show_person_header">
         <span class="step-links" id="step_links_top">
-          <h3>Committees</h3>
+          <b>COMMITTEES</b>
+        </span>
+        <span class="step-links" id="step_links_top2">
+          <a href="{% url 'members_app:list_board' %}">Board Members</a>
         </span>
     </div>
     {% for key, values in choices.items %}

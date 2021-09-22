@@ -120,7 +120,7 @@
     {% elif members.paginator.num_pages == 1 %}
         document.getElementById("pagination_bottom").innerHTML = "";
         {% if view == 'list_board' %}
-            document.getElementById("step_links_top").innerHTML = "BOARD MEMBERS";
+            document.getElementById("pagination_top").innerHTML = "<span class=\"step-links\" id=\"step_links_top\">BOARD MEMBERS</span><span class=\"step-links\" id=\"step_links_top2\"><a href=\"{% url 'members_app:show_committees' %}\">Committees</a></span>";
         {% elif view == 'active_members' %}
             document.getElementById("step_links_top").innerHTML = "ACTIVE MEMBERS";
         {% elif view == 'inactive_members' %}
