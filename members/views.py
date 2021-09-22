@@ -145,7 +145,7 @@ def search_results(request):
             }
             return render(request, 'members/output.html', context)
 
-    # (c)ontains (s)earch (t)erms (reduce is probably unnecessary)
+    # (c)ontains (s)earch (t)erms (reduce(Q.__or__, []) is probably unnecessary)
     person_fn_cst = person_records.filter(reduce(Q.__or__, [Q(first_name__iexact=word) for word in search_terms]))
     person_ln_cst = person_records.filter(reduce(Q.__or__, [Q(last_name__iexact=word) for word in search_terms]))
     member_person1fn_cst = member_records.filter(reduce(Q.__or__, [Q(person1__first_name__iexact=word) for word in search_terms]))
@@ -333,6 +333,7 @@ def edit_member(request, member_id):
     }
     return render(request, 'members/edit_member.html', context)
 
+@login_required
 def save_member(request):
     member_id = request.POST['member_id']
     person1 = request.POST['person1']
@@ -354,6 +355,7 @@ def save_member(request):
 
     return HttpResponseRedirect(reverse('members_app:show_member', kwargs={'member_id':member_id})+'?message=changes_saved')
 
+@login_required
 def show_committees(request):
     choices = Board._meta.get_field('committees').choices #get committee choices from model(Board)
     committee_roles = [x[0] for x in choices] #create list from list of tuples
@@ -363,7 +365,7 @@ def show_committees(request):
     # loop through each board member with committee role(s) and add to committee_roles_dict
     for x in board:
         for i in range(len(x.committees)):
-            if x.committees[i] in committee_roles_dict.keys():
+            if x.committees[i] in committee_roles_dict.keys(): #this is probably unnecessary
                 if len(committee_roles_dict[x.committees[i]]) == 0:
                     committee_roles_dict[x.committees[i]] = [x.person1]
                 else:
