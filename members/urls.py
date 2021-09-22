@@ -8,10 +8,10 @@ app_name = 'members_app'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('all/', views.list_all, name='list_all'),
+    path('people/all/', views.list_all, name='list_all'),
     path('board/', ListBoardView.as_view(), name='list_board'),
-    path('active/', views.list_active, name='list_active'),
-    path('inactive/', views.list_inactive, name='list_inactive'),
+    path('members/active/', views.list_active, name='list_active'),
+    path('members/inactive/', views.list_inactive, name='list_inactive'),
     path('needs_review/', views.needs_review, name='needs_review'),
     path('person/<int:person_id>/', views.show_person, name='show_person'),
     path('edit_person/<int:person_id>/', views.edit_person, name='edit_person'),
