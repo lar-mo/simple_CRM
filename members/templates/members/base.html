@@ -346,7 +346,7 @@
           data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
           data.append('refresh_url', refresh_url);
           $.ajax({
-              url: '/members/save_address/',
+              url: '/save_address/',
               type: "POST",
               data: data,
               cache: false,
