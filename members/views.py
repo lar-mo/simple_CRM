@@ -129,6 +129,11 @@ def search_results(request):
     # * The logic assumes that each Person is a unique fn+ln combo.
     # ** It also expects the search query to be "first name last name"
         exact_match_p = person_records.filter(Q(first_name__iexact=search_terms[0], last_name__iexact=search_terms[1]))
+        try:
+            exact_match_p_board_info = board_records.get(person1__id=exact_match_p[0].id)
+        except:
+            exact_match_p_board_info = None
+        print("Matched: {}".format(exact_match_p_board_info))
         exact_match_mp1 = member_records.filter(Q(person1__first_name__iexact=search_terms[0], person1__last_name__iexact=search_terms[1]))
         exact_match_mp2 = member_records.filter(Q(person2__first_name__iexact=search_terms[0], person2__last_name__iexact=search_terms[1]))
 
@@ -168,7 +173,7 @@ def search_results(request):
                 print(person.id)
                 if person.id not in board_ids:
                     people.remove(person)
-                    print("yep: {}".format(person.id))                
+                    print("yep: {}".format(person.id))
         context = {
             'members': people,
             'querystring': querystring,
