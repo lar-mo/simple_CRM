@@ -4,7 +4,9 @@
 
   <div class="container">
     <div class="edit_page_heading"><h3>Edit Person Information</h3></div>
-    <form id="edit_person_form" action="{% url 'members_app:save_person' %}" method="post">
+    {% if perms.members.change_person %}
+      <form id="edit_person_form" action="{% url 'members_app:save_person' %}" method="post">
+    {% endif %}
       <div class="edit_form_align">
           {% csrf_token %}
         <div class="col_rw">
@@ -75,6 +77,14 @@
     edit_address_link.onclick = function() {
       $('#show_edit_address').click();
     }
+
+    {% if not perms.members.change_person %}
+      let save_changes_btn = document.querySelector('#save_changes_btn');
+      save_changes_btn.onclick = function(e) {
+        e.preventDefault()
+        alert("This is a demo only. This account cannot make changes.");
+      }
+    {% endif %}
   </script>
 
 {% endblock %}
