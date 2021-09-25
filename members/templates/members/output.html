@@ -3,7 +3,7 @@
 {% block content %}
 
   <div class="container">
-    <div id="pagination_top" style="background-color: #cde;">
+    <div id="pagination_top">
         <span class="step-links" id="step_links_top">
             {% if members.has_previous %}
                 <a href="?page=1">&laquo; first</a>
@@ -83,6 +83,8 @@
             {% endif %}
           </div>
         </div>
+    {% empty %}
+    <div>No individuals or memberships found.</div>
     {% endfor %}
     <div id="pagination_bottom">
         <span class="step-links" id="step_links_bottom">
@@ -108,7 +110,7 @@
       document.getElementById("step_links_top").innerHTML = "Changes Saved";
     {% endif %}
     {% if view == 'search_results' %}
-        document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}}</code></i>";
+        document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}} ({{members|length}})</code></i>";
         document.getElementById("pagination_bottom").innerHTML = "";
         console.log('{{match}}')
     {% elif view == 'show_person' %}
