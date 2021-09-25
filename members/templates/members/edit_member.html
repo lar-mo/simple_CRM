@@ -4,7 +4,11 @@
 
   <div class="container">
     <div class="edit_page_heading"><h3>Edit Membership Information</h3></div>
-      <form id="edit_member_form" action="{% url 'members_app:save_member' %}" method="post">
+      {% if perms.members.change_membership %}
+        <form id="edit_member_form" action="{% url 'members_app:save_member' %}" method="post">
+      {% else %}
+        <form>
+      {% endif %}
         <div class="edit_form_align">
             {% csrf_token %}
           <div class="col_edit">
@@ -63,7 +67,7 @@
           <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
           <a href="{% if querystring == 'person' %}{% url 'members_app:show_person' member.person1.id %}{% elif querystring == 'member' %}{% url 'members_app:show_member' member.id %}{%else%}{% url 'members_app:list_active' %}{%endif%}">cancel</a>
         </div>
-        <input type="hidden" id="member_id" name="member_id" value="{{member.id}}">
+        <input type="hidden" id="memberid" name="memberid" value="{{member.id}}">
         <input type="hidden" id="address" name="address" value="{{member.address.id}}">
         <input type="hidden" id="person1" name="person1" value="{{member.person1.id}}">
         <input type="hidden" id="person2" name="person2" value="{{member.person2.id}}">
@@ -76,6 +80,14 @@
     edit_address_link.onclick = function() {
       $('#show_edit_address').click();
     }
+
+    {% if not perms.members.change_membership %}
+      let save_changes_btn = document.querySelector('#save_changes_btn');
+      save_changes_btn.onclick = function(e) {
+        e.preventDefault()
+        alert("This is a demo only. This account cannot make changes.");
+      }
+    {% endif %}
   </script>
 
 {% endblock %}
