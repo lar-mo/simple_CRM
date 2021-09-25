@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, reverse, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -90,10 +90,11 @@ def search_results(request):
     # check if 'f' (board filter) and 'get' it (checkbox value)
     # checked form box returns 'on'/true, unchecked form box returns None
     try:
-        filter = request.GET['f']
-        print(filter)
+        board_only = request.GET['board_only']
+        filter_by_board = True
     except:
-        pass
+        filter_by_board = False
+    # print(filter_by_board)
 
     ###
     ### Clean up input
@@ -119,23 +120,21 @@ def search_results(request):
     person_records = Person.objects.all()
     member_records = Membership.objects.all()
     board_records = Board.objects.all()
+    board_ids = [x.person1.id for x in board_records]
 
     if len(search_terms) == 2:
     # Check if there is are exactly 2 items in the cleaned up data (optimal: first and last name)
     # Then, query Person, Member/Person1, Member/Person2
     # Using "filter" to get a QuerySet (instead of an single object) so I can use .exists()
-        exact_match_p = person_records.filter(Q(first_name=search_terms[0], last_name=search_terms[1]))
-        # print(exact_match_p[0].id)
-        try:
-            exact_match_p_board_info = board_records.get(person1__id=exact_match_p[0].id)
-            print(exact_match_p_board_info)
-        except:
-            exact_match_p_board_info = None
-        exact_match_mp1 = member_records.filter(Q(person1__first_name=search_terms[0], person1__last_name=search_terms[1]))
-        exact_match_mp2 = member_records.filter(Q(person2__first_name=search_terms[0], person2__last_name=search_terms[1]))
+    # * The logic assumes that each Person is a unique fn+ln combo.
+    # ** It also expects the search query to be "first name last name"
+        exact_match_p = person_records.filter(Q(first_name__iexact=search_terms[0], last_name__iexact=search_terms[1]))
+        exact_match_mp1 = member_records.filter(Q(person1__first_name__iexact=search_terms[0], person1__last_name__iexact=search_terms[1]))
+        exact_match_mp2 = member_records.filter(Q(person2__first_name__iexact=search_terms[0], person2__last_name__iexact=search_terms[1]))
 
         if exact_match_p.exists() or exact_match_mp1.exists() and exact_match_mp2.exists():
             members = list(dict.fromkeys(chain(exact_match_p, exact_match_mp1, exact_match_mp2)))
+            print(members)
             context = {
                 'members': members,
                 'querystring': querystring,
@@ -164,6 +163,12 @@ def search_results(request):
                         member_person2ln_cst,
                         )
                 ))
+        if filter_by_board:
+            for person in people:
+                print(person.id)
+                if person.id not in board_ids:
+                    people.remove(person)
+                    print("yep: {}".format(person.id))                
         context = {
             'members': people,
             'querystring': querystring,
@@ -182,6 +187,12 @@ def search_results(request):
                         member_person2ln_cst,
                         )
                 ))
+        if filter_by_board:
+            for person in people:
+                print(person.id)
+                if person.id not in board_ids:
+                    people.remove(person)
+                    print("yep: {}".format(person.id))
         context = {
             'members': people,
             'querystring': querystring,
@@ -193,7 +204,7 @@ def search_results(request):
     else:
         # This catch-all needs work; doesn't really do anything
         # Perhaps if other fields are searchable (TBD)
-        # e.g. "asdf" returns nothing becauase an empty list is passed to "members" (just to silence errors on FE)
+        # e.g. "asdf" returns nothing becauase an empty list is passed to "members" (just to silently errors on FE)
         members = []
         context = {
             'members': members,
@@ -233,7 +244,7 @@ def edit_person(request, person_id):
     person = people.get(id=person_id)
     address = get_object_or_404(Address, id=person.address.id)
     membership = Membership.objects.filter(person1__id=person_id, person2__id=person_id)
-    form = AddressForm(instance=address)
+    addr_form = AddressForm(instance=address)
     try:
         querystring = request.GET['from']
     except:
@@ -243,20 +254,13 @@ def edit_person(request, person_id):
         'people': people,
         'address_id': address.id,
         'membership': membership,
-        'form': form,
+        'addr_form': addr_form,
         'querystring': querystring,
         'view': 'edit_person',
     }
     return render(request, 'members/edit_person.html', context)
 
-# @login_required
-# def edit_address(request, address_id):
-#     address = get_object_or_404(Address, id=address_id)
-#     print(address)
-#     form = AddressForm(instance=address)
-#     print(form)
-#     return render(request, 'members/edit_address.html', {'form': form})
-
+@permission_required('members.change_address')
 @login_required
 def save_address(request):
     # print(request.POST)
@@ -277,6 +281,7 @@ def save_address(request):
     # return redirect(refresh_url)
     # return HttpResponseRedirect(reverse('members_app:edit_member', kwargs={'member_id':member_id})+'?message=changes_saved')
 
+@permission_required('members.change_person')
 @login_required
 def save_person(request):
     person_id = request.POST['person_id']
@@ -317,7 +322,7 @@ def show_member(request, member_id):
 def edit_member(request, member_id):
     member = Membership.objects.get(id=member_id)
     address = get_object_or_404(Address, id=member.address.id)
-    form = AddressForm(instance=address)
+    addr_form = AddressForm(instance=address)
     people = Person.objects.all()
     try:
         querystring = request.GET['from']
@@ -327,15 +332,16 @@ def edit_member(request, member_id):
         'member': member,
         'people': people,
         'address_id': address.id,
-        'form': form,
+        'addr_form': addr_form,
         'querystring': querystring,
         'view': 'edit_member',
     }
     return render(request, 'members/edit_member.html', context)
 
+@permission_required('members.change_membership')
 @login_required
 def save_member(request):
-    member_id = request.POST['member_id']
+    member_id = request.POST['memberid']
     person1 = request.POST['person1']
     person2 = request.POST['person2']
     address = request.POST['address']
