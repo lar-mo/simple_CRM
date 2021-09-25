@@ -3,9 +3,9 @@
 {% block content %}
 
   <div class="container">
-    <div style="background-color: #cde;" id="show_person_header">
+    <div id="show_person_header">
         <span class="step-links" id="step_links_top">
-          <h3>{{membership.person1.first_name}} {{membership.person1.last_name}}{% if membership.person1.byline %}<span class="person_detail_byline">, {{membership.person1.byline}}</span>{%endif%}{% if membership.person2 %} and {{membership.person2.first_name}} {{membership.person2.last_name}}{%endif%}</h3>
+          <h4>{{membership.person1.first_name}} {{membership.person1.last_name}}{% if membership.person1.byline %}<span class="person_detail_byline">, {{membership.person1.byline}}</span>{%endif%}{% if membership.person2 %} and {{membership.person2.first_name}} {{membership.person2.last_name}}{%endif%}</h4>
         </span>
         <span>
           <a href="{% url 'members_app:edit_member' membership.id %}?from=member">edit</a>

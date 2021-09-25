@@ -199,7 +199,7 @@
         width: 25vw; /* 300px; */
         margin-bottom: 10px;
       }
-      h3 {
+      h3, h4 {
         background-color: #fff;
         margin: 0 auto;
         border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
@@ -254,9 +254,13 @@
       .edit_member_mailing_address > {
         margin-left: 20px;
       }
-      .edit_page_heading, h3 {
-        background-color: #cde;
+      .edit_page_heading, h4 {
+        background-color: inherit;
         border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
+      }
+      #edit_member_header, #edit_person_header {
+        /* background-color: rgba(255,255,255,0.8); */
+        background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(222,222,222,0.9), rgba(255,255,255,1.0));
       }
       #show_person_header, #pagination_top {
         display: flex;

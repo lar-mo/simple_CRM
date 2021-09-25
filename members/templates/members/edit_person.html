@@ -3,7 +3,11 @@
 {% block content %}
 
   <div class="container">
-    <div class="edit_page_heading"><h3>Edit Person Information</h3></div>
+    <div class="edit_page_heading" id="edit_person_header">
+      <span class="step-links" id="step_links_top">
+        <h4>Edit Person Information</h4>
+      </span>
+    </div>
     {% if perms.members.change_person %}
       <form id="edit_person_form" action="{% url 'members_app:save_person' %}" method="post">
     {% endif %}
