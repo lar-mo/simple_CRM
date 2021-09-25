@@ -16,13 +16,15 @@
   {% endif %}
 </div>
 <script type="text/javascript">
-  let sample_search = document.querySelector('#sample_search');
-  sample_search.onclick = function() {
-    q.value = 'William Brown';
-    setTimeout(function() {
-      window.location="{% url 'members_app:search_results' %}?q=" + q.value;
-    }, 1000)
-  }
+  {% if user.is_authenticated %}
+    let sample_search = document.querySelector('#sample_search');
+    sample_search.onclick = function() {
+      q.value = 'William Brown';
+      setTimeout(function() {
+        window.location="{% url 'members_app:search_results' %}?q=" + q.value;
+      }, 1000)
+    }
+  {% endif %}
 </script>
 
 {% endblock %}
