@@ -51,6 +51,9 @@
       #header_logo {
         width:100px;
       }
+      #logo_break {
+        display: none;
+      }
       .left_side_header > * {
         margin: 3px 0;
       }
@@ -92,12 +95,12 @@
       }
       #pagination_top {
         border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
-        background-color: rgba(255,255,255,0.8);
+        background-color: rgba(255,255,255,0.89);
       }
       #pagination_bottom {
         border-radius: 0 0 calc(.3rem - 1px) calc(.3rem - 1px);
         text-align: center;
-        background-color: rgba(255,255,255,0.8);
+        background-color: rgba(255,255,255,0.89);
       }
       .members_list_value, .ticket_list_value {
         border: 1px solid #000;
@@ -132,14 +135,17 @@
       }
       .tile:nth-child(odd) {
         /* background-color: #EEE; */
-        background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(222,222,222,0.9), rgba(255,255,255,1.0));
+        background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(222,222,222,0.95), rgba(255,255,255,1.0));
       }
       .tile:nth-child(even) {
         /* background-color: #EEE; */
-        background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(202,202,202,0.8), rgba(255,255,255,1.0));
+        background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(202,202,202,0.95), rgba(255,255,255,1.0));
       }
-      .row {
-        padding-right: 20px;
+      .cols_left_middle {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
       }
       .edit_form_align {
         display: flex;
@@ -281,6 +287,11 @@
         align-items: center;
         justify-content: flex-start;
       }
+      .search_button_checkbox {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
       .srch_edit {
         text-align: right;
         width: 20vw;
@@ -293,10 +304,18 @@
           flex-direction: column;
           position: inherit;
         }
+        .homepage_link {
+          font-size: 0.95em;
+        }
         .search_container {
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
+        }
+        .search_button_checkbox {
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
         }
         .search_box {
           width: 80vw;
@@ -327,6 +346,12 @@
         .filter_members {
           display: none;
         }
+        .cols_left_middle {
+          flex-direction: column;
+        }
+        .col_middle {
+          width: auto;
+        }
       }
     </style>
   </head>
@@ -355,7 +380,7 @@
                 <span id="pancake" style="font-size:28px;cursor:pointer;" onclick="openNav()">&#9776;&nbsp;</span>
                 <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
               </div>
-              <div>
+              <div class="search_button_checkbox">
                 <button type="submit" class="btn btn-secondary btn-sm" id="search_btn"><b>Search</b></button>
                 <input type="checkbox" class="" name="filter_cb" id="filter_cb"/>
                 <span>Show Only Board Members</span>
@@ -515,7 +540,6 @@
           function openNav() {
             document.getElementById("mobile_nav").style.width = "100%";
           }
-
           function closeNav() {
             document.getElementById("mobile_nav").style.width = "0%";
           }

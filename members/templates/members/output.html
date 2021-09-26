@@ -22,66 +22,70 @@
     </div>
     {% for member in members %}
         <div class="tile">
-          <div class="col_left">
-            <div class="row">
-              <span class="names_title">
-                {% firstof member.first_name member.person1.first_name %} {% firstof member.last_name member.person1.last_name %}{% if member.byline or member.person1.byline %}<span class="byline">, {% firstof member.byline member.person1.byline %}</span>{% endif %}
-              </span>
-            </div>
-            {% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' or view == 'search_results' %}
+          <div class="cols_left_middle">
+            <div class="col_left">
               <div class="row">
-                <span class="names_title">{{member.person1.partner.first_name}} {{member.person1.partner.last_name}}{% if member.person1.partner.byline %}<span class="byline">, {{member.person1.partner.byline}}</span>{% endif %}
+                <span class="names_title">
+                  {% firstof member.first_name member.person1.first_name %} {% firstof member.last_name member.person1.last_name %}{% if member.byline or member.person1.byline %}<span class="byline">, {% firstof member.byline member.person1.byline %}</span>{% endif %}
                 </span>
               </div>
-            {% endif %}
-            <div class="row">
-              {% if view == 'list_board' %}
-                <div>{{member.person1.address.address_1}}</div>
-                <div>{{member.person1.address.address_2}}</div>
-                <div>{{member.person1.address.city}}, {{member.person1.address.state}} {{member.person1.address.postal_code}}</div>
-              {% else %}
-                <div>{{member.address.address_1}}</div>
-                <div>{{member.address.address_2}}</div>
-                <div>{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+              {% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' or view == 'search_results' %}
+                <div class="row">
+                  <span class="names_title">{{member.person1.partner.first_name}} {{member.person1.partner.last_name}}{% if member.person1.partner.byline %}<span class="byline">, {{member.person1.partner.byline}}</span>{% endif %}
+                  </span>
+                </div>
+              {% endif %}
+              <div class="row">
+                {% if view == 'list_board' %}
+                  <div>{{member.person1.address.address_1}}</div>
+                  <div>{{member.person1.address.address_2}}</div>
+                  <div>{{member.person1.address.city}}, {{member.person1.address.state}} {{member.person1.address.postal_code}}</div>
+                {% else %}
+                  <div>{{member.address.address_1}}</div>
+                  <div>{{member.address.address_2}}</div>
+                  <div>{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+                {% endif %}
+              </div>
+              <div class="row">
+                <div>{{member.email}}{{member.person1.email}}</div>
+                <div>{% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}{{member.person1.partner.email}}{% endif %}</div>
+              </div>
+            </div>
+            <div class="col_middle">
+              <div class="row">
+                <div>{{member.phone_number}}{{member.person1.phone_number}}</div>
+                <div>{% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}{{member.person1.partner.phone_number}}{% endif %}</div>
+                <div>{% if member.title != 'Committee' %}{{member.title}}{% endif %}</div>
+                <div style="width:100%">{% if member.committees|length > 0 %}Committee{{member.committees|length|pluralize}}: {{member.committees}}{% endif %}</div>
+              </div>
+              {% if member.first_name %}
+              <div class="row">
+                <div>{{board_record.title}}</div>
+                {% if board_record.committees %}<div>Committees: {{board_record.committees}}</div>{% endif %}
+              </div>
               {% endif %}
             </div>
-            <div class="row">
-              <div>{{member.email}}{{member.person1.email}}</div>
-              <div>{% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}{{member.person1.partner.email}}{% endif %}</div>
-            </div>
           </div>
-          <div class="col_middle">
-            <div class="row">
-              <div>{{member.phone_number}}{{member.person1.phone_number}}</div>
-              <div>{% if view == 'active_members' or view == 'inactive_members' or view == 'show_member' %}{{member.person1.partner.phone_number}}{% endif %}</div>
-              <div>{% if member.title != 'Committee' %}{{member.title}}{% endif %}</div>
-              <div>{% if member.committees|length > 0 %}Committee{{member.committees|length|pluralize}}: {{member.committees}}{% endif %}</div>
-            </div>
-            {% if member.first_name %}
-            <div class="row">
-              <div>{{board_record.title}}</div>
-              {% if board_record.committees %}<div>Committees: {{board_record.committees}}</div>{% endif %}
-            </div>
-            {% endif %}
-          </div>
-          <div class="col_right">
-            {% if view == 'search_results' %}
-              {% if member.first_name %}<span class="srch_edit">Person&nbsp;<a href="{% url 'members_app:edit_person' member.id %}" class="edit_link">(edit)</a></span>
-              {% elif member.person1.first_name %}<span class="srch_edit">Membership&nbsp;<a href="{% url 'members_app:edit_member' member.id %}" class="edit_link">(edit)</a></span>
+          {% if view != 'list_board' %}
+            <div class="col_right">
+              {% if view == 'search_results' %}
+                {% if member.first_name %}<span class="srch_edit">Person&nbsp;<a href="{% url 'members_app:edit_person' member.id %}" class="edit_link">(edit)</a></span>
+                {% elif member.person1.first_name %}<span class="srch_edit">Membership&nbsp;<a href="{% url 'members_app:edit_member' member.id %}" class="edit_link">(edit)</a></span>
+                {% endif %}
               {% endif %}
-            {% endif %}
 
-            {% url 'members_app:needs_review' as needs_review_url %}
-            {% if view == 'list_all' %}
-            <span class="srch_edit"><a href="{% url 'members_app:show_person' member.id %}">show</a></span>
-            {% elif view == 'show_person' %}
-            <span class="srch_edit"><a href="{% url 'members_app:edit_person' member.id %}">edit</a></span>
-            {% elif view == 'active_members' or view == 'inactive_members' %}
-            <span class="srch_edit"><a href="{% url 'members_app:show_member' member.id %}">show</a></span>
-            {% elif view == 'show_member' %}
-            <span class="srch_edit"><a href="{% url 'members_app:edit_member' member.id %}">edit</a></span>
-            {% endif %}
-          </div>
+              {% url 'members_app:needs_review' as needs_review_url %}
+              {% if view == 'list_all' %}
+              <span class="srch_edit"><a href="{% url 'members_app:show_person' member.id %}">show</a></span>
+              {% elif view == 'show_person' %}
+              <span class="srch_edit"><a href="{% url 'members_app:edit_person' member.id %}">edit</a></span>
+              {% elif view == 'active_members' or view == 'inactive_members' %}
+              <span class="srch_edit"><a href="{% url 'members_app:show_member' member.id %}">show</a></span>
+              {% elif view == 'show_member' %}
+              <span class="srch_edit"><a href="{% url 'members_app:edit_member' member.id %}">edit</a></span>
+              {% endif %}
+            </div>
+          {% endif %}
         </div>
     {% empty %}
     <div>No individuals or memberships found.</div>

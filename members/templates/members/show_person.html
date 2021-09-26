@@ -71,29 +71,27 @@
       </div><!-- end of 'col_ro' -->
     </div><!-- end of 'tile' -->
     {% if board %}
-    <div>
-      <hr>
-      <div class="tile">
-        <div class="col_ro">
-          <div class="row">
-            <div class="person_detail_section">
-              <div class="person_detail_board_title" style="text-align: right">
-                <b>Board Title</b>:
-                  <span class="">{{board.title}}</span>
-              </div>
+    <div class="tile" style="display:none"></div>
+    <div class="tile">
+      <div class="col_ro">
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_board_title" style="text-align: right">
+              <b>Board Title</b>:
+                <span class="">{{board.title}}</span>
             </div>
-          </div><!-- end of 'row' -->
-        </div>
-        <div class="col_ro">
-          <div class="row">
-            <div class="person_detail_section">
-              <div class="person_detail_cmte_roles">
-                <b>Committee Role{{board.committees|length|pluralize}}</b>:
-                  <span class="">{{board.committees}}</span>
-              </div>
+          </div>
+        </div><!-- end of 'row' -->
+      </div>
+      <div class="col_ro">
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="person_detail_cmte_roles">
+              <b>Committee Role{{board.committees|length|pluralize}}</b>:
+                <span class="">{{board.committees}}</span>
             </div>
-          </div><!-- end of 'row' -->
-        </div>
+          </div>
+        </div><!-- end of 'row' -->
       </div>
     </div>
     {% endif %}
