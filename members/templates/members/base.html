@@ -48,6 +48,9 @@
         -moz-box-shadow:      3px 3px 5px 0 rgba(25,25,25,0.4);
         -webkit-box-shadow:   3px 3px 5px 0 rgba(25,25,25,0.4);
       }
+      #header_logo {
+        height: 100px;
+      }
       .left_side_header > * {
         margin: 3px 0;
       }
@@ -338,7 +341,7 @@
       </div>
       <header>
         <div class="left_side_header">
-          <div class="display-5"><a href="{% url 'members_app:index' %}" class="homepage_link">Cascadia Hiking Club</a></div>
+          <div class="display-5"><img id="header_logo" src="https://www.cascadiahiking.club/static/images/mountain_logo.png"><a href="{% url 'members_app:index' %}" class="homepage_link">Cascadia Hiking Club</a></div>
           {% if user.is_authenticated %}
           <div class="filter_members">Show:
             <nobr><input type="radio" name="filter_members" id="show_active"> <a href="{% url 'members_app:list_active' %}">Active Members</a> ({{user.active_member_count}})</nobr>
@@ -347,7 +350,6 @@
             <nobr><input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})</nobr>
             <!-- <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}}) -->
           </div>
-
           <div class="search_container">
               <div>
                 <span id="pancake" style="font-size:28px;cursor:pointer;" onclick="openNav()">&#9776;&nbsp;</span>
