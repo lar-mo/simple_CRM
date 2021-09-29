@@ -2,9 +2,9 @@
 
 {% block content %}
 
-  <div class="container">
-    <div id="edit_member_header">
-        <span class="step-links" id="step_links_top">
+<div class="container">
+  <div id="edit_member_header">
+      <span class="step-links" id="step_links_top">
           <h4>Edit Membership Information</h4>
         </span>
     </div>
@@ -15,7 +15,7 @@
       {% endif %}
         <div class="edit_form_align">
             {% csrf_token %}
-          <div class="col_edit">
+          <div class="col_ro">
             <div class="row">
               <div class="member_detail_section">
                 <div class=""><b>Member{% if member.person2 %}s{%endif%}</b> <a href="{% url 'members_app:edit_person' member.person1.id %}" class="edit_link">(edit)</a>:</div>
@@ -66,7 +66,7 @@
             </div>
           </div>
         </div>
-        <div class="clearfix"></div>
+        <div class="clearfix">&nbsp;</div>
         <div class="form_fields submit_btn">
           <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
           <a href="{% if querystring == 'person' %}{% url 'members_app:show_person' member.person1.id %}{% elif querystring == 'member' %}{% url 'members_app:show_member' member.id %}{%else%}{% url 'members_app:list_active' %}{%endif%}">cancel</a>
@@ -76,7 +76,10 @@
         <input type="hidden" id="person1" name="person1" value="{{member.person1.id}}">
         <input type="hidden" id="person2" name="person2" value="{{member.person2.id}}">
       </form>
-  </div> <!-- end of 'container' -->
+      <div id="pagination_bottom">
+          <span class="step-links" id="step_links_bottom"></span>
+      </div>
+</div> <!-- end of 'container' -->
 
   <script type="text/javascript">
     let edit_address_link = document.querySelector('#edit_address_link');

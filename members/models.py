@@ -18,6 +18,11 @@ def board_member_count(user):
     return number_of_board_members
 User.add_to_class('board_member_count', board_member_count)
 
+def committee_member_count(user):
+    number_of_committee_members = '10'
+    return number_of_committee_members
+User.add_to_class('committee_member_count', committee_member_count)
+
 def active_member_count(user):
     number_of_active_members = Membership.objects.filter(status='Active').count()
     return number_of_active_members

@@ -1,0 +1,168 @@
+{% extends 'members/base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <div id="pagination_top" class="listing_page_header">
+        <span id="listing_title"><h4>{{title}}</h4></span>
+        {% if members.paginator.num_pages == 1 and view == 'list_board' %}
+          <h5><a href="{% url 'members_app:list_committees' %}">Committees</a></h5>
+        {% elif members.paginator.num_pages == 1 %}
+          <span></span>
+        {% else %}
+        <ul class="pagination">
+            {% if members.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ members.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            {% endif %}
+            {% for i in members.paginator.page_range %}
+              {% if members.number == i %}
+                <li class="page-item active" aria-current="page">
+                  <span class="page-link">
+                    {{ i }}
+                    <span class="sr-only">(current)</span>
+                  </span>
+                </li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if members.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ members.next_page_number }}">Next</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+              </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+    {% for member in members %}
+        <div class="tile">
+          <div class="cols_left_middle">
+            <div class="col_left">
+              <div class="row">
+                <span class="names_title">
+                  {% firstof member.first_name member.person1.first_name %} {% firstof member.last_name member.person1.last_name %}{% if member.byline or member.person1.byline %}<span class="byline">, <nobr>{% firstof member.byline member.person1.byline %}</nobr></span>{% endif %}
+                </span>
+              </div>
+              {% if view == 'list_active' or view == 'list_inactive' or view == 'search_results' %}
+                <div class="row">
+                  <span class="names_title">{{member.person1.partner.first_name}} {{member.person1.partner.last_name}}{% if member.person1.partner.byline %}<span class="byline">, {{member.person1.partner.byline}}</span>{% endif %}
+                  </span>
+                </div>
+              {% endif %}
+              <div class="row">
+                {% if view == 'list_board' %}
+                  <div>{{member.person1.address.address_1}}</div>
+                  <div>{{member.person1.address.address_2}}</div>
+                  <div>{{member.person1.address.city}}, {{member.person1.address.state}} {{member.person1.address.postal_code}}</div>
+                {% else %}
+                  <div>{{member.address.address_1}}</div>
+                  <div>{{member.address.address_2}}</div>
+                  <div>{{member.address.city}}, {{member.address.state}} {{member.address.postal_code}}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="col_middle">
+              <div class="row">
+                <div>{{member.email}}{{member.person1.email}}</div>
+                <div>{% if view == 'list_active' or view == 'list_inactive' %}{{member.person1.partner.email}}{% endif %}</div>
+              </div>
+              <div class="row">
+                <div>{{member.phone_number}}{{member.person1.phone_number}}</div>
+                <div>{% if view == 'list_active' or view == 'list_inactive' %}{{member.person1.partner.phone_number}}{% endif %}</div>
+                <div>{% if member.title != 'Committee' %}{{member.title}}{% endif %}</div>
+                <div style="width:100%">{% if member.committees|length > 0 %}Committee{{member.committees|length|pluralize}}: {{member.committees}}{% endif %}</div>
+              </div>
+              {% if member.first_name %}
+              <div class="row">
+                <div>{{board_record.title}}</div>
+                {% if board_record.committees %}<div>Committees: {{board_record.committees}}</div>{% endif %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col_right">
+            {% if view == 'search_results' %}
+              {% if member.first_name %}<span class="srch_edit">Person&nbsp;<a href="{% url 'members_app:edit_person' member.id %}" class="edit_link">(edit)</a></span>
+              {% elif member.person1.first_name %}<span class="srch_edit">Membership&nbsp;<a href="{% url 'members_app:edit_member' member.id %}" class="edit_link">(edit)</a></span>
+              {% endif %}
+            {% endif %}
+            {% if view == 'list_people' %}
+            <span class="srch_edit"><a href="{% url 'members_app:show_person' member.id %}">show</a></span>
+            {% elif view == 'show_person' %}
+            <span class="srch_edit"><a href="{% url 'members_app:edit_person' member.id %}">edit</a></span>
+            {% elif view == 'list_active' or view == 'list_inactive' %}
+            <span class="srch_edit"><a href="{% url 'members_app:show_member' member.id %}">show</a></span>
+            {% elif view == 'show_member' %}
+            <span class="srch_edit"><a href="{% url 'members_app:edit_member' member.id %}">edit</a></span>
+            {% endif %}
+          </div>
+        </div>
+    {% empty %}
+    <div>No individuals or memberships found.</div>
+    {% endfor %}
+    <div id="pagination_bottom">
+        {% if members.paginator.num_pages != 1 %}
+        <ul class="pagination justify-content-center">
+            {% if members.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ members.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            {% endif %}
+            {% for i in members.paginator.page_range %}
+              {% if members.number == i %}
+                <li class="page-item active" aria-current="page">
+                  <span class="page-link">
+                    {{ i }}
+                    <span class="sr-only">(current)</span>
+                  </span>
+                </li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if members.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ members.next_page_number }}">Next</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+              </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    {% if message == "changes_saved" %}
+      document.getElementById("step_links_top").innerHTML = "Changes Saved";
+    {% endif %}
+    {% if view == 'search_results' %}
+        $('#listing_title').css('display', 'none');
+        document.getElementById("step_links_top").innerHTML = "Search Results for: <i><code>{{querystring}} ({{members|length}})</code></i>";
+        document.getElementById("pagination_bottom").innerHTML = "";
+    {% elif view == 'show_person' %}
+        document.getElementById("step_links_top").innerHTML = "PERSON DETAILS";
+        document.getElementById("pagination_bottom").innerHTML = "";
+    {% elif view == 'show_member' %}
+        document.getElementById("step_links_top").innerHTML = "MEMBER DETAILS";
+        document.getElementById("pagination_bottom").innerHTML = "";
+    {% endif %}
+  </script>
+
+{% endblock %}

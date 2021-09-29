@@ -2,78 +2,83 @@
 
 {% block content %}
 
-  <div class="container">
-    <div class="edit_page_heading" id="edit_person_header">
+<div class="container">
+  <div id="edit_person_header">
       <span class="step-links" id="step_links_top">
         <h4>Edit Person Information</h4>
       </span>
-    </div>
-    {% if perms.members.change_person %}
-      <form id="edit_person_form" action="{% url 'members_app:save_person' %}" method="post">
-    {% endif %}
-      <div class="edit_form_align">
-          {% csrf_token %}
-        <div class="col_rw">
-          <div class="row">
-            <div class="form_fields">
-              <label for="first_name">First Name*:</label>
-              <input type="text" id="first_name" name="first_name" value="{{person.first_name}}" required>
-            </div>
-            <div class="form_fields">
-              <label for="last_name">Last Name*:</label>
-              <input type="text" id="last_name" name="last_name" value="{{person.last_name}}" required>
-            </div>
-            <div class="form_fields">
-              <label for="byline">Byline:</label>
-              <input type="text" id="byline" name="byline" value="{{person.byline}}">
-            </div>
-            <div class="form_fields">
-              <label for="nickname">Nickname:</label>
-              <input type="text" id="nickname" name="nickname" value="{{person.nickname}}">
-            </div>
-            <div class="form_fields">
-              <label for="phone_number1">Phone:</label>
-              <input type="text" id="phone_number" name="phone_number" value="{{person.phone_number}}">
-            </div>
-            <div class="form_fields">
-              <label for="email1">Email:</label>
-              <input type="text" id="email" name="email" value="{{person.email}}">
-            </div>
-          </div><!-- end of 'row' -->
-        </div><!-- end of 'col_rw' -->
-        <div class="col_rw">
-          <div class="row">
-            <div class="form_fields">
-              <label for="partner">Partner:</label>
-              <select id="partner" name="partner">
-                <option value="">---</option>
-                {% for so in people %}
-                  <option value="{{so.id}}"{% if person.partner.id == so.id %} selected{% endif %}>{{so.first_name}} {{so.last_name}}</option>
-                {% endfor %}
-              </select>
-            </div>
-        <div class="row">
-          <div class="member_detail_section">
-            <div class="member_detail_mailing_address">
-              <b>Mailing Address</b> <a href="#" id="edit_address_link" class="edit_link">(edit)</a>:
-                <div id="address_fields">
-                  <div class="">{{person.address.address_1}}</div>
-                  <div class="">{{person.address.address_2}}</div>
-                  <div class="">{{person.address.city}}, {{person.address.state}} {{person.address.postal_code}}</div>
-                </div>
-            </div>
-          </div>
-        </div><!-- end of 'row' -->
-      </div><!-- end of 'col_rw' -->
-      <div class="clearfix"></div>
-      <div class="form_fields submit_btn">
-        <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
-        <a href="{% url 'members_app:show_person' person.id %}">cancel</a>
+  </div><!-- end: edit_person_header -->
+  {% if perms.members.change_person %}
+    <form id="edit_person_form" action="{% url 'members_app:save_person' %}" method="post">
+  {% endif %}
+  <div class="edit_form_align">
+        {% csrf_token %}
+    <div class="col_rw">
+      <div class="row">
+        <div class="form_fields">
+          <label for="first_name">First Name*:</label>
+          <input type="text" id="first_name" name="first_name" value="{{person.first_name}}" required>
+        </div>
+        <div class="form_fields">
+          <label for="last_name">Last Name*:</label>
+          <input type="text" id="last_name" name="last_name" value="{{person.last_name}}" required>
+        </div>
+        <div class="form_fields">
+          <label for="byline">Byline:</label>
+          <input type="text" id="byline" name="byline" value="{{person.byline}}">
+        </div>
+        <div class="form_fields">
+          <label for="nickname">Nickname:</label>
+          <input type="text" id="nickname" name="nickname" value="{{person.nickname}}">
+        </div>
+        <div class="form_fields">
+          <label for="phone_number1">Phone:</label>
+          <input type="text" id="phone_number" name="phone_number" value="{{person.phone_number}}">
+        </div>
+        <div class="form_fields">
+          <label for="email1">Email:</label>
+          <input type="text" id="email" name="email" value="{{person.email}}">
+        </div>
+      </div><!-- end of 'row' -->
+    </div><!-- end of 'col_rw' -->
+    <div class="col_rw">
+      <div class="row">
+        <div class="form_fields">
+          <label for="partner">Partner:</label>
+          <select id="partner" name="partner">
+            <option value="">---</option>
+            {% for so in people %}
+              <option value="{{so.id}}"{% if person.partner.id == so.id %} selected{% endif %}>{{so.first_name}} {{so.last_name}}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
-      <input type="hidden" id="person_id" name="person_id" value="{{person.id}}">
-      <input type="hidden" id="address" name="address" value="{{person.address.id}}">
-    </form>
-  </div> <!-- end of 'container' -->
+      <div class="row">
+        <div class="member_detail_section">
+          <div class="member_detail_mailing_address">
+            <b>Mailing Address</b> <a href="#" id="edit_address_link" class="edit_link">(edit)</a>:
+              <div id="address_fields">
+                <div class="">{{person.address.address_1}}</div>
+                <div class="">{{person.address.address_2}}</div>
+                <div class="">{{person.address.city}}, {{person.address.state}} {{person.address.postal_code}}</div>
+              </div>
+          </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="form_fields submit_btn">
+          <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
+          <a href="{% url 'members_app:show_person' person.id %}">cancel</a>
+        </div>
+        <input type="hidden" id="person_id" name="person_id" value="{{person.id}}">
+        <input type="hidden" id="address" name="address" value="{{person.address.id}}">
+      </form>
+      </div><!-- end of 'row' -->
+    </div><!-- end of 'col_rw' -->
+  </div><!-- end of edit_form_align -->
+  <div id="pagination_bottom">
+      <span class="step-links" id="step_links_bottom"></span>
+  </div>
+</div> <!-- end of 'container' -->
 
   <script type="text/javascript">
     let edit_address_link = document.querySelector('#edit_address_link');

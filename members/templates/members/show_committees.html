@@ -3,13 +3,9 @@
 {% block content %}
 
   <div class="container">
-    <div style="background-color: rgba(255,255,255,0.8);" id="show_person_header">
-        <span class="step-links" id="step_links_top">
-          <b>COMMITTEES</b>
-        </span>
-        <span class="step-links" id="step_links_top2">
-          <a href="{% url 'members_app:list_board' %}">Board Members</a>
-        </span>
+    <div id="pagination_top" class="listing_page_header">
+        <span id="listing_title"><h4>{{title}}</h4></span>
+        <h5><a href="{% url 'members_app:list_board' %}">Board Members</a></h5>
     </div>
     {% for key, values in choices.items %}
       <div class="tile">

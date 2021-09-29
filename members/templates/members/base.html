@@ -6,14 +6,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Cascadia Hiking Club</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <link rel="shortcut icon" href="{{ STATIC_URL }}/static/images/icon_orange.png">
-    <link rel="stylesheet" href="https://www.pattymdesigns.com/css/overlay.css">
     <style media="screen" type="text/css">
       html, body {
         background: radial-gradient(#60A9EA, #6D6D6D);
@@ -21,7 +21,6 @@
         background-attachment: fixed;
         background-size: cover;
         box-sizing: border-box;
-        /* background-position: 0 150px; */
         margin: 0;
         padding: 0;
         width: 100%;
@@ -51,69 +50,98 @@
       #header_logo {
         width:100px;
       }
-      #logo_break {
+      #pancake {
         display: none;
       }
-      .left_side_header > * {
-        margin: 3px 0;
+      .homepage_link, .homepage_link:hover {
+        text-decoration: none;
+        color: black;
       }
       .left_side_header {
-        padding: 10px 20px;
         display:flex;
         flex-direction: column;
         justify-content: space-between;
+        align-items: flex-start;
+        margin: 5px;
+        padding: 5px;
       }
       .right_side_header {
-        margin-right: 40px;
+        margin-right: 10px;
+      }
+      #filter_members {
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+        padding: 3px;
+      }
+      #filter_members > * {
+        padding-left: 5px;
+      }
+      #search_container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+      #search_container * {
+        padding-right: 7px;
       }
       main {
-        padding: 10px;
+        margin: 10px auto;
       }
       .container > * {
         padding: 10px;
         background-color: rgba(255,255,255,0.9);
-
+      }
+      .nav_buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+      }
+      .search_box {
+        width: 400px;
+      }
+      .nav_buttons > * {
+        padding-bottom: 20px;
+      }
+      label {
+        font-weight: bold;
+        width: 100px;
       }
       input[type=text], input[type=date] {
         border: none;
         border-bottom: 2px solid #ccc;
+        background-color: inherit;
       }
       select {
         padding: 3px 3px;
         border: none;
         border-bottom: 2px solid #ccc;
         border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
-        background-color: #fff;
+        background-color: inherit;
       }
-      .clearfix {
-        height: 30px;
-      }
-      .main_edit {
-        width: 90vw;
-        padding: 10px;
-        margin: 20px auto;
+      .form_fields > input,
+      .form_fields > select {
+        width: 25vw;
+        margin-bottom: 10px;
       }
       #pagination_top {
         border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
-        background-color: rgba(255,255,255,0.89);
+        background: linear-gradient(90deg, rgba(222,222,222,0.95), rgba(255,255,255,1.0), rgba(222,222,222,0.95));
       }
       #pagination_bottom {
         border-radius: 0 0 calc(.3rem - 1px) calc(.3rem - 1px);
         text-align: center;
-        background-color: rgba(255,255,255,0.89);
+        background: linear-gradient(90deg, rgba(222,222,222,0.95), rgba(255,255,255,1.0), rgba(222,222,222,0.95));
       }
-      .members_list_value, .ticket_list_value {
-        border: 1px solid #000;
-        padding: 4px;
+      .pagination {
+        margin-bottom: 0;
       }
-      .members_list_header, .ticket_list_header {
-        border: 1px solid #000;
-        padding: 4px;
-        font-weight: bold;
-      }
-      .members_list, .ticket_list {
-        border-collapse: collapse;
-        background-color: #fff;
+      h4,h5 {
+        margin-bottom: 0;
       }
       .names_title {
         font-weight: bold;
@@ -126,19 +154,29 @@
         font-style: italic;
         font-weight: normal;
       }
+      .edit_link {
+        color: blue;
+        text-decoration: none;
+        font-size: 0.8em;
+      }
+      .listing_page_header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 0.9em;
+        background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(222,222,222,0.95), rgba(255,255,255,1.0));
+      }
       .tile {
-        background-color: #fff;
         display: flex;
         flex-direction: row;
         align-items: flex-start;
-        justify-content: flex-start;
+        justify-content: space-between;
       }
       .tile:nth-child(odd) {
-        /* background-color: #EEE; */
         background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(222,222,222,0.95), rgba(255,255,255,1.0));
       }
       .tile:nth-child(even) {
-        /* background-color: #EEE; */
         background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(202,202,202,0.95), rgba(255,255,255,1.0));
       }
       .cols_left_middle {
@@ -146,23 +184,6 @@
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
-      }
-      .edit_form_align {
-        display: flex;
-        justify-content: space-between;
-        width: auto;
-      }
-      .col_ro {
-        width: auto;
-      }
-      .col_rw {
-        width: auto;
-      }
-      .col_edit {
-        width: 120vw;
-      }
-      .col_show {
-        width: 50%;
       }
       .col_left {
         width: 35%;
@@ -175,56 +196,52 @@
         width: 25%;
         text-align: right;
       }
+      #show_member_header, #show_person_header, #edit_person_header, #edit_member_header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
+        background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(222,222,222,0.95), rgba(255,255,255,1.0));
+      }
+      .show_member {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+      .show_member_board_cmte {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+      .edit_form_align {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        width: auto;
+      }
+      .col_ro {
+        width: 50%;
+      }
+      .col_rw {
+        width: 50%;
+      }
+      .col_edit {
+        width: 120vw;
+      }
+      .col_show {
+        width: 50%;
+      }
       .col_50 {
         width: 50%;
       }
-      .search_box {
-        margin: 10px 0;
-        width: 400px;
-      }
-      .red_label {
-        color: red;
-      }
-      .needs_review {
-        width: 220px;
-      }
-      .edit_link {
-        color: blue;
-        text-decoration: none;
-        font-size: 0.8em;
-      }
-      #clear_reason_lnk {
-        font-size: 0.8em;
-        text-decoration: none;
-      }
-      label {
-        display: block;
-        width: 95px; /* 230px; */
-        float: left;
-        font-weight: bold;
-      }
-      .form_fields > input,
-      .form_fields > select {
-        width: 25vw; /* 300px; */
-        margin-bottom: 10px;
-      }
-      h3, h4 {
-        background-color: #fff;
-        margin: 0 auto;
-        border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
-      }
-      .checkmark_bool_grid {
-        text-align: center;
-        font-size: 1.99em;
+      .person_detail_mailing_address > div,
+      .member_detail_mailing_address > div {
+        margin-left: 20px;
       }
       .submit_btn {
         text-align: center;
-      }
-      #filter_cb {
-        margin: auto 5px;
-      }
-      #search_btn {
-        margin-left: 5px;
       }
       .message {
         color: green;
@@ -233,118 +250,46 @@
         padding: 2px 4px 2px 4px;
         background-color: #F2F2F2;
       }
-      #edit_member_form, #edit_person_form {
-        border-radius: 0 0 calc(.3rem - 1px) calc(.3rem - 1px);
-        background-color: #FFF;
-      }
-      .execs {
-        font-size: 1.2em;
-      }
-      #role_label, #role, #reason_for_review, #reason_for_review_label {
-        visibility: hidden;
-      }
-      .member_label {
-        font-weight: bold;
-      }
-      .member_names {
-        margin-left: 20px;
-      }
-      .person_detail_byline {
-        font-weight: normal;
-        font-style: italic;
-      }
       .person_detail_section, .member_detail_section {
         margin-bottom: 10px;
-      }
-      .person_detail_mailing_address > div,
-      .member_detail_mailing_address > div {
-        margin-left: 20px;
-      }
-      .edit_member_mailing_address > {
-        margin-left: 20px;
-      }
-      .edit_page_heading, h4 {
-        background-color: inherit;
-        border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
-      }
-      #edit_member_header, #edit_person_header {
-        /* background-color: rgba(255,255,255,0.8); */
-        background: linear-gradient(90deg, rgba(255,255,255,1.0), rgba(222,222,222,0.9), rgba(255,255,255,1.0));
-      }
-      #show_person_header, #pagination_top {
-        display: flex;
-        justify-content: space-between;
-        border-radius: calc(.3rem - 1px) calc(.3rem - 1px) 0 0;
-      }
-      .homepage_link, .homepage_link:hover {
-        text-decoration: none;
-        color: black;
-      }
-      .search_container {
-        width: auto;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-      }
-      .search_button_checkbox {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
-      .srch_edit {
-        text-align: right;
-        width: 20vw;
-      }
-      #pancake {
-        display: none;
+        width: 100%;
       }
       @media all and (max-width: 800px) {
         header {
           flex-direction: column;
-          position: inherit;
-        }
-        .homepage_link {
-          font-size: 0.95em;
-        }
-        .search_container {
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-        }
-        .search_button_checkbox {
-          display: flex;
-          flex-direction: row-reverse;
-          align-items: center;
-        }
-        .search_box {
-          width: 80vw;
-        }
-        .filter_members {
-          display: flex;
-          flex-direction: column;
-        }
-        .left_side_header {
-          text-align: center;
-        }
-        .right_side_header {
-          text-align: center;
-          width: 100vw;
-          margin: auto;
-          text-align: center;
-        }
-        .lead {
-          display: flex;
-          flex-direction: column;
-        }
-        .lead a {
-          margin: 5px;
         }
         #pancake {
           display: inline-block;
         }
-        .filter_members {
+        #search_container,
+        #filter_members {
           display: none;
+        }
+        .homepage_link {
+          font-size: 0.95em;
+        }
+        .clearfix {
+          height: 25px;
+          display: inline-block;
+        }
+        .nav_buttons > div > a {
+          width: 75vw;
+        }
+        .search_box {
+          width: 60vw;
+        }
+        .mobile_nav_buttons {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        .mobile_nav_buttons > a {
+          width: 100%;
+          margin-bottom: 10px;
+        }
+        .right_side_header {
+          margin-bottom: 7px;
         }
         .cols_left_middle {
           flex-direction: column;
@@ -358,39 +303,49 @@
         .col_right {
           width: auto;
         }
+        h4 {
+          font-size: 1.1em;
+        }
+        .col_show {
+          width: auto;
+        }
+        .show_member {
+          flex-direction: column;
+        }
+        .edit_form_align {
+          flex-direction: column;
+        }
+        .col_rw {
+          width: auto;
+        }
+        .col_ro {
+          width: auto;
+        }
+        .form_fields > input,
+        .form_fields > select {
+          width: 100%;
+          margin-bottom: 10px;
+        }
       }
     </style>
   </head>
     <body>
-      <div id="mobile_nav" class="overlay">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <div class="overlay-content">
-          <p class="lead">
-            <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_active' %}" role="button">Active Members</a> <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_board' %}" role="button">Board Members</a> <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_all' %}" role="button">All People</a> <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_inactive' %}" role="button">Inactive Members</a> <a class="btn btn-primary btn-lg" href="{% url 'members_app:needs_review' %}" role="button">Needs Review</a>
-          </p>
-        </div>
-      </div>
       <header>
         <div class="left_side_header">
-          <div class="display-5"><img id="header_logo" src="https://www.cascadiahiking.club/static/images/mountain_logo.png"><a href="{% url 'members_app:index' %}" class="homepage_link">Cascadia Hiking Club</a></div>
+          <div class="display-6"><span id="pancake" style="font-size:28px;cursor:pointer;">&#9776;&nbsp;</span><img id="header_logo" src="https://www.cascadiahiking.club/static/images/mountain_logo.png"><a href="{% url 'members_app:index' %}" class="homepage_link">Cascadia Hiking Club</a></div>
           {% if user.is_authenticated %}
-          <div class="filter_members">Show:
-            <nobr><input type="radio" name="filter_members" id="show_active"> <a href="{% url 'members_app:list_active' %}">Active Members</a> ({{user.active_member_count}})</nobr>
-            <nobr><input type="radio" name="filter_members" id="show_board"> <a href="{% url 'members_app:list_board' %}">Board Members</a> ({{user.board_member_count}})</nobr>
-            <nobr><input type="radio" name="filter_members" id="show_all"> <a href="{% url 'members_app:list_all' %}">All People</a> ({{user.all_member_count}})</nobr>
-            <nobr><input type="radio" name="filter_members" id="show_inactive"> <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a> ({{user.inactive_member_count}})</nobr>
-            <!-- <input type="radio" name="filter_members" id="show_needs_review"> <a href="{% url 'members_app:needs_review' %}">Needs Review</a> ({{user.needs_review_count}}) -->
+          <div id="filter_members">Show:
+            <a href="{% url 'members_app:list_active' %}">Active Members</a>&nbsp;({{user.active_member_count}})
+            <a href="{% url 'members_app:list_board' %}">Board Members</a>&nbsp;({{user.board_member_count}})
+            <a href="{% url 'members_app:list_committees' %}">Committees</a>&nbsp;({{user.committee_member_count}})
+            <a href="{% url 'members_app:list_all' %}">All People</a>&nbsp;({{user.all_member_count}})
+            <a href="{% url 'members_app:list_inactive' %}">Inactive Members</a>&nbsp;({{user.inactive_member_count}})
           </div>
-          <div class="search_container">
-              <div>
-                <span id="pancake" style="font-size:28px;cursor:pointer;" onclick="openNav()">&#9776;&nbsp;</span>
-                <input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required>
-              </div>
-              <div class="search_button_checkbox">
-                <button type="submit" class="btn btn-secondary btn-sm" id="search_btn"><b>Search</b></button>
-                <input type="checkbox" class="" name="filter_cb" id="filter_cb"/>
-                <span>Show Only Board Members</span>
-              </div>
+          <div id="search_container">
+            <span><input type="search" id="q" class="search_box" name="q" placeholder="&nbsp;Search for a Member" required></span>
+            <span><button type="submit" class="btn btn-secondary btn-sm" id="search_btn"><b>Search</b></button></span>
+            <span><input type="checkbox" class="" name="filter_cb" id="filter_cb"/></span>
+            <span>Show Only Board Members</span>
           </div>
           {% endif %}
         </div>
@@ -415,7 +370,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="editAddressModal">Edit Address</h5>
+              <h5 class="modal-title" id="edit_AddressModal">Edit Address</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -434,6 +389,39 @@
                   <button type="button" id="address_submit_btn" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button trigger modal -->
+      <button style="display: none" id="show_mobile_nav" type="button" class="btn btn-primary" data-toggle="modal" data-target="#mobileNavModal"></button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="mobileNavModal" tabindex="-1" role="dialog" aria-labelledby="mobileNavModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="mobileNavModal">Menu</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="clearfix"></div>
+            <div class="nav_buttons">
+              <div><a class="btn btn-primary btn-lg" href="{% url 'members_app:list_active' %}" role="button">Active Members</a></div>
+              <div><a class="btn btn-primary btn-lg" href="{% url 'members_app:list_board' %}" role="button">Board Members</a></div>
+              <div><a class="btn btn-primary btn-lg" href="{% url 'members_app:list_committees' %}" role="button">Committees</a></div>
+              <div><a class="btn btn-primary btn-lg" href="{% url 'members_app:list_all' %}" role="button">All People</a></div>
+              <div><a class="btn btn-primary btn-lg" href="{% url 'members_app:list_inactive' %}" role="button">Inactive Members</a></div>
+            <div class="clearfix"></div>
+            <div>
+              <input type="search" id="mobile_q" class="search_box" name="mobile_q" placeholder="&nbsp;Search for a Member" required>
+              <button type="submit" class="btn btn-secondary btn-sm" id="mobile_search_btn"><b>Search</b></button>
+            </div>
+            <div>
+              <input type="checkbox" class="" name="filter_cb" id="mobile_filter_cb"/>
+              <span>Show Only Board Members</span>
+            </div>
           </div>
         </div>
       </div>
@@ -479,51 +467,12 @@
 
       <script type="text/javascript">
         {% if user.is_authenticated %}
-          let show_all = document.querySelector('#show_all');
-          let show_board = document.querySelector('#show_board');
-          let show_active = document.querySelector('#show_active');
-          let show_inactive = document.querySelector('#show_inactive');
-          // let show_needs_review = document.querySelector('#show_needs_review');
-          if (window.location.pathname == '{% url 'members_app:list_all' %}') {
-            show_all.checked = true;
-          } else if (window.location.pathname == '{% url 'members_app:list_board' %}') {
-            show_board.checked = true;
-          } else if (window.location.pathname == '{% url 'members_app:list_active' %}') {
-            show_active.checked = true;
-          } else if (window.location.pathname == '{% url 'members_app:list_inactive' %}') {
-            show_inactive.checked = true;
-          // } else if (window.location.pathname == '{% url 'members_app:needs_review' %}') {
-          //   show_needs_review.checked = true;
-          } else {
-            show_all.checked = false;
-            show_board.checked = false;
-            show_active.checked = false;
-            show_inactive.checked = false;
-            // show_needs_review.checked = false;
-          }
-          show_all.onclick = function() {
-            window.location='{% url 'members_app:list_all' %}';
-          }
-          show_board.onclick = function() {
-            window.location='{% url 'members_app:list_board' %}';
-          }
-          show_active.onclick = function() {
-            window.location='{% url 'members_app:list_active' %}';
-          }
-          show_inactive.onclick = function() {
-            window.location='{% url 'members_app:list_inactive' %}';
-          }
-          // show_needs_review.onclick = function() {
-            // window.location='{% url 'members_app:needs_review' %}';
-          // }
-        {% endif %}
-      </script>
-
-      <script type="text/javascript">
-        {% if user.is_authenticated %}
           search_btn = document.querySelector('#search_btn');
+          mobile_search_btn = document.querySelector('#mobile_search_btn');
           q = document.querySelector('#q');
+          mobile_q = document.querySelector('#mobile_q');
           filter_cb = document.querySelector('#filter_cb');
+          mobile_filter_cb = document.querySelector('#mobile_filter_cb');
           search_btn.onclick = function(event) {
             if (q.value.trim() == '') {
               event.preventDefault();
@@ -540,16 +489,37 @@
                   search_btn.click();                                      // emulate button click
               }
           })
+          mobile_search_btn.onclick = function(event) {
+            if (mobile_q.value.trim() == '') {
+              event.preventDefault();
+            } else {
+              if (mobile_filter_cb.checked) {
+                window.location="{% url 'members_app:search_results' %}?q=" + mobile_q.value + "&board_only";
+              } else {
+                window.location="{% url 'members_app:search_results' %}?q=" + mobile_q.value;
+              }
+            }
+          }
+          mobile_q.addEventListener("keydown", function (event) { // listen for  key presses
+              if (event.keyCode === 13) {                                 // '13' is the Enter/Return key
+                  mobile_search_btn.click();                                      // emulate button click
+              }
+          })
         {% endif %}
       </script>
+
       <script type="text/javascript">
-          function openNav() {
-            document.getElementById("mobile_nav").style.width = "100%";
-          }
-          function closeNav() {
-            document.getElementById("mobile_nav").style.width = "0%";
-          }
+        let pancake = document.querySelector('#pancake');
+        let show_mobileNav = document.querySelector('#show_mobileNav');
+        pancake.onclick = function() {
+          $('#show_mobile_nav').click();
+        }
       </script>
+
+      <!-- Optional Javascript -->
+      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     </body>
   </html>

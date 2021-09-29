@@ -27,9 +27,10 @@ def list_all(request):
     members = paginator.get_page(page_number)
     context = {
         'members': members,
-        'view': 'list_all',
+        'view': 'list_people',
+        'title': 'All People',
     }
-    return render(request, 'members/output.html', context)
+    return render(request, 'members/listing.html', context)
 
 class ListBoardView(LoginRequiredMixin, View):
 
@@ -41,8 +42,9 @@ class ListBoardView(LoginRequiredMixin, View):
         context = {
             'members': members,
             'view': 'list_board',
+            'title': 'Board Members'
         }
-        return render(request, 'members/output.html', context)
+        return render(request, 'members/listing.html', context)
 
 @login_required
 def list_active(request):
@@ -52,9 +54,10 @@ def list_active(request):
     members = paginator.get_page(page_number)
     context = {
         'members': members,
-        'view': 'active_members'
+        'view': 'list_active',
+        'title': 'Active Members',
     }
-    return render(request, 'members/output.html', context)
+    return render(request, 'members/listing.html', context)
 
 @login_required
 def list_inactive(request):
@@ -64,9 +67,10 @@ def list_inactive(request):
     members = paginator.get_page(page_number)
     context = {
         'members': members,
-        'view': 'inactive_members'
+        'view': 'list_inactive',
+        'title': 'Inactive Members',
     }
-    return render(request, 'members/output.html', context)
+    return render(request, 'members/listing.html', context)
 
 @login_required
 def needs_review(request):
@@ -145,9 +149,9 @@ def search_results(request):
                 'querystring': querystring,
                 'board_record': exact_match_p_board_info,
                 'view': 'search_results',
-                'match': '1:exact',
+                    'match': '1:exact',
             }
-            return render(request, 'members/output.html', context)
+            return render(request, 'members/listing.html', context)
 
     # (c)ontains (s)earch (t)erms (reduce(Q.__or__, []) is probably unnecessary)
     person_fn_cst = person_records.filter(reduce(Q.__or__, [Q(first_name__iexact=word) for word in search_terms]))
@@ -181,7 +185,7 @@ def search_results(request):
             'view': 'search_results',
             'match': '2:words',
         }
-        return render(request, 'members/output.html', context)
+        return render(request, 'members/listing.html', context)
     if person_fn_cst.exists() or person_ln_cst.exists() or member_person1fn_cst.exists() or member_person1ln_cst.exists() or member_person2fn_cst.exists() or member_person2ln_cst.exists():
         people = list(dict.fromkeys(chain(
                         person_fn_cst,
@@ -205,7 +209,7 @@ def search_results(request):
             'view': 'search_results',
             'match': '3:single_match',
         }
-        return render(request, 'members/output.html', context)
+        return render(request, 'members/listing.html', context)
     else:
         # This catch-all needs work; doesn't really do anything
         # Perhaps if other fields are searchable (TBD)
@@ -218,7 +222,7 @@ def search_results(request):
             'view': 'search_results',
             'match': '4:else',
         }
-        return render(request, 'members/output.html', context)
+        return render(request, 'members/listing.html', context)
 
 @login_required
 def show_person(request, person_id):
@@ -367,7 +371,7 @@ def save_member(request):
     return HttpResponseRedirect(reverse('members_app:show_member', kwargs={'member_id':member_id})+'?message=changes_saved')
 
 @login_required
-def show_committees(request):
+def list_committees(request):
     choices = Board._meta.get_field('committees').choices #get committee choices from model(Board)
     committee_roles = [x[0] for x in choices] #create list from list of tuples
     committee_roles_dict = dict.fromkeys(committee_roles, []) #create dictionary with value=[]
@@ -383,5 +387,7 @@ def show_committees(request):
                     committee_roles_dict[x.committees[i]].append(x.person1)
     context = {
         'choices': committee_roles_dict,
+        'view': 'list_board',
+        'title': "Committees",
     }
     return render(request, 'members/show_committees.html', context)
