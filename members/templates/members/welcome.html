@@ -8,13 +8,12 @@
   <p class="lead">This is a demo application for a fictitious hiking club to view & edit members & their memberships, a board of directors & its committee members. A simple ticketing system for managing data corrections & updates (and other improvements are under development).</p>
   <p>Built with Django 3.2.5, Python 3, Javascript ES6, JQuery 3.2.1, Bootstrap 4/5, HTML5, CSS3</p>
   <p>Hosted on <a href="https://aws.amazon.com/lightsail/" target="_blank">AWS Lightsail</a> with <a href="https://bitnami.com/stack/django" target="_blank">Bitnami Django 3.2.5-8</a></p>
-  <hr>
+  <div style="border-bottom: 1px solid #333; overflow: hidden; margin-bottom: 10px"></div>
   <p class="lead mobile_nav_buttons">
     <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_active' %}" role="button">Active Members</a>
     <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_board' %}" role="button">Board Members</a>
     <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_all' %}" role="button">All People</a>
     <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_inactive' %}" role="button">Inactive Members</a>
-    <a class="btn btn-primary btn-lg" href="{% url 'members_app:needs_review' %}" role="button">Needs Review</a>
   </p>
   {% if user.is_authenticated %}
   <div>Try: <a href="#" id="sample_search">Simple Search</a> (William Brown)</div>
