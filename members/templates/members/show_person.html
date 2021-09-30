@@ -66,30 +66,30 @@
             </div>
           </div>
         </div><!-- end of 'row' -->
-
       </div><!-- end of 'col_ro' -->
     </div><!-- end of 'tile' -->
     {% if board %}
     <div class="show_member">
-      <div class="col_show">
+      <div class="col_show2">
         <div class="row">
-          <div class="person_detail_section">
-            <div class="person_detail_board_title" style="text-align: right">
+          <div class="">
+            <div class="btn btn-primary btn-sm">
               <b>Board Title</b>:
                 <span>{{board.title}}</span>
             </div>
           </div>
         </div><!-- end of 'row' -->
       </div>
-      <div class="col_show">
+      <div class="col_show2">
         <div class="row">
-          <div class="person_detail_section">
-            <div class="person_detail_cmte_roles">
+          <div class="">
+            <div class="btn btn-primary btn-sm">
               <b>Committee Role{{board.committees|length|pluralize}}</b>:
                 <span>{{board.committees}}</span>
             </div>
           </div>
         </div><!-- end of 'row' -->
+        <div class="clearfix">&nbsp;</div>
       </div>
     </div>
     {% endif %}
