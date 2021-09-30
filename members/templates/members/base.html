@@ -359,7 +359,7 @@
     <body>
       <header>
         <div class="left_side_header">
-          <div class="display-6"><span id="pancake" style="font-size:28px;cursor:pointer;">&#9776;&nbsp;</span><img id="header_logo" src="https://www.cascadiahiking.club/static/images/mountain_logo.png"><a href="{% url 'members_app:index' %}" class="homepage_link">Cascadia Hiking Club</a></div>
+          <div class="display-6"><span id="pancake" style="font-size:28px;cursor:pointer;">&#9776;&nbsp;</span><a href="{% url 'members_app:index' %}" class="homepage_link"><img id="header_logo" src="https://www.cascadiahiking.club/static/images/mountain_logo.png">Cascadia Hiking Club</a></div>
           {% if user.is_authenticated %}
           <div id="filter_members">Show:
             <a href="{% url 'members_app:list_active' %}">Active Members</a>&nbsp;({{user.active_member_count}})
