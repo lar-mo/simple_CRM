@@ -256,16 +256,18 @@
       }
       .welcome_hero {
         float: left;
-        padding: 20px;
         margin: auto 20px;
         text-align: center;
         border-radius: 3px;
+        width: 30vw;
         box-shadow:           3px 3px 5px 0 rgba(25,25,25,0.4);
         -moz-box-shadow:      3px 3px 5px 0 rgba(25,25,25,0.4);
         -webkit-box-shadow:   3px 3px 5px 0 rgba(25,25,25,0.4);
       }
       .welcome_hero img {
-        width:30vw;
+        border-radius: 3px 3px 0 0;
+        padding: 10px;
+        width: inherit;
       }
       .jumbotron {
         width: 80vw;
@@ -288,6 +290,9 @@
       }
       .more_info p {
         padding: 10px;
+      }
+      @media all and (max-width: 1440px) {
+        /* tbd */
       }
       @media all and (max-width: 800px) {
         header {
@@ -359,6 +364,11 @@
         .form_fields > input,
         .form_fields > select {
           width: 100%;
+          margin-bottom: 10px;
+        }
+        .welcome_hero {
+          width: 100%;
+          margin: auto;
           margin-bottom: 10px;
         }
       }

@@ -10,10 +10,10 @@
   <p>Hosted on <a href="https://aws.amazon.com/lightsail/" target="_blank">AWS Lightsail</a> with <a href="https://bitnami.com/stack/django" target="_blank">Bitnami Django 3.2.5-8</a></p>
   <div style="border-bottom: 1px solid #333; overflow: hidden; margin-bottom: 10px"></div>
   <p class="lead mobile_nav_buttons">
-    <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_active' %}" role="button">Active Members</a>
-    <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_board' %}" role="button">Board Members</a>
-    <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_all' %}" role="button">All People</a>
-    <a class="btn btn-primary btn-lg" href="{% url 'members_app:list_inactive' %}" role="button">Inactive Members</a>
+    <a class="btn btn-primary" href="{% url 'members_app:list_active' %}" role="button">Active Members</a>
+    <a class="btn btn-primary" href="{% url 'members_app:list_board' %}" role="button">Board Members</a>
+    <a class="btn btn-primary" href="{% url 'members_app:list_all' %}" role="button">All People</a>
+    <a class="btn btn-primary" href="{% url 'members_app:list_inactive' %}" role="button">Inactive Members</a>
   </p>
   {% if user.is_authenticated %}
   <div>Try: <a href="#" id="sample_search">Simple Search</a> (William Brown)</div>
