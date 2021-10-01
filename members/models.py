@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms import ModelForm
+from django.db.models import Q
 
 from django.utils import timezone
 import datetime
@@ -19,7 +20,8 @@ def board_member_count(user):
 User.add_to_class('board_member_count', board_member_count)
 
 def committee_member_count(user):
-    number_of_committee_members = '10'
+    # number_of_committee_members = '10'
+    number_of_committee_members = Board.objects.filter(~Q(committees='')).order_by('person1__last_name').count()
     return number_of_committee_members
 User.add_to_class('committee_member_count', committee_member_count)
 
