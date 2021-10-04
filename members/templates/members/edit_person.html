@@ -35,25 +35,20 @@
           <label for="phone_number1">Phone:</label>
           <input type="text" id="phone_number" name="phone_number" value="{{person.phone_number}}">
         </div>
-        <div class="form_fields">
-          <label for="email1">Email:</label>
-          <input type="text" id="email" name="email" value="{{person.email}}">
-        </div>
       </div><!-- end of 'row' -->
     </div><!-- end of 'col_rw' -->
     <div class="col_rw">
       <div class="row">
         <div class="form_fields">
-          <label for="partner">Partner:</label>
-          <select id="partner" name="partner">
-            <option value="">---</option>
-            {% for so in people %}
-              <option value="{{so.id}}"{% if person.partner.id == so.id %} selected{% endif %}>{{so.first_name}} {{so.last_name}}</option>
-            {% endfor %}
-          </select>
+          <label for="email1">Email:</label>
+          <input type="text" id="email" name="email" value="{{person.email}}">
         </div>
-      </div>
-      <div class="row">
+        <div class="member_detail_section">
+          <div class="form_fields">
+            <label for="notes">Notes:</label>
+            <input type="text" id="notes" name="notes" value="{{member.notes}}">
+          </div>
+        </div>
         <div class="member_detail_section">
           <div class="member_detail_mailing_address">
             <b>Mailing Address</b> <a href="#" id="edit_address_link" class="edit_link">(edit)</a>:
@@ -64,17 +59,17 @@
               </div>
           </div>
         </div>
-        <div class="clearfix">&nbsp;</div>
-        <div class="form_fields submit_btn">
-          <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
-          <a href="{% url 'members_app:show_person' person.id %}">cancel</a>
-        </div>
-        <input type="hidden" id="person_id" name="person_id" value="{{person.id}}">
-        <input type="hidden" id="address" name="address" value="{{person.address.id}}">
-      </form>
       </div><!-- end of 'row' -->
     </div><!-- end of 'col_rw' -->
   </div><!-- end of edit_form_align -->
+  <div class="clearfix">&nbsp;</div>
+  <div class="form_fields submit_btn">
+    <button type="submit" class="btn btn-secondary" id="save_changes_btn"><b>Save Changes</b></button>&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'members_app:show_person' person.id %}">cancel</a>
+  </div>
+  <input type="hidden" id="person_id" name="person_id" value="{{person.id}}">
+  <input type="hidden" id="address" name="address" value="{{person.address.id}}">
+  </form>
   <div id="pagination_bottom">
       <span class="step-links" id="step_links_bottom"></span>
   </div>

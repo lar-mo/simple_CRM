@@ -36,7 +36,7 @@
             <div class="person_detail_mailing_address">
               <b>Membership</b> <a href="{% url 'members_app:edit_member' membership.id %}?from=person" id="edit_membership_link" class="edit_link">(edit)</a>:
                 <div>{{membership.level}} ({{membership.status}})</div>
-                <div>{% if membership.expiration %}{{membership.expiration}}{% endif %}</div>
+                <div>{% if membership.expiration %}Valid thru {{membership.expiration}}{% endif %}</div>
                 <div>{{membership.notes}}</div>
             </div>
           </div>
@@ -45,15 +45,26 @@
       </div><!-- end of 'col_ro' -->
 
       <div class="col_show">
-        {% if person.partner %}
-        <div class="row">
-          <div class="person_detail_section">
-            <div class="person_detail_partner">
-              <b>Partner</b>:
-              {{person.partner.first_name}} {% if person.partner.nickname %}({{person.partner.nickname}}){%endif%} {{person.partner.last_name}}{% if person.partner.byline %}<span class="person_detail_byline">, {{person.partner.byline}}</span>{%endif%}
+        {% if membership.person2 %}
+          {% if membership.person2 == person %}
+          <div class="row">
+            <div class="person_detail_section">
+              <div class="person_detail_partner">
+                <b>Partner</b>:
+                {{membership.person1.first_name}} {% if membership.person1.nickname %}({{membership.person1.nickname}}){%endif%} {{membership.person1.last_name}}{% if membership.person1.byline %}<span class="person_detail_byline">, {{membership.person1.byline}}</span>{%endif%}
+              </div>
             </div>
           </div>
-        </div><!-- end of 'row' -->
+          {% else %}
+          <div class="row">
+            <div class="person_detail_section">
+              <div class="person_detail_partner">
+                <b>Partner</b>:
+                {{membership.person2.first_name}} {% if membership.person2.nickname %}({{membership.person2.nickname}}){%endif%} {{membership.person2.last_name}}{% if membership.person2.byline %}<span class="person_detail_byline">, {{membership.person2.byline}}</span>{%endif%}
+              </div>
+            </div>
+          </div>
+          {% endif %}
         {% endif %}
 
         <div class="row">
@@ -63,6 +74,14 @@
                 <div>{{person.address.address_1}}</div>
                 <div>{{person.address.address_2}}</div>
                 <div>{{person.address.city}}, {{person.address.state}} {{person.address.postal_code}}</div>
+            </div>
+          </div>
+        </div><!-- end of 'row' -->
+        <div class="row">
+          <div class="person_detail_section">
+            <div class="">
+              <b>Notes</b>:
+                <div>{{person.notes}}</div>
             </div>
           </div>
         </div><!-- end of 'row' -->
@@ -81,6 +100,7 @@
         </div><!-- end of 'row' -->
       </div>
       <div class="col_show2">
+        {% if board.committees %}
         <div class="row">
           <div class="">
             <div class="btn btn-primary btn-sm">
@@ -89,6 +109,7 @@
             </div>
           </div>
         </div><!-- end of 'row' -->
+        {% endif %}
         <div class="clearfix">&nbsp;</div>
       </div>
     </div>

@@ -55,7 +55,7 @@
               </div>
               {% if view == 'list_active' or view == 'list_inactive' or view == 'search_results' %}
                 <div class="row">
-                  <span class="names_title">{{member.person1.partner.first_name}} {{member.person1.partner.last_name}}{% if member.person1.partner.byline %}<span class="byline">, {{member.person1.partner.byline}}</span>{% endif %}
+                  <span class="names_title">{{member.person2.first_name}} {{member.person2.last_name}}{% if member.person2.byline %}<span class="byline">, {{member.person2.byline}}</span>{% endif %}
                   </span>
                 </div>
               {% endif %}
@@ -74,11 +74,11 @@
             <div class="col_middle">
               <div class="row">
                 <div>{{member.email}}{{member.person1.email}}</div>
-                <div>{% if view == 'list_active' or view == 'list_inactive' %}{{member.person1.partner.email}}{% endif %}</div>
+                <div>{% if view == 'list_active' or view == 'list_inactive' %}{{member.person2.email}}{% endif %}</div>
               </div>
               <div class="row">
                 <div>{{member.phone_number}}{{member.person1.phone_number}}</div>
-                <div>{% if view == 'list_active' or view == 'list_inactive' %}{{member.person1.partner.phone_number}}{% endif %}</div>
+                <div>{% if view == 'list_active' or view == 'list_inactive' %}{{member.person2.phone_number}}{% endif %}</div>
                 <div>{% if member.title != 'Committee' %}{{member.title}}{% endif %}</div>
                 <div style="width:100%">{% if member.committees|length > 0 %}Committee{{member.committees|length|pluralize}}: {{member.committees}}{% endif %}</div>
               </div>

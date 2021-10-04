@@ -169,13 +169,6 @@ class Person(models.Model):
     nickname                = models.CharField(max_length=100, blank=True)
     phone_number            = models.CharField(max_length=20, blank=True)
     email                   = models.EmailField(blank=True)
-    partner = models.OneToOneField(
-                'self',
-                on_delete=models.CASCADE,
-                related_name='person',
-                blank=True,
-                null=True,
-    )
     address = models.ForeignKey(
                 Address,
                 on_delete=models.CASCADE,
@@ -183,6 +176,7 @@ class Person(models.Model):
                 blank=True,
                 null=True,
     )
+    notes                   = models.CharField(max_length=300, blank=True)
 
     def __str__(self):
         return "{} {} ({})".format(self.first_name, self.last_name, self.id)
@@ -210,27 +204,18 @@ class Membership(models.Model):
             (ACTIVE, 'Active'),
             (INACTIVE, 'Inactive'),
     ]
-
     person1 = models.OneToOneField(
             Person,
             on_delete=models.CASCADE,
-            related_name='membership1',
-            related_query_name='membership',
+            related_name='person_1',
             null=True,
     )
-    # person2 = models.OneToOneField(
-    #         Person, on_delete=models.CASCADE,
-    #         related_name='membership2',
-    #         related_query_name='membership',
-    #         blank=True,
-    #         null=True)
-    person2 = models.ForeignKey(
+    person2 = models.OneToOneField(
             Person,
-            to_field='partner',
             on_delete=models.CASCADE,
-            related_name='so',
-            null=True,
             blank=True,
+            related_name='person_2',
+            null=True,
     )
     address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='member_address', null=True)
     level = models.CharField(
