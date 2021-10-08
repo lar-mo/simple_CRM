@@ -13,7 +13,7 @@ from itertools import chain
 
 import json
 
-from .models import Address, Board, Membership, Person, NeedsReview, NeedsReviewComment
+from .models import Address, Board, Membership, Person, NeedsReview
 
 def index(request):
     context = {}
@@ -381,7 +381,6 @@ def save_member(request):
 @login_required
 def needs_review(request):
     tickets = NeedsReview.objects.filter()
-
     paginator = Paginator(tickets, 10)
     page_number = request.GET.get('page')
     tickets = paginator.get_page(page_number)
