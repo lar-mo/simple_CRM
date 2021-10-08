@@ -13,7 +13,7 @@ from itertools import chain
 
 import json
 
-from .models import Address, Board, Membership, Person, NeedsReview
+from .models import Address, Board, Membership, Person, NeedsReview, NeedsReviewComment
 
 def index(request):
     context = {}
@@ -28,7 +28,7 @@ def list_all(request):
     context = {
         'members': members,
         'view': 'list_people',
-        'title': 'All People',
+        'title': 'All People' + ' ({})'.format(all_members.count()),
     }
     return render(request, 'members/listing.html', context)
 
@@ -42,9 +42,31 @@ class ListBoardView(LoginRequiredMixin, View):
         context = {
             'members': members,
             'view': 'list_board',
-            'title': 'Board Members'
+            'title': 'Board Members' + ' ({})'.format(board_members.count()),
         }
         return render(request, 'members/listing.html', context)
+
+@login_required
+def list_committees(request):
+    choices = Board._meta.get_field('committees').choices #get committee choices from model(Board)
+    committee_roles = [x[0] for x in choices] #create list from list of tuples
+    committee_roles_dict = dict.fromkeys(committee_roles, []) #create dictionary with value=[]
+    board = Board.objects.filter(~Q(committees='')).order_by('person1__last_name') #get only board members with committee role(s)
+
+    # loop through each board member with committee role(s) and add to committee_roles_dict
+    for x in board:
+        for i in range(len(x.committees)):
+            if x.committees[i] in committee_roles_dict.keys(): #this is probably unnecessary
+                if len(committee_roles_dict[x.committees[i]]) == 0:
+                    committee_roles_dict[x.committees[i]] = [x.person1]
+                else:
+                    committee_roles_dict[x.committees[i]].append(x.person1)
+    context = {
+        'choices': committee_roles_dict,
+        'view': 'list_board',
+        'title': "Committees" + ' ({})'.format(board.count()),
+    }
+    return render(request, 'members/show_committees.html', context)
 
 @login_required
 def list_active(request):
@@ -55,7 +77,7 @@ def list_active(request):
     context = {
         'members': members,
         'view': 'list_active',
-        'title': 'Active Members',
+        'title': 'Active Members' + ' ({})'.format(active_members.count()),
     }
     return render(request, 'members/listing.html', context)
 
@@ -68,20 +90,9 @@ def list_inactive(request):
     context = {
         'members': members,
         'view': 'list_inactive',
-        'title': 'Inactive Members',
+        'title': 'Inactive Members' + ' ({})'.format(inactive_members.count()),
     }
     return render(request, 'members/listing.html', context)
-
-@login_required
-def needs_review(request):
-    tickets = NeedsReview.objects.filter()
-    paginator = Paginator(tickets, 10)
-    page_number = request.GET.get('page')
-    tickets = paginator.get_page(page_number)
-    context = {
-        'tickets': tickets,
-    }
-    return render(request, 'members/list_tickets.html', context)
 
 @login_required
 def search_results(request):
@@ -368,23 +379,13 @@ def save_member(request):
     return HttpResponseRedirect(reverse('members_app:show_member', kwargs={'member_id':member_id})+'?message=changes_saved')
 
 @login_required
-def list_committees(request):
-    choices = Board._meta.get_field('committees').choices #get committee choices from model(Board)
-    committee_roles = [x[0] for x in choices] #create list from list of tuples
-    committee_roles_dict = dict.fromkeys(committee_roles, []) #create dictionary with value=[]
-    board = Board.objects.filter(~Q(committees='')).order_by('person1__last_name') #get only board members with committee role(s)
+def needs_review(request):
+    tickets = NeedsReview.objects.filter()
 
-    # loop through each board member with committee role(s) and add to committee_roles_dict
-    for x in board:
-        for i in range(len(x.committees)):
-            if x.committees[i] in committee_roles_dict.keys(): #this is probably unnecessary
-                if len(committee_roles_dict[x.committees[i]]) == 0:
-                    committee_roles_dict[x.committees[i]] = [x.person1]
-                else:
-                    committee_roles_dict[x.committees[i]].append(x.person1)
+    paginator = Paginator(tickets, 10)
+    page_number = request.GET.get('page')
+    tickets = paginator.get_page(page_number)
     context = {
-        'choices': committee_roles_dict,
-        'view': 'list_board',
-        'title': "Committees",
+        'tickets': tickets,
     }
-    return render(request, 'members/show_committees.html', context)
+    return render(request, 'members/list_tickets.html', context)

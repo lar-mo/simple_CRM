@@ -257,7 +257,8 @@
       }
       .welcome_hero {
         float: left;
-        margin: auto 20px;
+        position: relative;
+        margin: auto 20px 30px;
         text-align: center;
         border-radius: 3px;
         padding-bottom: 10px;
@@ -282,10 +283,16 @@
         overflow: hidden;
         margin-bottom: 10px;
       }
+      .clearfix {
+        height: 25px;
+        display: inline-block;
+      }
       .more_info {
+        clear: left;
         float: bottom;
         margin-top: 30px;
         width: 100%;
+        position: relative;
         text-align: left;
         text-align: center;
         background: linear-gradient(90deg, rgba(222,222,222,0.95), rgba(255,255,255,1.0), rgba(222,222,222,0.95));
@@ -293,6 +300,22 @@
       }
       .more_info p {
         padding: 10px;
+      }
+      .ticket_list {
+        background-color: #fff;
+        margin: auto;
+        width: 95vw;
+      }
+      .ticket_list table {
+        border-radius:6px;
+        -moz-border-radius:6px;
+      }
+      .ticket_list * {
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+      .ticket_list th {
+        background-color: #ace;
       }
       @media all and (max-width: 1440px) {
         /* tbd */
@@ -310,10 +333,6 @@
         }
         .homepage_link {
           font-size: 0.95em;
-        }
-        .clearfix {
-          height: 25px;
-          display: inline-block;
         }
         .nav_buttons > div > a {
           width: 75vw;
