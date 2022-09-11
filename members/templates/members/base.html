@@ -20,7 +20,11 @@
         background-image: url(https://www.roadtripsandhikes.org/images/ButteCampPano2.jpg);
         background-attachment: fixed;
         background-size: cover;
-        background-position: top 50px center;
+        {% if user.is_authenticated %}
+          background-position: top 110px center;
+        {% else %}
+          background-position: top 50px center;
+        {% endif %}
         box-sizing: border-box;
         margin: 0;
         padding: 0;
