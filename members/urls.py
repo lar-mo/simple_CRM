@@ -12,7 +12,6 @@ urlpatterns = [
     path('board/', ListBoardView.as_view(), name='list_board'),
     path('members/active/', views.list_active, name='list_active'),
     path('members/inactive/', views.list_inactive, name='list_inactive'),
-    path('needs_review/', views.needs_review, name='needs_review'),
     path('person/<int:person_id>/', views.show_person, name='show_person'),
     path('edit_person/<int:person_id>/', views.edit_person, name='edit_person'),
     path('save_person/', views.save_person, name='save_person'),
@@ -22,4 +21,5 @@ urlpatterns = [
     path('save_member/', views.save_member, name='save_member'),
     path('search/', views.search_results, name='search_results'),
     path('board/committees/', views.list_committees, name='list_committees'),
+    path('needs_review/', views.needs_review, name='needs_review'),
 ]

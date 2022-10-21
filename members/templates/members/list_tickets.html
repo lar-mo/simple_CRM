@@ -4,26 +4,25 @@
 
     <table class="ticket_list">
       <tr>
-        <td class="ticket_list_header">Summary</td>
-        <td class="ticket_list_header">Description</td>
-        <td class="ticket_list_header">Component</td>
-        <td class="ticket_list_header">Person</td>
-        <td class="ticket_list_header">Membership</td>
-        <td class="ticket_list_header">Status</td>
-        <td class="ticket_list_header">Assignee</td>
+        <th class="ticket_list_header">Summary</th>
+        <th class="ticket_list_header">Description</th>
+        <th class="ticket_list_header">Component</th>
+        <th class="ticket_list_header">Person</th>
+        <th class="ticket_list_header">Membership</th>
+        <th class="ticket_list_header">Status</th>
+        <th class="ticket_list_header">Assignee</th>
       </tr>
       {% for ticket in tickets %}
       <tr>
         <td class="ticket_list_value">{{ticket.summary}}</td>
         <td class="ticket_list_value">{{ticket.description}}</td>
         <td class="ticket_list_value">{{ticket.component}}</td>
-        <td class="ticket_list_value">{{ticket.person}}</td>
-        <td class="ticket_list_value">{{ticket.membership}}</td>
+        <td class="ticket_list_value">{% if ticket.person %}{{ticket.person}}{%endif%}</td>
+        <td class="ticket_list_value">{% if ticket.member %}{{ticket.member}}{%endif%}</td>
         <td class="ticket_list_value">{{ticket.status}}</td>
-        <td class="ticket_list_value">{{ticket.assignee}}</td>
+        <td class="ticket_list_value">{% if ticket.assignee.person1 %}{{ticket.assignee.person1|stringformat:'r'}}{%endif%}</td>
       </tr>
       {% endfor %}
     </table>
-  </div>
 
 {% endblock %}

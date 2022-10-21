@@ -21,7 +21,8 @@ User.add_to_class('board_member_count', board_member_count)
 
 def committee_member_count(user):
     # number_of_committee_members = '10'
-    number_of_committee_members = Board.objects.filter(~Q(committees='')).order_by('person1__last_name').count()
+    number_of_committee_members = Board.objects.filter(~Q(committees='')).count()
+    print(Board.objects.filter())
     return number_of_committee_members
 User.add_to_class('committee_member_count', committee_member_count)
 
@@ -181,6 +182,9 @@ class Person(models.Model):
     def __str__(self):
         return "{} {} ({})".format(self.first_name, self.last_name, self.id)
 
+    def __repr__(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
     class Meta:
         ordering = ['last_name']
 
@@ -297,7 +301,7 @@ class Board(models.Model):
         (COUNCIL_COORDINATOR, 'Council Coordinator'),
     ]
 
-    person1     = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True, related_name='board_member')
+    person1     = models.OneToOneField(Person, on_delete=models.CASCADE, blank=True, null=True, related_name='board_member')
     title       = models.CharField(max_length=20,choices=BOARD_TITLE_CHOICES)
     committees  = MultiSelectField(max_length=50, choices=COMMITTEE_ROLE_CHOICES, blank=True)
 
@@ -344,11 +348,11 @@ class NeedsReview(models.Model):
     person              = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True, related_name='nr_person')
     member              = models.ForeignKey(Membership, on_delete=models.CASCADE, blank=True, null=True, related_name='nr_member')
     status              = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='OPEN',
+                            max_length=20,
+                            choices=STATUS_CHOICES,
+                            default='OPEN',
     )
-    assignee                = models.ForeignKey(
+    assignee            = models.ForeignKey(
         Board,
         on_delete=models.CASCADE,
         related_name='assignee',
@@ -362,3 +366,18 @@ class NeedsReview(models.Model):
         else:
             assignee = self.assignee
         return "{} ({})".format(self.summary, assignee)
+
+class NeedsReviewComment(models.Model):
+    review              = models.ForeignKey(
+                            NeedsReview,
+                            on_delete=models.CASCADE,
+                            null=True,
+                            related_name='nr_review'
+    )
+    comment_body        = models.TextField(null=True)
+    author              = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='nr_author')
+    created             = models.DateTimeField()
+    modified            = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} - {} - {}".format(self.review.summary, self.created, self.author.username)
